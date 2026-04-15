@@ -2,4 +2,27 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="primary_color">#C08A5D</color>
+    <color name="primary_dark">#8B5E3C</color>
+    <color name="cream_background">#F5EBDD</color>
+    <color name="text_secondary">#7A6E65</color>
+    <!-- PENDIENTE -->
+    <color name="estado_pendiente_bg">#FFF3CD</color>
+    <color name="estado_pendiente_text">#856404</color>
+    <color name="estado_pendiente_border">#FFC107</color>
+
+    <!-- ENTREGADO -->
+    <color name="estado_entregado_bg">#D4EDDA</color>
+    <color name="estado_entregado_text">#155724</color>
+    <color name="estado_entregado_border">#28A745</color>
+
+    <!-- ENCAMINO -->
+    <color name="estado_camino_bg">#D1ECF1</color>
+    <color name="estado_camino_text">#0C5460</color>
+    <color name="estado_camino_border">#17A2B8</color>
+
+    <!-- FINALIZADO -->
+    <color name="estado_finalizado_bg">#F8D7DA</color>
+    <color name="estado_finalizado_text">#721C24</color>
+    <color name="estado_finalizado_border">#DC3545</color>
 </resources>
