@@ -6,6 +6,10 @@
     <color name="primary_dark">#8B5E3C</color>
     <color name="cream_background">#F5EBDD</color>
     <color name="text_secondary">#7A6E65</color>
+    <color name="primary_light">#D7A77A</color>
+    <color name="search_stroke">#8B4513</color> <!-- marrón -->
+    <color name="search_hint">#A1887F</color>
+
     <!-- PENDIENTE -->
     <color name="estado_pendiente_bg">#FFF3CD</color>
     <color name="estado_pendiente_text">#856404</color>

@@ -20,7 +20,8 @@
             app:titleCentered="true"
             app:menu="@menu/menu_home"
             android:background="@color/primary_color"
-            app:titleTextColor="@android:color/white"/>
+            app:titleTextColor="@android:color/white"
+            app:navigationIcon="@drawable/ic_back"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
