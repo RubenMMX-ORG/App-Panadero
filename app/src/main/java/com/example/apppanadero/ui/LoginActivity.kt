@@ -8,21 +8,23 @@ import com.example.apppanadero.databinding.ActivityAdminHomeBinding
 import com.example.apppanadero.databinding.ActivityHomeBinding
 import com.example.apppanadero.databinding.ActivityLoginBinding
 import com.example.apppanadero.databinding.FragmentAdminPedidosBinding
+import com.example.apppanadero.databinding.FragmentCrearProductoBinding
 import com.example.apppanadero.databinding.FragmentDetallePedidoBinding
 import com.example.apppanadero.databinding.FragmentNuevoPedidoBinding
 import com.example.apppanadero.databinding.FragmentRegistroBinding
 import com.example.apppanadero.databinding.ItemPedidoAdminBinding
 import com.example.apppanadero.databinding.ItemPedidoBinding
+import com.example.apppanadero.databinding.ItemProductoAdminBinding
 
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ItemPedidoAdminBinding//Declaracion binding
+    private lateinit var binding: FragmentCrearProductoBinding//Declaracion binding
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Iniciamos bindin
-        binding = ItemPedidoAdminBinding.inflate(layoutInflater)
+        binding = FragmentCrearProductoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
     }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+
     <color name="primary_color">#C08A5D</color>
     <color name="primary_dark">#8B5E3C</color>
     <color name="cream_background">#F5EBDD</color>
@@ -9,6 +9,31 @@
     <color name="primary_light">#D7A77A</color>
     <color name="search_stroke">#8B4513</color> <!-- marrón -->
     <color name="search_hint">#A1887F</color>
+    <color name="background">#F5EFE7</color>
+
+
+    <color name="text_primary">#3E2C23</color>
+    <color name="text_hint">#9E9E9E</color>
+
+    <color name="brown">#C08A5D</color>
+
+    <!-- Colores principales -->
+    <color name="brown_primary">#C48A5A</color>
+    <color name="brown_dark">#6D4C41</color>
+    <color name="brown_light">#EED9C4</color>
+
+    <!-- Fondo -->
+    <color name="background_light">#F7EFE5</color>
+    <color name="background_card">#FFFDF9</color>
+
+    <!-- Neutros -->
+    <color name="white">#FFFFFF</color>
+    <color name="gray_text">#757575</color>
+
+    <!-- Estados -->
+    <color name="green_success">#4CAF50</color>
+    <color name="red_error">#E53935</color>
+    <color name="yellow_warning">#FBC02D</color>
 
     <!-- PENDIENTE -->
     <color name="estado_pendiente_bg">#FFF3CD</color>

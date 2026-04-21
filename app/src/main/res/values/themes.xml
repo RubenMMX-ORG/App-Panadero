@@ -6,4 +6,15 @@
     </style>
 
     <style name="Theme.AppPanadero" parent="Base.Theme.AppPanadero" />
+    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeColor">@color/brown_light</item>
+        <item name="hintTextColor">@color/text_hint</item>
+    </style>
+
+    <style name="Widget.App.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeColor">@color/brown_light</item>
+        <item name="hintTextColor">@color/text_hint</item>
+    </style>
 </resources>
