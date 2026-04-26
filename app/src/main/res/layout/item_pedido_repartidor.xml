@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:foreground="?attr/selectableItemBackground">
+
+        <!-- HEADER -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txtTipo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PEDIDO #3"
+                android:textStyle="bold"
+                android:textColor="@color/primary_color"/>
+
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/txtEstado"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="En camino"
+                android:background="@drawable/bg_estado_pendiente"
+                android:padding="6dp"/>
+        </LinearLayout>
+
+        <!-- CLIENTE -->
+        <TextView
+            android:id="@+id/txtCliente"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Carlos Martínez"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="6dp"/>
+
+        <!-- DIRECCIÓN CLICKABLE -->
+        <TextView
+            android:id="@+id/txtDireccion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📍 Plaza España, 8"
+            android:textColor="@color/primary_dark"
+            android:layout_marginTop="2dp"/>
+
+        <!-- PRODUCTOS -->
+        <TextView
+            android:id="@+id/txtProductos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3 productos"
+            android:textColor="@color/text_secondary"/>
+
+        <!-- ACCIONES -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <!-- RUTA -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRuta"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Ruta"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/primary_color"
+                app:icon="@drawable/ic_navigation"
+                app:cornerRadius="12dp"/>
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="wrap_content"/>
+
+            <!-- DETALLE -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDetalle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Detalle"
+                android:backgroundTint="@android:color/transparent"
+                app:strokeColor="@color/primary_color"
+                app:strokeWidth="2dp"
+                app:cornerRadius="12dp"/>
+
+            <Space
+                android:layout_width="8dp"
+                android:layout_height="wrap_content"/>
+
+            <!-- ACCIÓN -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnAccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✔"
+                android:backgroundTint="@color/green_success"
+                android:textColor="@android:color/white"
+                app:cornerRadius="12dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

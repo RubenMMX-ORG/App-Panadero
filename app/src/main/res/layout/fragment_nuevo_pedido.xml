@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cream_background">
+    android:background="@drawable/fondo_pan">
 
     <!-- TOOLBAR -->
     <com.google.android.material.appbar.AppBarLayout
@@ -19,51 +19,100 @@
             app:title="Nuevo Pedido"
             app:titleCentered="true"
             app:titleTextColor="@android:color/white"
-            app:navigationIcon="@drawable/ic_back"/>
+            app:navigationIcon="@drawable/ic_back"
+            app:navigationIconTint="@android:color/white"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!-- CONTENIDO -->
-    <LinearLayout
+    <!-- SCROLL -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:fillViewport="true"
+        android:paddingBottom="90dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- TEXTO -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Seleccionar productos"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/primary_dark"
-            android:layout_margin="16dp"/>
-
-        <!-- LISTA -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerProductos"
+        <!-- CARD -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingHorizontal="16dp"
-            android:clipToPadding="false"
-            android:paddingBottom="8dp"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:backgroundTint="#F4EDE4"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-    <!-- BOTÓN FIJO ABAJO -->
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnConfirmarPedido"
+                <!-- TEXTO -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Selecciona tus productos"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#7A3E1D"
+                    android:layout_marginBottom="8dp"/>
+
+                <!-- RECYCLER -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerProductos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Confirmar Pedido"
-        android:textAllCaps="false"
-        android:layout_margin="16dp"
-        android:padding="16dp"
-        app:cornerRadius="18dp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/primary_color"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        android:layout_margin="12dp"
+        android:backgroundTint="@color/background_card"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:strokeColor="@color/brown_light"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="14dp"
+            android:gravity="center_vertical">
+
+            <!-- TOTAL -->
+            <TextView
+                android:id="@+id/tvTotal"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Total: €0.00"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"/>
+
+            <!-- BOTÓN -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnConfirmarPedido"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:text="Confirmar"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:backgroundTint="@color/primary_color"
+                app:cornerRadius="16dp"
+                app:elevation="4dp"/>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

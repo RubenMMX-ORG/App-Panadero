@@ -18,7 +18,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="#F4EDE4"
             app:title=""
-            app:elevation="0dp" />
+            app:elevation="0dp"
+            app:navigationIcon="@drawable/ic_back"/>
 
         <!-- LOGO -->
         <ImageView
