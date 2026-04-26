@@ -1,161 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cream_background">
+    android:background="@drawable/fondo_pan">
 
-    <!-- TOOLBAR -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarDetalle"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_color"
-            app:title="Detalle del Pedido"
-            app:titleCentered="true"
-            app:titleTextColor="@android:color/white"
-            app:navigationIcon="@drawable/ic_back"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- CONTENIDO -->
+    <!-- SCROLL -->
     <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        android:paddingBottom="120dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- CARD PRINCIPAL -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:backgroundTint="@color/background_card"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            app:strokeColor="@color/brown_light"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <!-- Nº PEDIDO -->
+                <TextView
+                    android:id="@+id/tvNumeroPedido"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pedido #1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- CARD INFO -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/brown_light"
+                    app:cardCornerRadius="16dp"
+                    app:strokeColor="@color/primary_light"
+                    app:strokeWidth="1dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <!-- FECHA -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Fecha"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary"/>
+
+                        <TextView
+                            android:id="@+id/tvFecha"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="2026-03-30"
+                            android:textSize="15sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/primary_dark"
+                            android:layout_marginBottom="8dp"/>
+
+                        <!-- ESTADO -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Estado"
+                            android:textSize="13sp"
+                            android:textColor="@color/text_secondary"/>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chipEstado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="En preparación"
+                            app:chipCornerRadius="16dp"
+                            app:chipStrokeWidth="1dp"
+                            android:layout_marginBottom="10dp"/>
+
+                        <!-- RESUMEN -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <!-- PRODUCTOS -->
+                            <TextView
+                                android:id="@+id/tvNumProductos"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="5 productos"
+                                android:textColor="@color/text_primary"
+                                android:textStyle="bold"/>
+
+                            <!-- TOTAL -->
+                            <TextView
+                                android:id="@+id/tvTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="€24.50"
+                                android:textColor="@color/primary_dark"
+                                android:textStyle="bold"
+                                android:textSize="16sp"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- TÍTULO PRODUCTOS -->
+                <TextView
+                    android:text="Productos"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <!-- LISTA -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerDetalle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- CARD BOTONES -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:backgroundTint="@color/background_card"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="10dp"
+        app:strokeColor="@color/brown_light"
+        app:strokeWidth="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:weightSum="2">
 
-            <!-- Nº PEDIDO -->
-            <TextView
-                android:id="@+id/tvNumeroPedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pedido #1"
-                android:textSize="18sp"
-                android:textColor="@color/text_secondary"
-                android:layout_marginBottom="12dp"/>
+            <!-- CANCELAR -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCancelar"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Cancelar"
+                android:textAllCaps="false"
+                android:textColor="@color/estado_finalizado_text"
+                app:strokeColor="@color/estado_finalizado_border"
+                app:strokeWidth="2dp"
+                app:backgroundTint="@android:color/transparent"
+                app:cornerRadius="16dp"/>
 
-            <!-- CARD INFO -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:strokeColor="@color/primary_color"
-                app:strokeWidth="1dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <!-- FECHA -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Fecha"
-                        android:textColor="@color/text_secondary"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/tvFecha"
-                        android:text="2026-03-30"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/primary_dark"
-                        android:layout_marginBottom="8dp"/>
-
-
-
-                    <!-- ESTADO -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Estado"
-                        android:textColor="@color/text_secondary"/>
-
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chipEstado"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="En preparación"
-                        app:chipCornerRadius="16dp"
-                        app:chipStrokeWidth="1dp"/>
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- TÍTULO PRODUCTOS -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Productos"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/primary_dark"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="8dp"/>
-
-            <!-- RECYCLERVIEW -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerDetalle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"/>
+            <!-- MODIFICAR -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnModificar"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
+                android:text="Modificar"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:backgroundTint="@color/primary_color"
+                app:cornerRadius="16dp"/>
 
         </LinearLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <!-- BOTONES ABAJO -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:weightSum="2"
-        android:layout_gravity="bottom">
-
-        <!-- CANCELAR -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnCancelar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Cancelar Pedido"
-            android:textAllCaps="false"
-            android:textColor="@color/estado_finalizado_text"
-            app:strokeColor="@color/estado_finalizado_border"
-            app:strokeWidth="2dp"
-            app:backgroundTint="@android:color/transparent"
-            app:cornerRadius="16dp"/>
-
-        <!-- MODIFICAR -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnModificar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Modificar Pedido"
-            android:textAllCaps="false"
-            android:layout_marginStart="8dp"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/primary_color"
-            app:cornerRadius="16dp"/>
-
-    </LinearLayout>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
