@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph_cliente"
+    app:startDestination="@id/clienteHomeFragment">
+    <action
+        android:id="@+id/action_global_home"
+        app:destination="@id/clienteHomeFragment"/>
+
+    <fragment
+        android:id="@+id/clienteHomeFragment"
+        android:name="com.example.apppanadero.ui.ClienteHomeFragment"
+        android:label="ClienteHomeFragment" >
+        <action
+            android:id="@+id/action_clienteHomeFragment_to_nuevoPedidoFragment"
+            app:destination="@id/nuevoPedidoFragment" />
+        <action
+            android:id="@+id/action_clienteHomeFragment_to_historicoPedidosFragment"
+            app:destination="@id/historicoPedidosFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/nuevoPedidoFragment"
+        android:name="com.example.apppanadero.ui.NuevoPedidoFragment"
+        android:label="NuevoPedidoFragment" />
+    <fragment
+        android:id="@+id/historicoPedidosFragment"
+        android:name="com.example.apppanadero.ui.HistoricoPedidosFragment"
+        android:label="HistoricoPedidosFragment" />
+</navigation>

@@ -1,57 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
 
-    <color name="primary_color">#C08A5D</color>
-    <color name="primary_dark">#8B5E3C</color>
-    <color name="cream_background">#F5EBDD</color>
-    <color name="text_secondary">#7A6E65</color>
+    <!-- 🟤 COLORES PRINCIPALES (PANADERÍA) -->
+    <color name="primary_color">#C89A6A</color> <!-- botones -->
+    <color name="primary_dark">#7A3E1D</color> <!-- textos importantes -->
     <color name="primary_light">#D7A77A</color>
-    <color name="search_stroke">#8B4513</color> <!-- marrón -->
-    <color name="search_hint">#A1887F</color>
-    <color name="background">#F5EFE7</color>
 
+    <!-- 🧁 FONDOS -->
+    <color name="background">#F5EFE7</color> <!-- general -->
+    <color name="background_card">#F4EDE4</color> <!-- cards login/home -->
+    <color name="white">#FFFFFF</color>
 
-    <color name="text_primary">#3E2C23</color>
+    <!-- ✍️ TEXTOS -->
+    <color name="text_primary">#7A3E1D</color>
+    <color name="text_secondary">#7A6E65</color>
     <color name="text_hint">#9E9E9E</color>
 
-    <color name="brown">#C08A5D</color>
+    <!-- 🟫 INPUT / BORDES -->
+    <color name="input_stroke">#D2691E</color>
+    <color name="stroke_soft">#E0D6CC</color>
 
-    <!-- Colores principales -->
-    <color name="brown_primary">#C48A5A</color>
-    <color name="brown_dark">#6D4C41</color>
-    <color name="brown_light">#EED9C4</color>
-
-    <!-- Fondo -->
-    <color name="background_light">#F7EFE5</color>
-    <color name="background_card">#FFFDF9</color>
-
-    <!-- Neutros -->
-    <color name="white">#FFFFFF</color>
-    <color name="gray_text">#757575</color>
-
-    <!-- Estados -->
-    <color name="green_success">#4CAF50</color>
-    <color name="red_error">#E53935</color>
-    <color name="yellow_warning">#FBC02D</color>
-
-    <!-- PENDIENTE -->
+    <!-- 🟡 ESTADOS -->
     <color name="estado_pendiente_bg">#FFF3CD</color>
     <color name="estado_pendiente_text">#856404</color>
-    <color name="estado_pendiente_border">#FFC107</color>
 
-    <!-- ENTREGADO -->
     <color name="estado_entregado_bg">#D4EDDA</color>
     <color name="estado_entregado_text">#155724</color>
-    <color name="estado_entregado_border">#28A745</color>
 
-    <!-- ENCAMINO -->
     <color name="estado_camino_bg">#D1ECF1</color>
     <color name="estado_camino_text">#0C5460</color>
-    <color name="estado_camino_border">#17A2B8</color>
 
-    <!-- FINALIZADO -->
-    <color name="estado_finalizado_bg">#F8D7DA</color>
     <color name="estado_finalizado_text">#721C24</color>
     <color name="estado_finalizado_border">#DC3545</color>
+    <color name="brown_light">#E8D5C0</color> <!-- fondo filtro -->
+    <color name="brown_soft">#F4EDE4</color> <!-- fondo general suave -->
+
 </resources>

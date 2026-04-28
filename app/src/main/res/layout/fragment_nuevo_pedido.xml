@@ -6,24 +6,6 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo_pan">
 
-    <!-- TOOLBAR -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarNuevoPedido"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_color"
-            app:title="Nuevo Pedido"
-            app:titleCentered="true"
-            app:titleTextColor="@android:color/white"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="@android:color/white"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <!-- SCROLL -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -34,28 +16,24 @@
 
         <!-- CARD -->
         <com.google.android.material.card.MaterialCardView
+            style="@style/CardPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:backgroundTint="#F4EDE4"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="8dp">
+            android:layout_margin="24dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="20dp">
 
                 <!-- TEXTO -->
                 <TextView
+                    style="@style/TextSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Selecciona tus productos"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#7A3E1D"
-                    android:layout_marginBottom="8dp"/>
+                    android:layout_marginBottom="12dp"/>
 
                 <!-- RECYCLER -->
                 <androidx.recyclerview.widget.RecyclerView
@@ -70,46 +48,39 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <!-- CARD INFERIOR -->
     <com.google.android.material.card.MaterialCardView
+        style="@style/CardSecondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:layout_margin="12dp"
-        android:backgroundTint="@color/background_card"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        app:strokeColor="@color/brown_light"
-        app:strokeWidth="1dp">
+        android:layout_margin="16dp"
+        app:cardElevation="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="14dp"
+            android:padding="16dp"
             android:gravity="center_vertical">
 
             <!-- TOTAL -->
             <TextView
                 android:id="@+id/tvTotal"
+                style="@style/TextValue"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Total: €0.00"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_primary"/>
+                android:text="Total: €0.00"/>
 
             <!-- BOTÓN -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnConfirmarPedido"
+                style="@style/ButtonPrimary"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:text="Confirmar"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:backgroundTint="@color/primary_color"
-                app:cornerRadius="16dp"
-                app:elevation="4dp"/>
+                android:textAllCaps="false"/>
 
         </LinearLayout>
 

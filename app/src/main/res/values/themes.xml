@@ -1,58 +1,87 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- BASE -->
     <style name="Base.Theme.AppPanadero" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorPrimary">@color/primary_color</item>
+        <item name="colorOnPrimary">@color/white</item>
     </style>
 
-    <style name="Theme.AppPanadero" parent="Base.Theme.AppPanadero" />
+    <style name="Theme.AppPanadero" parent="Base.Theme.AppPanadero"/>
 
-    <style name="Widget.App.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxBackgroundColor">@color/white</item>
-        <item name="boxStrokeColor">@color/brown_light</item>
-        <item name="hintTextColor">@color/text_hint</item>
-    </style>
+    <!-- 🔤 TEXTOS -->
 
-    <style name="Widget.App.Dropdown" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-        <item name="boxBackgroundColor">@color/white</item>
-        <item name="boxStrokeColor">@color/brown_light</item>
-        <item name="hintTextColor">@color/text_hint</item>
-    </style>
-
-
-    <!-- TÍTULOS PRINCIPALES -->
     <style name="TextTitle">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">26sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- SUBTÍTULOS -->
     <style name="TextSubtitle">
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- LABELS (Fecha, Estado, etc) -->
     <style name="TextLabel">
-        <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- VALORES -->
     <style name="TextValue">
         <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/primary_dark</item>
+        <item name="android:textColor">@color/text_primary</item>
     </style>
 
-    <!-- PRECIO -->
     <style name="TextPrice">
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:textColor">@color/primary_dark</item>
     </style>
 
+    <!-- 🧱 CARD (LOGIN STYLE) -->
+    <style name="CardPrimary" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">24dp</item>
+        <item name="cardElevation">8dp</item>
+        <item name="cardBackgroundColor">@color/background_card</item>
+    </style>
+
+    <!-- 🧱 CARD SECUNDARIA -->
+    <style name="CardSecondary" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">16dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardBackgroundColor">@color/background_card</item>
+        <item name="strokeColor">@color/stroke_soft</item>
+        <item name="strokeWidth">1dp</item>
+    </style>
+
+    <!-- 🔘 BOTÓN PRINCIPAL -->
+    <style name="ButtonPrimary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary_color</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
+
+    <!-- 🔘 BOTÓN SECUNDARIO -->
+    <style name="ButtonSecondary" parent="Widget.Material3.Button">
+        <item name="backgroundTint">@color/primary_dark</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
+
+    <!-- ✏️ INPUT -->
+    <style name="Widget.App.TextInputLayout"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeColor">@color/input_stroke</item>
+        <item name="hintTextColor">@color/text_hint</item>
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+
+    </style>
 
 </resources>

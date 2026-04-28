@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_pan">
+
+    <!-- SCROLL -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- CARD PRINCIPAL -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/CardPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="24dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="30dp">
+
+                <!-- LOGO -->
+                <ImageView
+                    android:layout_width="135dp"
+                    android:layout_height="135dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/bg_image_rounded"
+                    android:padding="12dp"
+                    android:src="@drawable/logo_panadero" />
+
+                <!-- BIENVENIDA -->
+                <TextView
+                    android:id="@+id/tvBienvenida"
+                    style="@style/TextTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="¡Bienvenido!" />
+
+                <TextView
+                    style="@style/TextSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Gestiona tus pedidos fácilmente"
+                    android:textColor="@color/text_secondary"/>
+
+                <!-- ESPACIO FLEXIBLE -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginTop="16dp" />
+
+                <!-- BOTÓN NUEVO PEDIDO -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnNuevoPedido"
+                    style="@style/ButtonPrimary"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Nuevo Pedido"
+                    android:textAllCaps="false"
+                    app:icon="@drawable/add_shopping_cart"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp" />
+
+                <!-- BOTÓN HISTÓRICO -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnHistorico"
+                    style="@style/ButtonSecondary"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Ver histórico de pedidos"
+                    android:textAllCaps="false"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

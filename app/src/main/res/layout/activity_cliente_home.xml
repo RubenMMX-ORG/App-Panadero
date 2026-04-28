@@ -1,121 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/fondo_pan">
 
-    <!-- APP BAR -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.Material3.Dark.ActionBar">
+    <!-- TOOLBAR -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbarCliente"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/primary_color"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_color"
-            app:menu="@menu/menu_home"
-            app:navigationIcon="@drawable/ic_back"
-            app:navigationIconTint="#FAF8F8"
-            app:title="Clientes"
-            app:titleCentered="true"
-            app:titleTextColor="@android:color/white" />
+        app:title="Inicio"
+        app:titleCentered="true"
+        app:titleTextColor="@android:color/white"
+        app:navigationIcon="@drawable/ic_back"
+        app:navigationIconTint="@android:color/white"
 
-    </com.google.android.material.appbar.AppBarLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- CONTENIDO -->
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    <!-- NAV HOST -->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment_cliente"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:navGraph="@navigation/nav_graph_cliente"
+        app:defaultNavHost="true"
+        app:layout_constraintTop_toBottomOf="@id/toolbarCliente"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <!-- CARD PRINCIPAL -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="24dp"
-            android:backgroundTint="#F4EDE4"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:padding="24dp">
-
-                <!-- LOGO -->
-                <ImageView
-                    android:layout_width="135dp"
-                    android:layout_height="135dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/bg_image_rounded"
-                    android:padding="8dp"
-                    android:src="@drawable/logo_panadero" />
-
-                <!-- BIENVENIDA -->
-                <TextView
-                    android:id="@+id/tvBienvenida"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="¡Bienvenido!"
-                    android:textSize="26sp"
-                    android:textStyle="bold"
-                    android:textColor="#7A3E1D"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Gestiona tus pedidos fácilmente"
-                    android:textSize="16sp"
-                    android:textColor="#7A3E1D"
-                    android:layout_marginTop="6dp"
-                    android:gravity="center"/>
-
-                <!-- ESPACIO FLEXIBLE -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"/>
-
-                <!-- BOTÓN NUEVO PEDIDO -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnNuevoPedido"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="#C89A6A"
-                    android:text="Nuevo Pedido"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:cornerRadius="20dp"
-                    app:icon="@drawable/add_shopping_cart"
-                    app:iconGravity="textStart"
-                    app:iconPadding="8dp" />
-
-                <!-- BOTÓN HISTÓRICO -->
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnHistorico"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="#7A3E1D"
-                    android:text="Ver histórico de pedidos"
-                    android:textColor="#FFFFFF"
-                    android:textAllCaps="false"
-                    app:cornerRadius="20dp" />
-
-            </LinearLayout>
-
-        </com.google.android.material.card.MaterialCardView>
-
-    </androidx.core.widget.NestedScrollView>
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

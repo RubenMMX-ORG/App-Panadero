@@ -1,0 +1,51 @@
+package com.example.apppanadero.ui
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.apppanadero.R
+import com.example.apppanadero.databinding.FragmentClienteHomeBinding
+
+
+class ClienteHomeFragment: Fragment() {
+
+
+    private var _binding: FragmentClienteHomeBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        //Inflamos la vista con binding
+        _binding = FragmentClienteHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Cambiar el título de la ActionBar
+        activity?.let {
+            (it as? AppCompatActivity)?.supportActionBar?.title = "Home Cliente"
+        }
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnNuevoPedido.setOnClickListener {
+            navegarHacia(R.id.action_clienteHomeFragment_to_nuevoPedidoFragment)
+        }
+
+        binding.btnHistorico.setOnClickListener {
+            navegarHacia(R.id.action_clienteHomeFragment_to_historicoPedidosFragment)
+        }
+
+
+
+    }
+    //Funcion comun para navegar hacia un fragment
+    private fun navegarHacia(actionId: Int) {
+        findNavController().navigate(actionId)
+    }
+}
