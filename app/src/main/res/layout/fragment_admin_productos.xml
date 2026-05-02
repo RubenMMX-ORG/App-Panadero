@@ -1,79 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cream_background">
-
-    <!-- TOOLBAR -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbarProductos"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_color"
-            app:title="Gestión de Productos"
-            app:titleCentered="true"
-            app:titleTextColor="@android:color/white"
-            app:navigationIcon="@drawable/ic_back"
-            app:menu="@menu/menu_home"/>
-
-    </com.google.android.material.appbar.AppBarLayout>
+    android:background="@drawable/fondo_pan">
 
     <!-- CONTENIDO -->
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- BUSCADOR -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="24dp"
-            app:boxCornerRadiusBottomStart="24dp"
-            app:boxCornerRadiusTopEnd="24dp"
-            app:boxCornerRadiusTopStart="24dp"
-            app:boxStrokeColor="@color/primary_color"
-            app:startIconDrawable="@android:drawable/ic_search_category_default"
-            app:startIconTint="@color/primary_color">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/etBuscarProducto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Buscar producto..."
-                android:textColor="@color/primary_dark"
-                android:textColorHint="@color/text_secondary" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- BOTÓN AÑADIR -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnAddProducto"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="+ Añadir Producto"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-            android:backgroundTint="@color/primary_light"
-            app:cornerRadius="20dp"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- RECYCLERVIEW -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerProductos"
+        <!-- CARD PRINCIPAL -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"/>
+            style="@style/CardPrimary">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- BUSCADOR -->
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    style="@style/Widget.App.TextInputLayout"
+                    app:startIconDrawable="@android:drawable/ic_search_category_default"
+                    app:startIconTint="@color/text_secondary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etBuscarProducto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Buscar producto"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        tools:text="Pan integral" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <!-- BOTÓN AÑADIR -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAddProducto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/ButtonPrimary"
+                    android:text="Añadir producto"
+                    android:textAllCaps="false"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- RECYCLERVIEW -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerProductos"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:clipToPadding="false"/>
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

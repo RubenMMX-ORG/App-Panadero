@@ -83,5 +83,27 @@
         <item name="boxCornerRadiusBottomEnd">16dp</item>
 
     </style>
+    <style name="Widget.App.Dropdown"
+        parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+        <!-- Fondo -->
+        <item name="boxBackgroundColor">@color/white</item>
+
+        <!-- Borde -->
+        <item name="boxStrokeColor">@color/input_stroke</item>
+
+        <!-- Hint -->
+        <item name="hintTextColor">@color/text_hint</item>
+
+        <!-- Flecha -->
+        <item name="endIconTint">@color/primary_dark</item>
+
+        <!-- Bordes redondeados -->
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+
+    </style>
 
 </resources>

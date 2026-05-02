@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "271025520076",
+    "project_id": "app-panadero-cf9a3",
+    "storage_bucket": "app-panadero-cf9a3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:271025520076:android:ffccab651dd9ace584f169",
+        "android_client_info": {
+          "package_name": "com.example.apppanadero"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_ac8nV0bBggGVhYIhcmWtB4HSaOap4QM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

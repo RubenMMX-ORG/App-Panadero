@@ -46,11 +46,11 @@
 
                 <!-- USUARIO -->
                 <TextView
+                    style="@style/TextLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:text="Introduzca Usuario"
-                    style="@style/TextLabel"/>
+                    android:text="Introduzca Email" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.App.TextInputLayout"
@@ -58,10 +58,11 @@
                     android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Usuario"
-                        android:textColor="@color/text_primary"/>
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- PASSWORD -->
@@ -79,11 +80,12 @@
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Contraseña"
                         android:inputType="textPassword"
-                        android:textColor="@color/text_primary"/>
+                        android:textColor="@color/text_primary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- RECORDAR -->
@@ -96,14 +98,16 @@
 
                 <!-- BOTON -->
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnLogin"
                     style="@style/ButtonPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="24dp"
-                    android:text="ACCEDER"/>
+                    android:text="ACCEDER" />
 
                 <!-- GOOGLE -->
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnGoogle"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="16dp"
