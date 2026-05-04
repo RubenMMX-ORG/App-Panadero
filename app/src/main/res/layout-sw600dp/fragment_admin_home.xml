@@ -25,11 +25,16 @@
                 android:gravity="center"
                 android:padding="24dp">
 
-                <!-- LOGO -->
+                !-- LOGO -->
                 <ImageView
                     android:layout_width="180dp"
                     android:layout_height="180dp"
-                    android:src="@drawable/logo_panadero" />
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="16dp"
+                    android:src="@drawable/logo_panadero"
+                    android:background="@drawable/bg_image_rounded"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"/>
 
                 <!-- TÍTULO -->
                 <TextView

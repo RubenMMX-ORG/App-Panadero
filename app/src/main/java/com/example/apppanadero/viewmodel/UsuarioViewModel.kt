@@ -12,28 +12,22 @@ class UsuarioViewModel(
     private val repository: UsuarioRepository
 ) : ViewModel() {
 
-    // Usuario autenticado (Firebase Auth)
     private val _firebaseUser = MutableLiveData<FirebaseUser?>()
     val firebaseUser: LiveData<FirebaseUser?> = _firebaseUser
 
-    // Usuario completo (Firestore)
-    private val _usuario = MutableLiveData<Usuario?>()
-    val usuario: LiveData<Usuario?> = _usuario
+    fun registrarUsuario(email: String, password: String) {
 
-    // REGISTRO
-    fun registrarUsuario(email: String, password: String, usuario: Usuario) {
-
-        repository.registrarUsuario(email, password, usuario) { user ->
-
+        repository.registrarUsuario(email, password) { user ->
             _firebaseUser.postValue(user)
-
-            user?.let {
-                obtenerUsuario(it.uid) // Carga ususario una vez registrado
-            }
         }
     }
 
-    // LOGIN EMAIL
+    fun loginConGoogle(idToken: String) {
+        repository.loginConGoogle(idToken) { user ->
+            _firebaseUser.postValue(user)
+        }
+    }
+
     fun loginUsuario(email: String, password: String) {
 
         repository.loginUsuario(email, password) { user ->
@@ -41,26 +35,12 @@ class UsuarioViewModel(
         }
     }
 
-    // LOGIN GOOGLE
-    fun loginConGoogle(idToken: String) {
-
-        repository.loginConGoogle(idToken) { user ->
-            _firebaseUser.postValue(user)
-        }
+    fun checkSesion() {
+        _firebaseUser.value = repository.getCurrentUser()
     }
 
-    // OBTENER USUARIO (Firestore)
-    fun obtenerUsuario(uid: String) {
-
-        repository.obtenerUsuario(uid) { userFirestore ->
-            _usuario.postValue(userFirestore)
-        }
-    }
-
-    // LOGOUT
     fun logout() {
         repository.logout()
-        _firebaseUser.postValue(null)
-        _usuario.postValue(null)
+        _firebaseUser.value = null
     }
 }

@@ -12,7 +12,20 @@
           "package_name": "com.example.apppanadero"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "271025520076-681blovfql5ph9in506t0oqt97k63ii1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.apppanadero",
+            "certificate_hash": "b8da123f164157f7600092ac3ea472886286d8d7"
+          }
+        },
+        {
+          "client_id": "271025520076-evveh7q0d3lcebfrbt0cg7esdk882ji5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC_ac8nV0bBggGVhYIhcmWtB4HSaOap4QM"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "271025520076-evveh7q0d3lcebfrbt0cg7esdk882ji5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -28,7 +28,10 @@
                     android:layout_height="100dp"
                     android:layout_gravity="center"
                     android:layout_marginBottom="16dp"
-                    android:src="@drawable/logo_nuevo_producto"/>
+                    android:src="@drawable/logo_nuevo_producto"
+                    android:background="@drawable/bg_image_rounded"
+                    android:clipToOutline="true"
+                    android:scaleType="centerCrop"/>
 
                 <!-- NOMBRE -->
                 <TextView

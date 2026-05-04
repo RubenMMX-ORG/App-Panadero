@@ -12,6 +12,8 @@
     <color name="background">#F5EFE7</color> <!-- general -->
     <color name="background_card">#F4EDE4</color> <!-- cards login/home -->
     <color name="white">#FFFFFF</color>
+    <color name="background_card_dark">#ADD8E6</color>
+    <color name="background_lightgray">#D3D3D3</color>
 
 
     <!-- ✍️ TEXTOS -->

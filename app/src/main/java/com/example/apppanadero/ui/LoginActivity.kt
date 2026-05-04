@@ -2,6 +2,7 @@ package com.example.apppanadero.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -35,12 +36,32 @@ class LoginActivity : AppCompatActivity() {
 
         credentialManager = CredentialManager.create(this)
 
-        configurarLogin()
-        configurarGoogle()
         observarUsuario()
+        configurarRegistro()
+        configurarLogin()
+        accesoGoogle()
+
+
     }
 
-    //  LOGIN EMAIL/PASSWORD
+
+    private fun configurarRegistro() {
+
+        binding.tVRegistro.setOnClickListener {
+
+            val email = binding.etEmail.text.toString()
+            val password = binding.etPassword.text.toString()
+
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+
+                usuarioViewModel.registrarUsuario(email, password)
+
+            } else {
+                Toast.makeText(this, "Completa los campos", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun configurarLogin() {
 
         binding.btnLogin.setOnClickListener {
@@ -58,40 +79,36 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    //  LOGIN GOOGLE
-    private fun configurarGoogle() {
-
-        binding.btnGoogle.setOnClickListener {
-            accesoGoogle()
-        }
-    }
 
     private fun accesoGoogle() {
 
-        val googleIdOption = GetGoogleIdOption.Builder()
-            .setServerClientId(getString(R.string.default_web_client_id))
-            .setFilterByAuthorizedAccounts(false)
-            .build()
+        binding.btnGoogle.setOnClickListener {
+            val googleIdOption = GetGoogleIdOption.Builder()
+                .setServerClientId(getString(R.string.default_web_client_id))
+                .setFilterByAuthorizedAccounts(false)
+                .setAutoSelectEnabled(false)
+                .build()
 
-        val request = GetCredentialRequest.Builder()
-            .addCredentialOption(googleIdOption)
-            .build()
+            val request = GetCredentialRequest.Builder()
+                .addCredentialOption(googleIdOption)
+                .build()
 
-        lifecycleScope.launch {
-            try {
-                val result = credentialManager.getCredential(
-                    request = request,
-                    context = this@LoginActivity
-                )
+            lifecycleScope.launch {
+                try {
+                    val result = credentialManager.getCredential(
+                        request = request,
+                        context = this@LoginActivity
+                    )
 
-                handleSignIn(result.credential)
+                    handleSignIn(result.credential)
 
-            } catch (e: Exception) {
-                Toast.makeText(this@LoginActivity, "Error Google Sign-In", Toast.LENGTH_SHORT).show()
+                } catch (e: Exception) {
+                    Log.e("GoogleSignIn", "Error", e)
+                    Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
     }
-
     private fun handleSignIn(credential: Credential) {
 
         if (credential is CustomCredential &&
@@ -106,40 +123,24 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    //  OBSERVADORES
     private fun observarUsuario() {
 
         usuarioViewModel.firebaseUser.observe(this) { user ->
 
             if (user != null) {
 
-                usuarioViewModel.obtenerUsuario(user.uid)
+                Toast.makeText(
+                    this,
+                    "Login OK: ${user.email}",
+                    Toast.LENGTH_LONG
+                ).show()
+                //Navegacion hacia home
+                val intent = Intent(this, ClienteHomeActivity::class.java)
+                startActivity(intent)
+                finish()
 
             } else {
-                Toast.makeText(this, "Login incorrecto", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        usuarioViewModel.usuario.observe(this) { usuario ->
-
-            usuario?.let {
-
-                when (it.rol) {
-
-                    "cliente" -> {
-                        startActivity(Intent(this, ClienteHomeActivity::class.java))
-                    }
-
-                    "admin" -> {
-                        startActivity(Intent(this, AdminHomeActivity::class.java))
-                    }
-
-                    "repartidor" -> {
-                        // TODO pantalla repartidor
-                    }
-                }
-
-                finish()
+                Toast.makeText(this, "Login fallido", Toast.LENGTH_SHORT).show()
             }
         }
     }
