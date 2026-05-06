@@ -27,7 +27,7 @@
                 android:orientation="vertical"
                 android:padding="30dp">
 
-                !-- LOGO -->
+                <!-- LOGO -->
                 <ImageView
                     android:layout_width="140dp"
                     android:layout_height="140dp"
@@ -90,6 +90,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNombreCliente"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Nombre"
@@ -103,6 +104,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etApellidosCliente"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Apellidos"
@@ -116,6 +118,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etComercio"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Nombre del comercio"
@@ -129,6 +132,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etTelefono"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Teléfono"
@@ -143,6 +147,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCif"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="CIF"
@@ -156,6 +161,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etDireccion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Dirección"
@@ -168,6 +174,7 @@
                         android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEmailCliente"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Email"
@@ -192,6 +199,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etNombreEmpleado"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Nombre"
@@ -205,6 +213,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etApellidosEmpleado"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Apellidos"
@@ -218,6 +227,7 @@
                         android:layout_marginBottom="10dp">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCargo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Cargo"
@@ -230,6 +240,7 @@
                         android:layout_height="wrap_content">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etEmailEmpleado"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:hint="Email"
@@ -241,12 +252,13 @@
 
                 <!-- BOTÓN -->
                 <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnRegistrar"
                     style="@style/ButtonPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginTop="24dp"
                     android:text="REGISTRARSE"
-                    android:textAllCaps="false"/>
+                    android:textAllCaps="false" />
 
             </LinearLayout>
 

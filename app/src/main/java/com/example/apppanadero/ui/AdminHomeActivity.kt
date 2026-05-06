@@ -1,19 +1,13 @@
 package com.example.apppanadero.ui
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.credentials.CredentialManager
-import com.example.apppanadero.data.di.Injector
-import com.example.apppanadero.databinding.ActivityLoginBinding
-import com.example.apppanadero.databinding.ItemPedidoBinding
-import com.example.apppanadero.viewmodel.UsuarioViewModel
-import kotlin.getValue
-
+import com.example.apppanadero.databinding.ActivityAdminHomeBinding
+import com.example.apppanadero.databinding.FragmentAdminHomeBinding
 class AdminHomeActivity: AppCompatActivity() {
 
 
-    private lateinit var binding: ItemPedidoBinding
+    private lateinit var binding: ActivityAdminHomeBinding
 
 
 
@@ -21,7 +15,7 @@ class AdminHomeActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ItemPedidoBinding.inflate(layoutInflater)
+        binding = ActivityAdminHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 

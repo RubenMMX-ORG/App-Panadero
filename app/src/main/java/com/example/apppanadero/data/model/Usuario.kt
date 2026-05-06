@@ -7,6 +7,7 @@ data class Usuario(
     val apellidos: String = "",
     val email: String = "",
     val rol: String = "",
+    val aprobado: Boolean? = null,
 
     // 🔹 cliente
     val nombreComercio: String? = null,
@@ -14,11 +15,11 @@ data class Usuario(
     val telefono: String? = null,
     val cif: String? = null,
 
-    // 🔹 ubicación (IMPORTANTE)
+    // 🔹 ubicación
     val latitud: Double? = null,
     val longitud: Double? = null,
 
     // 🔹 empleado
-    val cargo: String? = null,
-    val aprobado: Boolean? = null
+    val cargo: String? = null
+
 )

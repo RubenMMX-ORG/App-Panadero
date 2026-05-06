@@ -40,7 +40,7 @@ class ClienteHomeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        // 🔥 Obtener NavController correctamente
+        //  Obtener NavController correctamente
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_cliente) as NavHostFragment
 

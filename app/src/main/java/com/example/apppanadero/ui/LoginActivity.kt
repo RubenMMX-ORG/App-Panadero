@@ -22,11 +22,7 @@ import kotlinx.coroutines.launch
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private lateinit var credentialManager: CredentialManager
 
-    private val usuarioViewModel: UsuarioViewModel by viewModels {
-        Injector.provideUsuarioViewModelFactory()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,114 +30,9 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        credentialManager = CredentialManager.create(this)
 
-        observarUsuario()
-        configurarRegistro()
-        configurarLogin()
-        accesoGoogle()
 
 
     }
 
-
-    private fun configurarRegistro() {
-
-        binding.tVRegistro.setOnClickListener {
-
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-
-                usuarioViewModel.registrarUsuario(email, password)
-
-            } else {
-                Toast.makeText(this, "Completa los campos", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun configurarLogin() {
-
-        binding.btnLogin.setOnClickListener {
-
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
-
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-
-                usuarioViewModel.loginUsuario(email, password)
-
-            } else {
-                Toast.makeText(this, "Completa los campos", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-
-    private fun accesoGoogle() {
-
-        binding.btnGoogle.setOnClickListener {
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setServerClientId(getString(R.string.default_web_client_id))
-                .setFilterByAuthorizedAccounts(false)
-                .setAutoSelectEnabled(false)
-                .build()
-
-            val request = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
-
-            lifecycleScope.launch {
-                try {
-                    val result = credentialManager.getCredential(
-                        request = request,
-                        context = this@LoginActivity
-                    )
-
-                    handleSignIn(result.credential)
-
-                } catch (e: Exception) {
-                    Log.e("GoogleSignIn", "Error", e)
-                    Toast.makeText(this@LoginActivity, e.message, Toast.LENGTH_LONG).show()
-                }
-            }
-        }
-    }
-    private fun handleSignIn(credential: Credential) {
-
-        if (credential is CustomCredential &&
-            credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
-
-            val googleIdTokenCredential =
-                GoogleIdTokenCredential.createFrom(credential.data)
-
-            val idToken = googleIdTokenCredential.idToken
-
-            usuarioViewModel.loginConGoogle(idToken)
-        }
-    }
-
-    private fun observarUsuario() {
-
-        usuarioViewModel.firebaseUser.observe(this) { user ->
-
-            if (user != null) {
-
-                Toast.makeText(
-                    this,
-                    "Login OK: ${user.email}",
-                    Toast.LENGTH_LONG
-                ).show()
-                //Navegacion hacia home
-                val intent = Intent(this, ClienteHomeActivity::class.java)
-                startActivity(intent)
-                finish()
-
-            } else {
-                Toast.makeText(this, "Login fallido", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
 }
