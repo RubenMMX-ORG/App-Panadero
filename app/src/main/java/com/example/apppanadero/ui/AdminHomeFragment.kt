@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.apppanadero.R
 import com.example.apppanadero.databinding.FragmentAdminHomeBinding
 
 

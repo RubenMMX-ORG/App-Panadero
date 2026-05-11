@@ -26,14 +26,17 @@ class EmpleadoHomeFragment: Fragment() {
         return binding.root
     }
 
+
+
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Cambiar el título de la ActionBar
         activity?.let {
             (it as? AppCompatActivity)?.supportActionBar?.title = "Home Empleado"
         }
         super.onViewCreated(view, savedInstanceState)
-
-
 
 
 

@@ -1,6 +1,5 @@
 package com.example.apppanadero.ui
 
-
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,24 +7,50 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import com.example.apppanadero.R
 import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.data.model.Usuario
 import com.example.apppanadero.databinding.FragmentRegistroBinding
 import com.example.apppanadero.viewmodel.UsuarioViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 class RegistroFragment : Fragment() {
 
+    // ---------------------------------------------------
+    // VIEW BINDING
+    // ---------------------------------------------------
+
+    // Binding nullable porque la vista puede destruirse
     private var _binding: FragmentRegistroBinding? = null
+
+    // Acceso cómodo al binding
     private val binding get() = _binding!!
 
-    // ViewModel con Injector
+
+    // ---------------------------------------------------
+    // VIEWMODEL
+    // ---------------------------------------------------
+
+    // Un ViewModel es una clase que guarda y gestiona
+    // datos/lógica de la UI sin depender de la pantalla.
+    //
+    // Podríamos decir:
+    // "el cerebro de la pantalla"
     private val viewModel: UsuarioViewModel by viewModels {
+
+        // Injector construye las dependencias necesarias
         Injector.provideUsuarioViewModelFactory()
     }
 
-    //  Rol seleccionado (por defecto cliente)
+
+    // ---------------------------------------------------
+    // ROL SELECCIONADO
+    // ---------------------------------------------------
+
+    // Por defecto cliente
     private var rolSeleccionado = "cliente"
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,29 +58,46 @@ class RegistroFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentRegistroBinding.inflate(inflater, container, false)
+        // Inicializamos binding
+        _binding = FragmentRegistroBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
+
         super.onViewCreated(view, savedInstanceState)
 
         configurarSelectorRol()
         configurarBotonRegistro()
-        observarGuardado()
     }
 
+
+    // ---------------------------------------------------
     // BOTONES CLIENTE / EMPLEADO
+    // ---------------------------------------------------
+
     private fun configurarSelectorRol() {
 
+        // Botón CLIENTE
         binding.btnCliente.setOnClickListener {
+
             rolSeleccionado = "cliente"
 
             binding.formCliente.visibility = View.VISIBLE
             binding.formEmpleado.visibility = View.GONE
         }
 
+        // Botón EMPLEADO
         binding.btnEmpleado.setOnClickListener {
+
             rolSeleccionado = "empleado"
 
             binding.formCliente.visibility = View.GONE
@@ -63,75 +105,120 @@ class RegistroFragment : Fragment() {
         }
     }
 
+
+    // ---------------------------------------------------
     // BOTÓN REGISTRARSE
+    // ---------------------------------------------------
+
     private fun configurarBotonRegistro() {
 
         binding.btnRegistrar.setOnClickListener {
-            // Obtenemos instancia de Auth para agregar por ejemplo el email directamente
-            val firebaseUser = FirebaseAuth.getInstance().currentUser
 
-            // Creamos un objeto usuario dependiendo del rol
+            // Obtenemos usuario autenticado actual
+            val usuarioFirebase = viewModel.getCurrentUser()
+
+            // Seguridad extra por si no existe sesión
+            if (usuarioFirebase == null) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Debe iniciar sesión primero",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@setOnClickListener
+            }
+
+
+            // ---------------------------------------------------
+            // CREAR OBJETO USUARIO SEGÚN ROL
+            // ---------------------------------------------------
+
             val usuario = if (rolSeleccionado == "cliente") {
 
                 Usuario(
+
+                    // Datos comunes
                     nombre = binding.etNombreCliente.text.toString(),
                     apellidos = binding.etApellidosCliente.text.toString(),
-                    email = firebaseUser?.email ?: "",
+                    email = usuarioFirebase.email ?: "",
                     rol = "cliente",
 
+                    // Datos cliente
                     nombreComercio = binding.etComercio.text.toString(),
                     telefono = binding.etTelefono.text.toString(),
                     cif = binding.etCif.text.toString(),
                     direccion = binding.etDireccion.text.toString(),
-                    aprobado = true
+
+                    // Pendiente aprobación admin
+                    aprobado = false
                 )
 
             } else {
 
                 Usuario(
+
+                    // Datos comunes
                     nombre = binding.etNombreEmpleado.text.toString(),
                     apellidos = binding.etApellidosEmpleado.text.toString(),
-                    email = firebaseUser?.email ?: "",
+                    email = usuarioFirebase.email ?: "",
                     rol = "empleado",
 
+                    // Datos empleado
                     cargo = binding.etCargo.text.toString(),
-                    aprobado = true
+
+                    // Pendiente aprobación admin
+                    aprobado = false
                 )
             }
 
-            viewModel.guardarUsuario(usuario)
-        }
-    }
 
-    //  OBSERVADOR: escucha si el usuario se ha guardado en Firestore
-    private fun observarGuardado() {
+            // ---------------------------------------------------
+            // GUARDAR USUARIO EN FIRESTORE
+            // ---------------------------------------------------
 
-        viewModel.usuarioGuardado.observe(viewLifecycleOwner) { success ->
+            // Estilo "Puy du Fou":
+            // callback directo
+            // sin observers innecesarios
+            viewModel.guardarUsuario(usuario) { guardadoCorrecto ->
 
-            if (success) {
+                // Firestore guardado correctamente
+                if (guardadoCorrecto) {
 
-                Toast.makeText(
-                    requireContext(),
-                    "Registro completado. Pendiente de aprobación",
-                    Toast.LENGTH_LONG
-                ).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Registro completado. Pendiente de aprobación",
+                        Toast.LENGTH_LONG
+                    ).show()
 
-                //  Volver a login (mejor práctica)
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                    // Volvemos atrás al login
+                    findNavController().navigate(
+                        R.id.loginFragment
+                    )
 
-            } else {
+                } else {
 
-                Toast.makeText(
-                    requireContext(),
-                    "Error al guardar",
-                    Toast.LENGTH_SHORT
-                ).show()
+                    // Error Firestore
+                    Toast.makeText(
+                        requireContext(),
+                        "Error al guardar datos",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
     }
 
+
+    // ---------------------------------------------------
+    // ON DESTROY VIEW
+    // ---------------------------------------------------
+
     override fun onDestroyView() {
+
         super.onDestroyView()
+
+        // Evitamos memory leaks
         _binding = null
     }
 }

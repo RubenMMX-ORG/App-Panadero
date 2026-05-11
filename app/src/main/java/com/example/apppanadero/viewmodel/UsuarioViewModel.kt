@@ -1,6 +1,5 @@
 package com.example.apppanadero.viewmodel
 
-
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,80 +11,156 @@ class UsuarioViewModel(
     private val repository: UsuarioRepository
 ) : ViewModel() {
 
-    //  LiveData interno (privado) que guarda el usuario autenticado de Firebase
-    // Se usa para actualizar el estado cuando el login (Google o email) cambia
-    private val _firebaseUser = MutableLiveData<FirebaseUser?>()
+    // ---------------------------------------------------
+    // LIVE DATA
+    // ---------------------------------------------------
 
-    //  LiveData interno (privado) que indica si el usuario se ha guardado correctamente en Firestore
-    // true = guardado OK, false = error al guardar
-    private val _usuarioGuardado = MutableLiveData<Boolean>()
-
-
-    //  LiveData público (solo lectura) que observa la UI (Activity/Fragment)
-    // Se usa para reaccionar cuando el usuario inicia sesión correctamente
-    val firebaseUser: LiveData<FirebaseUser?> = _firebaseUser
-
-    //  LiveData público (solo lectura) que observa la UI
-    // Se usa para saber si el guardado en Firestore ha sido exitoso y decidir qué hacer (navegar o mostrar error)
-    val usuarioGuardado: LiveData<Boolean> = _usuarioGuardado
-
-    //  Usuario completo desde Firestore (rol, aprobado, etc.)
+    // Usuario completo obtenido desde Firestore
+    // Aquí guardamos:
+    // - rol
+    // - aprobado
+    // - datos personales
+    // etc...
     private val _usuario = MutableLiveData<Usuario?>()
 
-    //  LiveData público que observará la UI
+    // LiveData público SOLO lectura
+    // La UI observará este usuario
     val usuario: LiveData<Usuario?> = _usuario
 
-    //Funcion de Auth
-    fun registrarUsuario(email: String, password: String) {
 
-        repository.registrarUsuario(email, password) { user ->
-            _firebaseUser.postValue(user)
-        }
+    // ---------------------------------------------------
+    // REGISTRO FIREBASE AUTH
+    // ---------------------------------------------------
+
+    // Esta función SOLO registra en Firebase Authentication
+    // NO guarda todavía en Firestore
+    //
+    // respuesta devuelve:
+    // - FirebaseUser si todo va bien
+    // - String error si falla
+    fun registrarUsuario(
+        email: String,
+        password: String,
+        respuesta: (FirebaseUser?, String?) -> Unit
+    ) {
+
+        repository.registrarUsuario(
+            email,
+            password,
+            respuesta
+        )
     }
 
-    //Funcion de Auth
-    fun loginConGoogle(idToken: String) {
-        repository.loginConGoogle(idToken) { user ->
-            _firebaseUser.postValue(user)
-        }
+
+    // ---------------------------------------------------
+    // LOGIN EMAIL Y CONTRASEÑA
+    // ---------------------------------------------------
+
+    // Inicia sesión con email/password
+    //
+    // respuesta devuelve:
+    // - usuario Firebase si login correcto
+    // - mensaje error si falla
+    fun loginUsuario(
+        email: String,
+        password: String,
+        respuesta: (FirebaseUser?, String?) -> Unit
+    ) {
+
+        repository.loginUsuario(
+            email,
+            password,
+            respuesta
+        )
     }
 
-    //Funcion de Auth
-    fun loginUsuario(email: String, password: String) {
 
-        repository.loginUsuario(email, password) { user ->
-            _firebaseUser.postValue(user)
-        }
+    // ---------------------------------------------------
+    // LOGIN GOOGLE
+    // ---------------------------------------------------
+
+    // Login usando credenciales Google
+    //
+    // respuesta devuelve:
+    // - usuario Firebase si login correcto
+    // - mensaje error si falla
+    fun loginConGoogle(
+        idToken: String,
+        respuesta: (FirebaseUser?, String?) -> Unit
+    ) {
+
+        repository.loginConGoogle(
+            idToken,
+            respuesta
+        )
     }
 
-    //Funcion de Firestore
-    fun guardarUsuario(usuario: Usuario) {
 
+    // ---------------------------------------------------
+    // GUARDAR USUARIO EN FIRESTORE
+    // ---------------------------------------------------
+
+    // Guarda datos completos del usuario en Firestore
+    //
+    // IMPORTANTE:
+    // Firebase Auth SOLO guarda email/password
+    // Firestore guarda:
+    // - rol
+    // - aprobado
+    // - nombre
+    // etc...
+    fun guardarUsuario(
+        usuario: Usuario,
+        respuesta: (Boolean) -> Unit
+    ) {
+
+        // Obtenemos usuario autenticado actual
         val uid = repository.getCurrentUser()?.uid ?: return
 
-        repository.guardarUsuario(uid, usuario) { success ->
-            _usuarioGuardado.postValue(success)
-        }
+        // Guardamos documento Firestore
+        repository.guardarUsuario(
+            uid,
+            usuario,
+            respuesta
+        )
     }
 
-    // Obtener usuario desde Firestore
+
+    // ---------------------------------------------------
+    // OBTENER USUARIO FIRESTORE
+    // ---------------------------------------------------
+
+    // Obtiene datos completos desde Firestore
+    // y actualiza el LiveData usuario
     fun obtenerUsuario(uid: String) {
 
         repository.obtenerUsuario(uid) { usuarioFirestore ->
 
-            // Actualizamos el LiveData con el resultado
+            // Guardamos resultado en LiveData
             _usuario.postValue(usuarioFirestore)
         }
     }
 
-    //Funcion de Auth
-    fun checkSesion() {
-        _firebaseUser.value = repository.getCurrentUser()
+
+    // ---------------------------------------------------
+    // COMPROBAR SESIÓN ACTUAL
+    // ---------------------------------------------------
+
+    // Devuelve directamente el usuario autenticado actual
+    // sin usar LiveData
+    fun getCurrentUser(): FirebaseUser? {
+
+        return repository.getCurrentUser()
     }
 
-    //Funcion de Auth
+
+    // ---------------------------------------------------
+    // LOGOUT
+    // ---------------------------------------------------
+
+    // Cierra sesión Firebase
     fun logout() {
+
         repository.logout()
-        _firebaseUser.value = null
     }
 }

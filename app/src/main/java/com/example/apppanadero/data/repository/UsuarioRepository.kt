@@ -5,6 +5,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 class UsuarioRepository {
 
@@ -18,16 +19,23 @@ class UsuarioRepository {
     fun registrarUsuario(
         email: String,
         password: String,
-        onResult: (FirebaseUser?) -> Unit
+        respuesta: (FirebaseUser?, String?) -> Unit
     ) {
 
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener { resultado ->
 
-                if (task.isSuccessful) {
-                    onResult(auth.currentUser)
+                if (resultado.isSuccessful) {
+                    respuesta(auth.currentUser, null)
                 } else {
-                    onResult(null)
+                    if (resultado.exception is FirebaseAuthUserCollisionException) {
+
+                        respuesta(null, "Ya existe una cuenta con este email")
+
+                    } else {
+
+                        respuesta(null, "Error al registrarse")
+                    }
                 }
             }
     }
@@ -35,36 +43,37 @@ class UsuarioRepository {
     //Funcion para firebase auth
     fun loginConGoogle(
         idToken: String,
-        onResult: (FirebaseUser?) -> Unit
+        respuesta: (FirebaseUser?, String?) -> Unit
     ) {
 
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         auth.signInWithCredential(credential)
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener { resultado ->
 
-                if (task.isSuccessful) {
-                    onResult(auth.currentUser)
+                if (resultado.isSuccessful) {
+                    respuesta(auth.currentUser,null)
                 } else {
-                    onResult(null)
+                    respuesta(null, "Credenciales incorrectas")
                 }
             }
     }
+
 
     //Funcion para firebase auth
     fun loginUsuario(
         email: String,
         password: String,
-        onResult: (FirebaseUser?) -> Unit
+        respuesta: (FirebaseUser?, String?) -> Unit
     ) {
 
         auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
+            .addOnCompleteListener { resultado ->
 
-                if (task.isSuccessful) {
-                    onResult(auth.currentUser)
+                if (resultado.isSuccessful) {
+                    respuesta(auth.currentUser,null)
                 } else {
-                    onResult(null)
+                    respuesta(null, "Email o contraseña incorrectos")
                 }
             }
     }
@@ -73,24 +82,23 @@ class UsuarioRepository {
     fun guardarUsuario(
         uid: String,
         usuario: Usuario,
-        onResult: (Boolean) -> Unit
+        respuesta: (Boolean) -> Unit
     ) {
 
         db.collection("usuarios")
             .document(uid)
             .set(usuario)
             .addOnSuccessListener {
-                onResult(true)
+                respuesta(true)
             }
             .addOnFailureListener {
-                onResult(false)
+                respuesta(false)
             }
     }
 
-    //Funcion para Firebase Firestore
     fun obtenerUsuario(
         uid: String,
-        onResult: (Usuario?) -> Unit
+        respuesta: (Usuario?) -> Unit
     ) {
 
         db.collection("usuarios")
@@ -100,13 +108,13 @@ class UsuarioRepository {
 
                 if (document.exists()) {
                     val usuario = document.toObject(Usuario::class.java)
-                    onResult(usuario)
+                    respuesta(usuario)
                 } else {
-                    onResult(null)
+                    respuesta(null)
                 }
             }
             .addOnFailureListener {
-                onResult(null)
+                respuesta(null)
             }
     }
 

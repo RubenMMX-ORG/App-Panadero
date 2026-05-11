@@ -13,16 +13,20 @@
         android:theme="@style/Theme.AppPanadero">
         <activity
             android:name=".ui.LoginActivity"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.ClienteHomeActivity" />
-        <activity android:name=".ui.AdminHomeActivity" />
-        <activity android:name=".ui.EmpleadoHomeActivity" />
+        <activity android:name=".ui.ClienteHomeActivity"
+            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".ui.AdminHomeActivity"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.EmpleadoHomeActivity"
+            android:windowSoftInputMode="adjustResize"/>
 
     </application>
 

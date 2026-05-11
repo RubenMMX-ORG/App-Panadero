@@ -1,5 +1,6 @@
 package com.example.apppanadero.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,165 +25,353 @@ import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
 
-    // Binding del fragment
-    private lateinit var binding: FragmentLoginBinding
+    // ---------------------------------------------------
+    // VIEW BINDING
+    // ---------------------------------------------------
 
-    // Credential Manager para login con Google
+    private var _binding: FragmentLoginBinding? = null
+
+    private val binding get() = _binding!!
+
+
+    // ---------------------------------------------------
+    // CREDENTIAL MANAGER GOOGLE
+    // ---------------------------------------------------
+
+    // Clase encargada del login Google moderno
     private lateinit var credentialManager: CredentialManager
 
-    // ViewModel con Injector (igual que antes pero en Fragment)
-    private val usuarioViewModel: UsuarioViewModel by viewModels {
+
+    // ---------------------------------------------------
+    // VIEWMODEL
+    // ---------------------------------------------------
+
+    // Un ViewModel es una clase que guarda y gestiona
+    // lógica/datos de la UI sin depender de la pantalla.
+    //
+    // Podríamos decir:
+    // "el cerebro de la pantalla"
+    private val viewModel: UsuarioViewModel by viewModels {
+
+        // Injector construye dependencias necesarias
         Injector.provideUsuarioViewModelFactory()
     }
 
-
-    // Se crea la vista del fragment
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        binding = FragmentLoginBinding.inflate(inflater, container, false)
+        _binding = FragmentLoginBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+
         return binding.root
     }
 
+    override fun onViewCreated(
+        view: View,
+        savedInstanceState: Bundle?
+    ) {
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Inicializar CredentialManager con contexto del fragment
+        // Inicializamos CredentialManager
         credentialManager = CredentialManager.create(requireContext())
 
-        // Inicialización de lógica
-        observarUsuario()
         configurarRegistro()
         configurarLogin()
-        accesoGoogle()
+        configurarLoginGoogle()
+
+        // SOLO observamos Firestore
+        // porque sí es estado persistente UI
+        observarUsuarioFirestore()
     }
 
-    // BOTÓN REGISTRO (solo crea usuario en Firebase Auth)
+
+    // ---------------------------------------------------
+    // REGISTRO EMAIL/PASSWORD
+    // ---------------------------------------------------
+
     private fun configurarRegistro() {
 
         binding.tVRegistro.setOnClickListener {
 
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
+            val email = binding.etEmail.text.toString().trim()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
+            val password = binding.etPassword.text.toString().trim()
 
-                // Llamada al ViewModel
-                usuarioViewModel.registrarUsuario(email, password)
 
-            } else {
-                Toast.makeText(requireContext(), "Completa los campos", Toast.LENGTH_SHORT).show()
+            // ---------------------------------------------------
+            // VALIDACIONES
+            // ---------------------------------------------------
+
+            // Validar email
+            if (!android.util.Patterns.EMAIL_ADDRESS
+                    .matcher(email)
+                    .matches()
+            ) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "El email no es válido",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@setOnClickListener
             }
-        }
-    }
 
-    // BOTÓN LOGIN EMAIL/PASSWORD
-    private fun configurarLogin() {
 
-        binding.btnLogin.setOnClickListener {
+            // Validar contraseña
+            if (password.length < 6) {
 
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
+                Toast.makeText(
+                    requireContext(),
+                    "La contraseña debe tener al menos 6 caracteres",
+                    Toast.LENGTH_LONG
+                ).show()
 
-            if (email.isNotEmpty() && password.isNotEmpty()) {
-
-                usuarioViewModel.loginUsuario(email, password)
-
-            } else {
-                Toast.makeText(requireContext(), "Completa los campos", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
-        }
-    }
 
-    // LOGIN CON GOOGLE
-    private fun accesoGoogle() {
 
-        binding.btnGoogle.setOnClickListener {
+            // ---------------------------------------------------
+            // REGISTRO FIREBASE AUTH
+            // ---------------------------------------------------
 
-            // Configuración de Google Sign-In
-            val googleIdOption = GetGoogleIdOption.Builder()
-                .setServerClientId(getString(R.string.default_web_client_id))
-                .setFilterByAuthorizedAccounts(false)
-                .setAutoSelectEnabled(false)
-                .build()
 
-            val request = GetCredentialRequest.Builder()
-                .addCredentialOption(googleIdOption)
-                .build()
+            // callback directo
+            viewModel.registrarUsuario(
+                email,
+                password
+            ) { usuarioFirebase, error ->
 
-            // Se ejecuta en coroutine porque es operación asíncrona
-            lifecycleScope.launch {
-                try {
-                    val result = credentialManager.getCredential(
-                        request = request,
-                        context = requireContext()
+                // Registro correcto
+                if (usuarioFirebase != null) {
+
+                    // Ir a completar datos Firestore
+                    findNavController().navigate(
+                        R.id.registroFragment
                     )
 
-                    handleSignIn(result.credential)
+                } else {
 
-                } catch (e: Exception) {
-                    Log.e("GoogleSignIn", "Error", e)
-                    Toast.makeText(requireContext(), e.message, Toast.LENGTH_LONG).show()
+                    // Error Firebase Auth
+                    Toast.makeText(
+                        requireContext(),
+                        error ?: "Error al registrarse",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
         }
     }
 
-    // Procesa el token de Google
-    private fun handleSignIn(credential: Credential) {
 
-        if (credential is CustomCredential &&
-            credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+    // ---------------------------------------------------
+    // LOGIN EMAIL/PASSWORD
+    // ---------------------------------------------------
 
-            val googleIdTokenCredential =
-                GoogleIdTokenCredential.createFrom(credential.data)
+    private fun configurarLogin() {
 
-            val idToken = googleIdTokenCredential.idToken
+        binding.btnLogin.setOnClickListener {
 
-            // Se envía al ViewModel para autenticación con Firebase
-            usuarioViewModel.loginConGoogle(idToken)
+            val email = binding.etEmail.text.toString().trim()
+
+            val password = binding.etPassword.text.toString().trim()
+
+
+            // Validar campos vacíos
+            if (email.isEmpty() || password.isEmpty()) {
+
+                Toast.makeText(
+                    requireContext(),
+                    "Completa los campos",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                return@setOnClickListener
+            }
+
+
+            // ---------------------------------------------------
+            // LOGIN FIREBASE AUTH
+            // ---------------------------------------------------
+
+            viewModel.loginUsuario(
+                email,
+                password
+            ) { usuarioFirebase, error ->
+
+                // Login correcto
+                if (usuarioFirebase != null) {
+
+                    // Obtener datos Firestore
+                    viewModel.obtenerUsuario(
+                        usuarioFirebase.uid
+                    )
+
+                } else {
+
+                    // Error login
+                    Toast.makeText(
+                        requireContext(),
+                        error ?: "Error login",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
     }
 
-    // OBSERVADORES PRINCIPALES
-    private fun observarUsuario() {
 
-        // 1. OBSERVA FIREBASE AUTH (solo login)
-        usuarioViewModel.firebaseUser.observe(viewLifecycleOwner) { user ->
+    // ---------------------------------------------------
+    // LOGIN GOOGLE
+    // ---------------------------------------------------
 
-            if (user != null) {
+    private fun configurarLoginGoogle() {
 
-                Toast.makeText(
-                    requireContext(),
-                    "Login OK: ${user.email}",
-                    Toast.LENGTH_SHORT
-                ).show()
+        binding.btnGoogle.setOnClickListener {
 
-                // IMPORTANTE:
-                // Aquí NO navegamos todavía
-                // Primero necesitamos datos de Firestore
-                usuarioViewModel.obtenerUsuario(user.uid)
+            // Configuración Google Sign In
+            val googleIdOption = GetGoogleIdOption.Builder()
 
-            } else {
+                .setServerClientId(
+                    getString(R.string.default_web_client_id)
+                )
 
-                Toast.makeText(
-                    requireContext(),
-                    "Login fallido",
-                    Toast.LENGTH_SHORT
-                ).show()
+                .setFilterByAuthorizedAccounts(false)
+
+                .setAutoSelectEnabled(false)
+
+                .build()
+
+
+            // Petición CredentialManager
+            val request = GetCredentialRequest.Builder()
+
+                .addCredentialOption(googleIdOption)
+
+                .build()
+
+
+            // Operación asíncrona
+            lifecycleScope.launch {
+
+                try {
+
+                    val resultado = credentialManager.getCredential(
+
+                        request = request,
+
+                        context = requireContext()
+                    )
+
+                    procesarCredencialGoogle(
+                        resultado.credential
+                    )
+
+                } catch (e: Exception) {
+
+                    Log.e(
+                        "GoogleSignIn",
+                        "Error login Google",
+                        e
+                    )
+
+                    Toast.makeText(
+                        requireContext(),
+                        "Error login Google",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
             }
         }
+    }
 
-        // 2. OBSERVA FIRESTORE (datos reales del usuario)
-        usuarioViewModel.usuario.observe(viewLifecycleOwner) { usuario ->
+
+    // ---------------------------------------------------
+    // PROCESAR TOKEN GOOGLE
+    // ---------------------------------------------------
+
+    private fun procesarCredencialGoogle(
+        credential: Credential
+    ) {
+
+        // Verificar tipo credencial
+        if (
+            credential is CustomCredential
+            &&
+            credential.type ==
+            GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
+        ) {
+
+            // Obtener token Google
+            val googleIdTokenCredential =
+
+                GoogleIdTokenCredential.createFrom(
+                    credential.data
+                )
+
+            val idToken =
+                googleIdTokenCredential.idToken
+
+
+            // ---------------------------------------------------
+            // LOGIN FIREBASE GOOGLE
+            // ---------------------------------------------------
+
+            viewModel.loginConGoogle(
+                idToken
+            ) { usuarioFirebase, error ->
+
+                // Login correcto
+                if (usuarioFirebase != null) {
+
+                    // Buscar usuario Firestore
+                    viewModel.obtenerUsuario(
+                        usuarioFirebase.uid
+                    )
+
+                } else {
+
+                    Toast.makeText(
+                        requireContext(),
+                        error ?: "Error Google",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+        }
+    }
+
+
+    // ---------------------------------------------------
+    // OBSERVAR USUARIO FIRESTORE
+    // ---------------------------------------------------
+
+    // SOLO observamos Firestore porque:
+    // - rol
+    // - aprobado
+    // - datos usuario
+    //
+    // sí son estado persistente UI
+    private fun observarUsuarioFirestore() {
+
+        viewModel.usuario.observe(
+            viewLifecycleOwner
+        ) { usuario ->
+
+            // ---------------------------------------------------
+            // USUARIO EXISTE FIRESTORE
+            // ---------------------------------------------------
 
             if (usuario != null) {
 
-                // Caso: usuario existe pero NO está aprobado
+                // Usuario pendiente aprobación
                 if (usuario.aprobado == false) {
 
                     Toast.makeText(
@@ -190,51 +379,74 @@ class LoginFragment : Fragment() {
                         "Usuario pendiente de aprobación",
                         Toast.LENGTH_LONG
                     ).show()
-                    // cerramos sesion
-                    usuarioViewModel.logout()
-
-                    // Asegurar que vuelve al  login (por si acaso)
-                    findNavController().popBackStack()
 
                     return@observe
                 }
 
-                // Caso: usuario aprobado → navegación según rol
-                if (usuario.rol == "cliente") {
 
-                    startActivity(
-                        android.content.Intent(requireContext(), ClienteHomeActivity::class.java)
-                    )
+                // ---------------------------------------------------
+                // NAVEGACIÓN SEGÚN ROL
+                // ---------------------------------------------------
 
-                } else if (usuario.rol == "empleado") {
+                when (usuario.rol) {
 
-                    startActivity(
-                        android.content.Intent(requireContext(), EmpleadoHomeActivity::class.java)
-                    )
+                    "cliente" -> {
 
-                } else if (usuario.rol == "admin") {
+                        startActivity(
+                            Intent(
+                                requireContext(),
+                                ClienteHomeActivity::class.java
+                            )
+                        )
+                    }
 
-                    startActivity(
-                        android.content.Intent(requireContext(), AdminHomeActivity::class.java)
-                    )
+                    "empleado" -> {
+
+                        startActivity(
+                            Intent(
+                                requireContext(),
+                                EmpleadoHomeActivity::class.java
+                            )
+                        )
+                    }
+
+                    "admin" -> {
+
+                        startActivity(
+                            Intent(
+                                requireContext(),
+                                AdminHomeActivity::class.java
+                            )
+                        )
+                    }
                 }
 
                 requireActivity().finish()
 
             } else {
 
-                // Caso: usuario NO existe en Firestore
-                // Esto pasa en login con Google o registro inicial
+                // ---------------------------------------------------
+                // NO EXISTE FIRESTORE
+                // ---------------------------------------------------
+                // login Google nuevo
+                // o usuario recién registrado
 
-                Toast.makeText(
-                    requireContext(),
-                    "Completa tu registro",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                // Navegación al fragment de registro
-                findNavController().navigate(R.id.registroFragment)
+                findNavController().navigate(
+                    R.id.registroFragment
+                )
             }
         }
+    }
+
+
+    // ---------------------------------------------------
+    // ON DESTROY VIEW
+    // ---------------------------------------------------
+
+    override fun onDestroyView() {
+
+        super.onDestroyView()
+
+        _binding = null
     }
 }
