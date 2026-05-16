@@ -1,6 +1,7 @@
 package com.example.apppanadero.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppanadero.data.model.LineaPedido
@@ -12,6 +13,7 @@ class LineaPedidoAdapter(
 
     // Lista líneas pedido
     private val listaLineasPedido: List<LineaPedido>,
+
 
     private val estadoPedido: String
 
@@ -70,16 +72,28 @@ class LineaPedidoAdapter(
 
                 lineaPedido.cantidadPedida
             }
+        //Condicion para que solo pinte cantidad devuelta si es distina de cero
+        if (lineaPedido.cantidadDevuelta != 0) {
+            //como en el else quitamos visibilidad y el item se recicla hay que volverle a dar visibilidad al dato
+            holder.binding.tvCantidad.visibility = View.VISIBLE
+
+            holder.binding.tvCantidad.text =
+                "Pedidas: ${lineaPedido.cantidadPedida} uds / Devueltas: ${lineaPedido.cantidadDevuelta} uds"
+
+        } else {
+            holder.binding.tvCantidad.visibility = View.GONE
+        }
+
 
         // Nombre producto
         holder.binding.tvNombreProducto.text = lineaPedido.nombreProducto
 
         // Texto detalle
-        holder.binding.tvDetalle.text = "$cantidadMostrar uds · €${lineaPedido.precioUnitario}/u"
+        holder.binding.tvDetalle.text = "$cantidadMostrar uds -> ${lineaPedido.precioUnitario} €/u"
 
         // Subtotal
         val subtotal = lineaPedido.cantidadFinal * lineaPedido.precioUnitario
-        holder.binding.tvTotal.text = "€$subtotal"
+        holder.binding.tvTotal.text = "%.2f €".format(subtotal)
     }
 
     // ------------------------------------------------

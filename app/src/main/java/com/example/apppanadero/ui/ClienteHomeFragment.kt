@@ -29,7 +29,7 @@ class ClienteHomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Cambiar el título de la ActionBar
         activity?.let {
-            (it as? AppCompatActivity)?.supportActionBar?.title = "Home Cliente"
+            (it as? AppCompatActivity)?.supportActionBar?.title = "Cliente"
         }
         super.onViewCreated(view, savedInstanceState)
 

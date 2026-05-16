@@ -13,26 +13,38 @@ class PedidoRepository {
     // ------------------------------------------------
 
     fun guardarPedido(
+
         pedido: Pedido,
         respuesta: (Boolean) -> Unit
+
     ) {
 
-        // Creamos documento automático
-        val documento = db.collection("pedidos").document()
+        // Obtenemos siguiente número pedido
+        obtenerSiguienteNumeroPedido { siguienteNumero ->
 
-        // Copiamos pedido añadiendo id generado
-        val pedidoConId = pedido.copy(id = documento.id)
+            // Documento Firestore
+            val documento =
+                db.collection("pedidos").document()
 
-        documento
-            .set(pedidoConId)
-            .addOnSuccessListener {
+            // Pedido final
+            val pedidoConId = pedido.copy(
 
-                respuesta(true)
-            }
-            .addOnFailureListener {
+                id = documento.id,
 
-                respuesta(false)
-            }
+                numeroPedido = siguienteNumero
+            )
+
+            documento
+                .set(pedidoConId)
+                .addOnSuccessListener {
+
+                    respuesta(true)
+                }
+                .addOnFailureListener {
+
+                    respuesta(false)
+                }
+        }
     }
 
     // ------------------------------------------------
@@ -147,6 +159,30 @@ class PedidoRepository {
         db.collection("pedidos")
             .document(pedidoId)
             .update("estado", nuevoEstado)
+            .addOnSuccessListener {
+
+                respuesta(true)
+            }
+            .addOnFailureListener {
+
+                respuesta(false)
+            }
+    }
+
+    // ------------------------------------------------
+    // ACTUALIZAR PEDIDO
+    // ------------------------------------------------
+
+    fun actualizarPedido(
+
+        pedido: Pedido,
+        respuesta: (Boolean) -> Unit
+
+    ) {
+
+        db.collection("pedidos")
+            .document(pedido.id)
+            .set(pedido)
             .addOnSuccessListener {
 
                 respuesta(true)

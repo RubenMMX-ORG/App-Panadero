@@ -8,13 +8,35 @@ import com.example.apppanadero.databinding.ItemProductoBinding
 
 
 // Adapter encargado de mostrar productos
-// para crear un nuevo pedido
+// para crear o modificar un pedido
 class ProductoPedidoAdapter(
 
-    // Lista productos
+    // Lista productos obtenidos desde Firestore
     private val listaProductos: List<Producto>,
 
-    // Callback cuando cambia cantidad
+    // Mapa con cantidades iniciales.
+    // Se usa principalmente al modificar un pedido.
+    //
+    // key   -> productoId
+    // value -> cantidad seleccionada
+    //
+    // Si es un pedido nuevo:
+    // se enviará emptyMap()
+    //
+    // Si es modificar pedido:
+    // se enviarán las cantidades reales
+    // recuperadas desde Firestore
+    private val cantidadesIniciales:
+    Map<String, Int>,
+
+    // Callback para comunicar al Fragment
+    // que una cantidad ha cambiado.
+    //
+    // El Adapter NO debe hablar con Firestore.
+    // Solo pinta datos y comunica eventos.
+    //
+    // La lógica real se gestiona en:
+    // Fragment -> ViewModel -> Repository
     private val onCantidadCambiada:
         (Producto, Int) -> Unit
 
@@ -25,11 +47,30 @@ class ProductoPedidoAdapter(
     // MAPA CANTIDADES
     // ------------------------------------------------
 
-    // Guarda cantidades seleccionadas
-    // key = productoId
-    // value = cantidad
+    // Guarda las cantidades actuales
+    // seleccionadas por el usuario.
+    //
+    // Este mapa se inicializa usando:
+    // cantidadesIniciales
+    //
+    // Así conseguimos que al modificar
+    // un pedido el RecyclerView ya aparezca
+    // con los productos previamente añadidos.
     private val cantidadesSeleccionadas =
         mutableMapOf<String, Int>()
+
+    // ------------------------------------------------
+    // INIT
+    // ------------------------------------------------
+
+    init {
+
+        // Copiamos las cantidades iniciales
+        // al mapa interno del adapter
+        cantidadesSeleccionadas.putAll(
+            cantidadesIniciales
+        )
+    }
 
     // ------------------------------------------------
     // VIEW HOLDER
@@ -75,18 +116,33 @@ class ProductoPedidoAdapter(
             listaProductos[position]
 
         // Recuperamos cantidad actual
+        //
+        // Si el producto no existe en el mapa:
+        // usamos 0 por defecto
         var cantidad =
-            cantidadesSeleccionadas[producto.id] ?: 0
+            cantidadesSeleccionadas[
+                producto.id
+            ] ?: 0
+
+        // ------------------------------------------------
+        // DATOS PRODUCTO
+        // ------------------------------------------------
 
         // Nombre producto
         holder.binding.tvNombreProducto.text =
             producto.nombre
 
-        // Precio temporal
-        holder.binding.tvPrecioProducto.text =
-            "€1.20"
+        // Categoría
+        holder.binding.tvCategoria.text =
+            producto.categoria
 
-        // Cantidad
+        // Precio temporal
+        // Más adelante se obtendrá
+        // desde la entidad Precio
+        holder.binding.tvPrecioProducto.text = "precio/unidad: %.2f €".format(producto.precio)
+
+
+        // Cantidad seleccionada
         holder.binding.tvCantidad.text =
             cantidad.toString()
 
@@ -98,12 +154,16 @@ class ProductoPedidoAdapter(
 
             cantidad++
 
-            cantidadesSeleccionadas[producto.id] =
-                cantidad
+            // Actualizamos mapa interno
+            cantidadesSeleccionadas[
+                producto.id
+            ] = cantidad
 
+            // Actualizamos UI
             holder.binding.tvCantidad.text =
                 cantidad.toString()
 
+            // Comunicamos cambio al Fragment
             onCantidadCambiada(
                 producto,
                 cantidad
@@ -120,12 +180,16 @@ class ProductoPedidoAdapter(
 
                 cantidad--
 
-                cantidadesSeleccionadas[producto.id] =
-                    cantidad
+                // Actualizamos mapa interno
+                cantidadesSeleccionadas[
+                    producto.id
+                ] = cantidad
 
+                // Actualizamos UI
                 holder.binding.tvCantidad.text =
                     cantidad.toString()
 
+                // Comunicamos cambio al Fragment
                 onCantidadCambiada(
                     producto,
                     cantidad

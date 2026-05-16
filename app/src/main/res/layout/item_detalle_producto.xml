@@ -32,15 +32,25 @@
                 android:textSize="15sp"
                 android:textColor="@color/text_primary"/>
 
+            <!-- CANTIDAD -->
+            <TextView
+                android:id="@+id/tvCantidad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="pedidas: 2 uds ·devueltas: 1uds"
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp" />
+
             <!-- DETALLE -->
             <TextView
                 android:id="@+id/tvDetalle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2 uds · €2.50/u"
-                android:textSize="13sp"
+                android:layout_marginTop="2dp"
+                android:text="2 uds · 2.50€/u"
                 android:textColor="@color/text_secondary"
-                android:layout_marginTop="2dp"/>
+                android:textSize="13sp" />
 
         </LinearLayout>
 

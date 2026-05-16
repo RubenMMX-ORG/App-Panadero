@@ -130,6 +130,32 @@ class PedidoViewModel(
     }
 
     // ------------------------------------------------
+    // ACTUALIZAR ESTADO PEDIDO
+    // ------------------------------------------------
+
+    fun actualizarPedido(
+        pedido: Pedido
+    ) {
+
+        repository.actualizarPedido(
+            pedido
+        ) { actualizado ->
+
+            if (actualizado) {
+
+                // Activamos observer
+                _pedidoGuardado.postValue(true)
+
+            } else {
+
+                _error.postValue(
+                    "Error al actualizar pedido"
+                )
+            }
+        }
+    }
+
+    // ------------------------------------------------
     // ELIMINAR PEDIDO
     // ------------------------------------------------
 

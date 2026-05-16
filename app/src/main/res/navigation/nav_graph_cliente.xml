@@ -21,7 +21,14 @@
     <fragment
         android:id="@+id/nuevoPedidoFragment"
         android:name="com.example.apppanadero.ui.NuevoPedidoFragment"
-        android:label="NuevoPedidoFragment" />
+        android:label="NuevoPedidoFragment" >
+
+        <argument
+            android:name="pedidoId"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/historicoPedidosFragment"
         android:name="com.example.apppanadero.ui.HistoricoPedidosFragment"
@@ -39,5 +46,8 @@
         <argument
             android:name="pedidoId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_detallePedidoFragment_to_nuevoPedidoFragment"
+            app:destination="@id/nuevoPedidoFragment" />
     </fragment>
 </navigation>

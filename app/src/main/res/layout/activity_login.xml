@@ -6,24 +6,26 @@
     android:background="@drawable/fondo_pan">
 
     <!-- TOOLBAR -->
+
+    <!-- NAV HOST -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarLogin"
         android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="40dp"
         android:background="@color/primary_color"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
 
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
-        app:navigationIconTint="@android:color/white"
 
+        app:navigationIconTint="@android:color/white"
         app:title="Iniciar Sesion"
         app:titleCentered="true"
         app:titleTextColor="@android:color/white" />
 
-    <!-- NAV HOST -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_cliente"
         android:name="androidx.navigation.fragment.NavHostFragment"

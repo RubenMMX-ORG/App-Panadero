@@ -60,7 +60,7 @@ class PedidoAdapter(
         val pedido = listaPedidos[position]
 
         // Número pedido
-        holder.binding.tvNumeroPedido.text = "Pedido #${pedido.numeroPedido}"
+        holder.binding.tvNumeroPedido.text = "Pedido # ${pedido.numeroPedido}"
 
         // Fecha
         val formato =
@@ -74,12 +74,10 @@ class PedidoAdapter(
                 pedido.fecha.toDate()
             )
 
-        holder.binding.tvFecha.text =
-            fechaFormateada
+        holder.binding.tvFecha.text = fechaFormateada
 
         // Estado
-        holder.binding.chipEstado.text =
-            pedido.estado
+        holder.binding.chipEstado.text = pedido.estado
 
         // Total productos
         val totalProductos = pedido.lineasPedido.sumOf {
@@ -87,12 +85,10 @@ class PedidoAdapter(
             it.cantidadPedida
         }
 
-        holder.binding.tvCantidad.text =
-            "$totalProductos productos"
+        holder.binding.tvCantidad.text = "$totalProductos productos"
 
         // Precio
-        holder.binding.tvPrecio.text =
-            "€${pedido.precioTotal}"
+        holder.binding.tvPrecio.text ="%.2f €".format(pedido.precioTotal)
 
         // Click item
         holder.itemView.setOnClickListener {

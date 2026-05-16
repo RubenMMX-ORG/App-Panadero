@@ -40,7 +40,7 @@ class HistoricoPedidosFragment : Fragment() {
     ): View {
         // Cambiar el título de la ActionBar
         activity?.let {
-            (it as? AppCompatActivity)?.supportActionBar?.title = "Historico de pedidos"
+            (it as? AppCompatActivity)?.supportActionBar?.title = "Pedidos"
         }
 
         _binding = FragmentHistoricoPedidosBinding.inflate(
@@ -118,12 +118,12 @@ class HistoricoPedidosFragment : Fragment() {
         viewModel.listaPedidos.observe(viewLifecycleOwner) { listaPedidos ->
 
             // Creamos adapter
-            val adapter = PedidoAdapter(listaPedidos) { pedido ->
+            val pedidoAdapter = PedidoAdapter(listaPedidos) { pedido ->
 
                 // CLICK ITEM PEDIDO
                 Toast.makeText(
                     requireContext(),
-                    "Pedido seleccionado: ${pedido.id}",
+                    "Pedido seleccionado: ${pedido.numeroPedido}",
                     Toast.LENGTH_SHORT
                 ).show()
 
@@ -140,7 +140,7 @@ class HistoricoPedidosFragment : Fragment() {
             }
 
             // Asignamos adapter al RecyclerView
-            binding.recyclerHistorico.adapter = adapter
+            binding.recyclerHistorico.adapter = pedidoAdapter
         }
 
         // ------------------------------------------------

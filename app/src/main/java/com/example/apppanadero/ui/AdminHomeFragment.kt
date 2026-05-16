@@ -28,7 +28,7 @@ class AdminHomeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         // Cambiar el título de la ActionBar
         activity?.let {
-            (it as? AppCompatActivity)?.supportActionBar?.title = "Home Admin"
+            (it as? AppCompatActivity)?.supportActionBar?.title = "Admin"
         }
         super.onViewCreated(view, savedInstanceState)
 

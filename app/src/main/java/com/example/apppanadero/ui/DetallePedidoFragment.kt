@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -23,6 +24,9 @@ class DetallePedidoFragment : Fragment() {
     private var _binding: FragmentDetallePedidoBinding? = null
     private val binding get() = _binding!!
 
+    //Variable para recuperar el pedidoId recibido
+    private lateinit var pedidoId : String
+
     // ViewModel con Injector
     private val pedidoViewModel: PedidoViewModel by viewModels {
         Injector.providePedidoViewModelFactory()
@@ -39,10 +43,15 @@ class DetallePedidoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Cambiar el título de la ActionBar
+        activity?.let {
+            (it as? AppCompatActivity)?.supportActionBar?.title = "Detalle Pedido"
+        }
+        super.onViewCreated(view, savedInstanceState)
 
         // Recuperamos el pedidoId de los argumentos
         val args = DetallePedidoFragmentArgs.fromBundle(requireArguments())
-        val pedidoId = args.pedidoId
+        pedidoId = args.pedidoId
 
 
         //  Observa el LiveData
@@ -50,7 +59,8 @@ class DetallePedidoFragment : Fragment() {
             if (pedido != null) {
                 mostrarDatosPedido(pedido)
             } else {
-                Toast.makeText(requireContext(), "No se encontró el pedido", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "No se encontró el pedido", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -62,7 +72,7 @@ class DetallePedidoFragment : Fragment() {
 
     private fun mostrarDatosPedido(pedido: Pedido) {
         // Número pedido
-        binding.tvNumeroPedido.text = "Pedido #${pedido.numeroPedido}"
+        binding.tvNumeroPedido.text = "Pedido # ${pedido.numeroPedido}"
 
         // Fecha
         val formato =
@@ -87,10 +97,10 @@ class DetallePedidoFragment : Fragment() {
         binding.tvNumProductos.text = "$totalProductos productos"
 
         // Precio total
-        binding.tvTotal.text = "€${pedido.precioTotal}"
+        binding.tvTotal.text = "%.2f €".format(pedido.precioTotal)
 
         // RecyclerView con las líneas de pedido
-        val adapter = LineaPedidoAdapter(pedido.lineasPedido,pedido.estado)
+        val adapter = LineaPedidoAdapter(pedido.lineasPedido, pedido.estado)
         binding.recyclerDetalle.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerDetalle.adapter = adapter
     }
@@ -108,7 +118,11 @@ class DetallePedidoFragment : Fragment() {
                     Toast.makeText(requireContext(), "Pedido cancelado", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 } else {
-                    Toast.makeText(requireContext(), "No se puede cancelar un pedido finalizado", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "No se puede cancelar un pedido finalizado",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             } else {
                 Toast.makeText(requireContext(), "Pedido no cargado aún", Toast.LENGTH_SHORT).show()
@@ -116,7 +130,14 @@ class DetallePedidoFragment : Fragment() {
         }
 
         binding.btnModificar.setOnClickListener {
-            Toast.makeText(requireContext(), "Modificar pedido aún no implementado", Toast.LENGTH_SHORT).show()
+
+            val action =
+                DetallePedidoFragmentDirections
+                    .actionDetallePedidoFragmentToNuevoPedidoFragment(
+                        pedidoId = pedidoId//asignamos al action el pedidoId recibido y lo pasamos al siguiente fragment
+                    )
+
+            findNavController().navigate(action)
         }
     }
 

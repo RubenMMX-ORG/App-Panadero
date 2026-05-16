@@ -1,7 +1,11 @@
 package com.example.apppanadero.data.di
 import com.example.apppanadero.data.repository.PedidoRepository
+import com.example.apppanadero.data.repository.PrecioRepository
+import com.example.apppanadero.data.repository.ProductoRepository
 import com.example.apppanadero.data.repository.UsuarioRepository
 import com.example.apppanadero.viewmodel.PedidoViewModelFactory
+import com.example.apppanadero.viewmodel.factory.PrecioViewModelFactory
+import com.example.apppanadero.viewmodel.factory.ProductoViewModelFactory
 import com.example.apppanadero.viewmodel.factory.UsuarioViewModelFactory
 
 // Un objeto injector es un sitio donde construimos dependencias
@@ -42,6 +46,33 @@ object Injector {
 
         return PedidoViewModelFactory(
             providePedidoRepository()
+        )
+    }
+
+    // ------------------------------------------------
+    // PRODUCTOS
+    // ------------------------------------------------
+
+    fun provideProductoViewModelFactory(): ProductoViewModelFactory {
+
+        val repository =
+            ProductoRepository()
+
+        return ProductoViewModelFactory(
+            repository
+        )
+    }
+    // ------------------------------------------------
+    // PRECIOS
+    // ------------------------------------------------
+
+    fun providePrecioViewModelFactory(): PrecioViewModelFactory {
+
+        val repository =
+            PrecioRepository()
+
+        return PrecioViewModelFactory(
+            repository
         )
     }
 }

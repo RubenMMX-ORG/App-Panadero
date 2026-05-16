@@ -5,7 +5,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.apppanadero.R
 import com.example.apppanadero.databinding.ActivityClienteHomeBinding
@@ -46,6 +45,12 @@ class ClienteHomeActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
+        //Navegacion atras de la toolbar
+        binding.toolbarCliente.setNavigationOnClickListener {
+
+            onBackPressedDispatcher.onBackPressed()
+        }
+
         return when (item.itemId) {
 
             R.id.menu_home -> {
@@ -68,5 +73,9 @@ class ClienteHomeActivity : AppCompatActivity() {
 
             else -> super.onOptionsItemSelected(item)
         }
+
+
     }
+
+
 }
