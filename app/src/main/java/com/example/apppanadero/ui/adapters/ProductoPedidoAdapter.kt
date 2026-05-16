@@ -14,6 +14,25 @@ class ProductoPedidoAdapter(
     // Lista productos obtenidos desde Firestore
     private val listaProductos: List<Producto>,
 
+    // ------------------------------------------------
+    // NUEVO 😄🔥
+    // ------------------------------------------------
+    // Mapa con precios vigentes.
+    //
+    // key   -> productoId
+    // value -> precio actual
+    //
+    // Este mapa viene desde el Fragment,
+    // NO desde Firestore directamente.
+    //
+    // El Adapter solo pinta datos.
+    private val mapaPrecios:
+    Map<String, Double>,
+
+    // ------------------------------------------------
+    // YA EXISTÍA
+    // ------------------------------------------------
+
     // Mapa con cantidades iniciales.
     // Se usa principalmente al modificar un pedido.
     //
@@ -115,6 +134,23 @@ class ProductoPedidoAdapter(
         val producto =
             listaProductos[position]
 
+        // ------------------------------------------------
+        // NUEVO 😄🔥
+        // ------------------------------------------------
+        // Recuperamos precio actual usando:
+        //
+        // producto.id
+        //
+        // como FK lógica.
+        //
+        // Si no existe:
+        // usamos 0.0 por seguridad.
+        val precioActual =
+
+            mapaPrecios[
+                producto.id
+            ] ?: 0.0
+
         // Recuperamos cantidad actual
         //
         // Si el producto no existe en el mapa:
@@ -136,11 +172,23 @@ class ProductoPedidoAdapter(
         holder.binding.tvCategoria.text =
             producto.categoria
 
-        // Precio temporal
-        // Más adelante se obtendrá
-        // desde la entidad Precio
-        holder.binding.tvPrecioProducto.text = "precio/unidad: %.2f €".format(producto.precio)
+        // ------------------------------------------------
+        // MODIFICADO 😄🔥
+        // ------------------------------------------------
+        // Antes:
+        //
+        // producto.precio
+        //
+        // Ahora:
+        //
+        // precioActual
+        //
+        // porque el precio ya NO pertenece
+        // directamente a Producto.
+        holder.binding.tvPrecioProducto.text =
 
+            "precio/unidad: %.2f €"
+                .format(precioActual)
 
         // Cantidad seleccionada
         holder.binding.tvCantidad.text =

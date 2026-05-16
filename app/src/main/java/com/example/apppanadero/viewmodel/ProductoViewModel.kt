@@ -35,6 +35,17 @@ class ProductoViewModel(
         _productoDetalle
 
     // ------------------------------------------------
+    // PRODUCTO GUARDADO
+    // ------------------------------------------------
+
+    private val _productoGuardado =
+        MutableLiveData<Producto?>()
+
+    val productoGuardado:
+            LiveData<Producto?> =
+        _productoGuardado
+
+    // ------------------------------------------------
     // ERROR
     // ------------------------------------------------
 
@@ -49,6 +60,7 @@ class ProductoViewModel(
     // GUARDAR PRODUCTO
     // ------------------------------------------------
 
+
     fun guardarProducto(
 
         producto: Producto
@@ -57,9 +69,15 @@ class ProductoViewModel(
 
         repository.guardarProducto(
             producto
-        ) { correcto ->
+        ) { productoGuardado ->
 
-            if (!correcto) {
+            if (productoGuardado != null) {
+
+                _productoGuardado.postValue(
+                    productoGuardado
+                )
+
+            } else {
 
                 _error.postValue(
                     "Error al guardar producto"
@@ -155,5 +173,14 @@ class ProductoViewModel(
     fun limpiarError() {
 
         _error.value = ""
+    }
+
+    // ------------------------------------------------
+    // LIMPIAR PRODUCTO GUARDADO
+    // ------------------------------------------------
+
+    fun limpiarProductoGuardado() {
+
+        _productoGuardado.value = null
     }
 }

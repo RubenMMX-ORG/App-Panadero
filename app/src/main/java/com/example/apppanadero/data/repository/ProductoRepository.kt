@@ -19,30 +19,38 @@ class ProductoRepository {
     fun guardarProducto(
 
         producto: Producto,
-        respuesta: (Boolean) -> Unit
+
+        respuesta: (Producto?) -> Unit
 
     ) {
 
+        // Documento Firestore
         val documento =
             db.collection("productos")
                 .document()
 
-        val productoConId =
-            producto.copy(
-                id = documento.id
-            )
+        // Añadimos id generado
+        val productoConId = producto.copy(
+
+            id = documento.id
+        )
 
         documento
             .set(productoConId)
+
             .addOnSuccessListener {
 
-                respuesta(true)
+                // Devolvemos producto ya guardado
+                // con el id generado
+                respuesta(productoConId)
             }
+
             .addOnFailureListener {
 
-                respuesta(false)
+                respuesta(null)
             }
     }
+
 
     // ------------------------------------------------
     // OBTENER TODOS PRODUCTOS

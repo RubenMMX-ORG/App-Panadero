@@ -62,17 +62,21 @@ object Injector {
             repository
         )
     }
+
     // ------------------------------------------------
     // PRECIOS
     // ------------------------------------------------
 
-    fun providePrecioViewModelFactory(): PrecioViewModelFactory {
+    // Repository
+    private val precioRepository =
+        PrecioRepository()
 
-        val repository =
-            PrecioRepository()
+    // Factory
+    fun providePrecioViewModelFactory():
+            PrecioViewModelFactory {
 
         return PrecioViewModelFactory(
-            repository
+            precioRepository
         )
     }
 }

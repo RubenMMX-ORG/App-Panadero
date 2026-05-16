@@ -14,48 +14,36 @@ class PrecioRepository {
         FirebaseFirestore.getInstance()
 
     // ------------------------------------------------
-    // GUARDAR PRECIO
+    // CREAR PRECIO
     // ------------------------------------------------
 
     fun guardarPrecio(
 
         precio: Precio,
+
         respuesta: (Boolean) -> Unit
 
     ) {
 
-        // Primero desactivamos precios vigentes
-        desactivarPreciosVigentes(
-            precio.productoId
-        ) {
+        val documento =
+            db.collection("precios")
+                .document()
 
-            val documento =
-                db.collection("precios")
-                    .document()
+        val precioConId =
+            precio.copy(
+                id = documento.id
+            )
 
-            val precioConId =
-                precio.copy(
+        documento
+            .set(precioConId)
+            .addOnSuccessListener {
 
-                    id = documento.id,
+                respuesta(true)
+            }
+            .addOnFailureListener {
 
-                    fechaInicio = Timestamp.now(),
-
-                    fechaFin = null,
-
-                    vigencia = true
-                )
-
-            documento
-                .set(precioConId)
-                .addOnSuccessListener {
-
-                    respuesta(true)
-                }
-                .addOnFailureListener {
-
-                    respuesta(false)
-                }
-        }
+                respuesta(false)
+            }
     }
 
     // ------------------------------------------------
@@ -65,6 +53,7 @@ class PrecioRepository {
     fun obtenerPrecioVigente(
 
         productoId: String,
+
         respuesta: (Precio?) -> Unit
 
     ) {
@@ -75,33 +64,22 @@ class PrecioRepository {
                 productoId
             )
             .whereEqualTo(
-                "vigencia",
+                "vigente",
                 true
             )
             .limit(1)
             .get()
             .addOnSuccessListener { resultado ->
 
-                if (!resultado.isEmpty) {
+                val documento =
+                    resultado.documents.firstOrNull()
 
-                    val documento =
-                        resultado.documents.first()
-
-                    val precio =
-                        documento.toObject(
-                            Precio::class.java
-                        )
-
-                    respuesta(
-                        precio?.copy(
-                            id = documento.id
-                        )
+                val precio =
+                    documento?.toObject(
+                        Precio::class.java
                     )
 
-                } else {
-
-                    respuesta(null)
-                }
+                respuesta(precio)
             }
             .addOnFailureListener {
 
@@ -110,12 +88,13 @@ class PrecioRepository {
     }
 
     // ------------------------------------------------
-    // OBTENER HISTORIAL PRECIOS
+    // OBTENER HISTORICO PRECIOS
     // ------------------------------------------------
 
-    fun obtenerHistorialPrecios(
+    fun obtenerHistoricoPrecios(
 
         productoId: String,
+
         respuesta: (List<Precio>) -> Unit
 
     ) {
@@ -129,15 +108,11 @@ class PrecioRepository {
             .addOnSuccessListener { resultado ->
 
                 val listaPrecios =
-                    resultado.documents.mapNotNull { documento ->
 
-                        val precio =
-                            documento.toObject(
-                                Precio::class.java
-                            )
+                    resultado.documents.mapNotNull {
 
-                        precio?.copy(
-                            id = documento.id
+                        it.toObject(
+                            Precio::class.java
                         )
                     }
 
@@ -150,110 +125,83 @@ class PrecioRepository {
     }
 
     // ------------------------------------------------
-    // ACTUALIZAR PRECIO
+    // ACTUALIZAR PRECIO PRODUCTO
     // ------------------------------------------------
 
     fun actualizarPrecio(
 
-        precio: Precio,
-        respuesta: (Boolean) -> Unit
-
-    ) {
-
-        db.collection("precios")
-            .document(precio.id)
-            .set(precio)
-            .addOnSuccessListener {
-
-                respuesta(true)
-            }
-            .addOnFailureListener {
-
-                respuesta(false)
-            }
-    }
-
-    // ------------------------------------------------
-    // ELIMINAR PRECIO
-    // ------------------------------------------------
-
-    fun eliminarPrecio(
-
-        precioId: String,
-        respuesta: (Boolean) -> Unit
-
-    ) {
-
-        db.collection("precios")
-            .document(precioId)
-            .delete()
-            .addOnSuccessListener {
-
-                respuesta(true)
-            }
-            .addOnFailureListener {
-
-                respuesta(false)
-            }
-    }
-
-    // ------------------------------------------------
-    // DESACTIVAR PRECIOS VIGENTES
-    // ------------------------------------------------
-
-    private fun desactivarPreciosVigentes(
-
         productoId: String,
+
+        nuevoPrecio: Double,
+
         respuesta: (Boolean) -> Unit
 
     ) {
 
-        db.collection("precios")
-            .whereEqualTo(
-                "productoId",
-                productoId
-            )
-            .whereEqualTo(
-                "vigencia",
-                true
-            )
-            .get()
-            .addOnSuccessListener { resultado ->
+        //  Buscar precio vigente actual
+        obtenerPrecioVigente(productoId) { precioActual ->
 
-                if (resultado.isEmpty) {
+            if (precioActual != null) {
 
-                    respuesta(true)
+                // 2️⃣ Desactivar precio antiguo
+                db.collection("precios")
+                    .document(precioActual.id)
+                    .update(
 
-                } else {
+                        mapOf(
 
-                    val batch =
-                        db.batch()
+                            "vigente" to false,
 
-                    resultado.documents.forEach { documento ->
+                            "fechaFin" to
+                                    Timestamp.now()
+                        )
+                    )
+                    .addOnSuccessListener {
 
-                        batch.update(
-                            documento.reference,
-                            mapOf(
-                                "vigencia" to false,
-                                "fechaFin" to Timestamp.now()
-                            )
+                        // 3️⃣ Crear nuevo precio
+                        val nuevo = Precio(
+
+                            productoId = productoId,
+
+                            precio = nuevoPrecio,
+
+                            fechaInicio =
+                                Timestamp.now(),
+
+                            vigente = true
+                        )
+
+                        guardarPrecio(
+                            nuevo,
+                            respuesta
                         )
                     }
+                    .addOnFailureListener {
 
-                    batch.commit()
-                        .addOnSuccessListener {
+                        respuesta(false)
+                    }
 
-                            respuesta(true)
-                        }
-                        .addOnFailureListener {
+            } else {
 
-                            respuesta(false)
-                        }
-                }
+                // Si no existía precio previo
+                val nuevo = Precio(
+
+                    productoId = productoId,
+
+                    precio = nuevoPrecio,
+
+                    fechaInicio =
+                        Timestamp.now(),
+
+                    vigente = true
+                )
+
+                guardarPrecio(
+                    nuevo,
+                    respuesta
+                )
             }
-            .addOnFailureListener {
-
-                respuesta(false)
-            }
+        }
     }
+
 }

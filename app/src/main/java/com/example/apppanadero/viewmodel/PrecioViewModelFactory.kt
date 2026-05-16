@@ -7,19 +7,26 @@ import com.example.apppanadero.viewmodel.PrecioViewModel
 
 class PrecioViewModelFactory(
 
-    private val repository: PrecioRepository
+    private val repository:
+    PrecioRepository
 
 ) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(
+
         modelClass: Class<T>
+
     ): T {
 
         if (
+
             modelClass.isAssignableFrom(
                 PrecioViewModel::class.java
             )
+
         ) {
+
+            @Suppress("UNCHECKED_CAST")
 
             return PrecioViewModel(
                 repository
@@ -27,7 +34,7 @@ class PrecioViewModelFactory(
         }
 
         throw IllegalArgumentException(
-            "Unknown ViewModel class"
+            "Unknown ViewModel"
         )
     }
 }

@@ -59,8 +59,27 @@ class NuevoPedidoFragment : Fragment() {
     // Total pedido
     private var totalPedido = 0.0
 
-    // Mapa cantidades iniciales.
+    // ------------------------------------------------
+    // NUEVO 😄🔥
+    // ------------------------------------------------
+    // Mapa precios vigentes.
     //
+    // key   -> productoId
+    // value -> precio actual
+    //
+    // El Fragment recibe estos datos
+    // desde Firestore y luego se los
+    // pasa al Adapter.
+    //
+    // Así evitamos que el Adapter
+    // acceda directamente a Firestore.
+    private var mapaPrecios:
+            Map<String, Double> = emptyMap()
+
+    // ------------------------------------------------
+    // MAPA CANTIDADES INICIALES
+    // ------------------------------------------------
+
     // Se usa cuando editamos un pedido.
     //
     // key   -> productoId
@@ -98,12 +117,16 @@ class NuevoPedidoFragment : Fragment() {
             savedInstanceState
         )
 
+        // ------------------------------------------------
+        // ACTION BAR
+        // ------------------------------------------------
 
-        // Cambiar el título de la ActionBar
         activity?.let {
-            (it as? AppCompatActivity)?.supportActionBar?.title = "Nuevo pedido"
+
+            (it as? AppCompatActivity)
+                ?.supportActionBar
+                ?.title = "Nuevo pedido"
         }
-        super.onViewCreated(view, savedInstanceState)
 
         // ------------------------------------------------
         // RECUPERAR ARGUMENTOS
@@ -130,14 +153,25 @@ class NuevoPedidoFragment : Fragment() {
             LinearLayoutManager(requireContext())
 
         // ------------------------------------------------
+        // PRECIOS TEMPORALES 😄🔥
+        // ------------------------------------------------
+        // De momento simulamos precios.
+        //
+        // Más adelante:
+        // vendrán desde PrecioRepository.
+        mapaPrecios = mapOf(
+
+            "1" to 1.20,
+
+            "2" to 2.50,
+
+            "3" to 3.10
+        )
+
+        // ------------------------------------------------
         // OBSERVAR PRODUCTOS
         // ------------------------------------------------
 
-        // Este observer se ejecutará cuando
-        // Firestore devuelva la lista productos.
-        //
-        // Aquí es donde realmente se crea
-        // el Adapter.
         productoViewModel.listaProductos.observe(
             viewLifecycleOwner
         ) { listaProductos ->
@@ -145,16 +179,14 @@ class NuevoPedidoFragment : Fragment() {
             adapter =
                 ProductoPedidoAdapter(
 
-                    // Lista productos Firestore
+                    // Lista productos
                     listaProductos,
 
+                    // NUEVO 😄🔥
+                    // Mapa precios actuales
+                    mapaPrecios,
+
                     // Cantidades iniciales
-                    //
-                    // Si es nuevo pedido:
-                    // emptyMap()
-                    //
-                    // Si es edición:
-                    // contendrá cantidades reales
                     cantidadesIniciales
 
                 ) { producto, cantidad ->
@@ -179,15 +211,12 @@ class NuevoPedidoFragment : Fragment() {
         // MODO EDICIÓN
         // ------------------------------------------------
 
-        // Si pedidoId != null:
-        // estamos modificando pedido.
         if (pedidoId != null) {
 
             pedidoViewModel.obtenerPedidoPorId(
                 pedidoId!!
             )
 
-            // Observamos pedido recuperado
             pedidoViewModel.pedidoDetalle.observe(
                 viewLifecycleOwner
             ) { pedido ->
@@ -222,23 +251,14 @@ class NuevoPedidoFragment : Fragment() {
                     // ACTUALIZAR TOTAL UI
                     // ------------------------------------------------
 
-                    binding.tvTotal.text = "Total: %.2f€".format(totalPedido)
+                    binding.tvTotal.text =
+                        "Total: %.2f €"
+                            .format(totalPedido)
 
                     // ------------------------------------------------
                     // CREAR MAPA CANTIDADES
                     // ------------------------------------------------
 
-                    // Convertimos:
-                    //
-                    // List<LineaPedido>
-                    //
-                    // en:
-                    //
-                    // Map<productoId, cantidad>
-                    //
-                    // Esto permitirá que el
-                    // RecyclerView aparezca
-                    // ya cargado al editar.
                     cantidadesIniciales =
 
                         pedido.lineasPedido.associate {
@@ -251,19 +271,15 @@ class NuevoPedidoFragment : Fragment() {
                     // RECARGAR ADAPTER
                     // ------------------------------------------------
 
-                    // Cuando ya tenemos:
-                    //
-                    // - productos
-                    // - cantidades
-                    //
-                    // volvemos a asignar adapter
-                    // para refrescar RecyclerView.
                     adapter =
                         ProductoPedidoAdapter(
 
                             productoViewModel
                                 .listaProductos
                                 .value ?: emptyList(),
+
+                            // NUEVO 😄🔥
+                            mapaPrecios,
 
                             cantidadesIniciales
 
@@ -322,6 +338,19 @@ class NuevoPedidoFragment : Fragment() {
 
         if (cantidad > 0) {
 
+            // ------------------------------------------------
+            // NUEVO 😄🔥
+            // ------------------------------------------------
+            // Recuperamos precio actual
+            // usando producto.id
+            //
+            // como FK lógica.
+            val precioActual =
+
+                mapaPrecios[
+                    producto.id
+                ] ?: 0.0
+
             val linea = LineaPedido(
 
                 productoId = producto.id,
@@ -336,8 +365,17 @@ class NuevoPedidoFragment : Fragment() {
                 // cantidadFinal = cantidadPedida
                 cantidadFinal = cantidad,
 
+                // ------------------------------------------------
+                // MODIFICADO 😄🔥
+                // ------------------------------------------------
+                // Antes:
+                // producto.precio
+                //
+                // Ahora:
+                // precio recuperado
+                // desde mapaPrecios
                 precioUnitario =
-                    producto.precio
+                    precioActual
             )
 
             listaLineasPedido.add(linea)
@@ -360,7 +398,9 @@ class NuevoPedidoFragment : Fragment() {
                         it.precioUnitario
             }
 
-        binding.tvTotal.text = "Total: %.2f €".format(totalPedido)
+        binding.tvTotal.text =
+            "Total: %.2f €"
+                .format(totalPedido)
     }
 
     // ------------------------------------------------
@@ -415,15 +455,18 @@ class NuevoPedidoFragment : Fragment() {
 
                 id = pedidoId!!,
 
-                numeroPedido = numeroPedidoActual,
+                numeroPedido =
+                    numeroPedidoActual,
 
                 clienteId = clienteId,
 
-                lineasPedido = listaLineasPedido,
+                lineasPedido =
+                    listaLineasPedido,
 
                 estado = "pendiente",
 
-                precioTotal = totalPedido
+                precioTotal =
+                    totalPedido
             )
 
             // Actualizamos pedido existente
@@ -441,11 +484,13 @@ class NuevoPedidoFragment : Fragment() {
 
                 clienteId = clienteId,
 
-                lineasPedido = listaLineasPedido,
+                lineasPedido =
+                    listaLineasPedido,
 
                 estado = "pendiente",
 
-                precioTotal = totalPedido
+                precioTotal =
+                    totalPedido
             )
 
             // Guardamos nuevo pedido
@@ -478,7 +523,8 @@ class NuevoPedidoFragment : Fragment() {
 
                 // Limpiamos LiveData
                 // para evitar bucles infinitos
-                pedidoViewModel.limpiarPedidoGuardado()
+                pedidoViewModel
+                    .limpiarPedidoGuardado()
             }
         }
     }

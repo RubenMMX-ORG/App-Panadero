@@ -2,17 +2,29 @@ package com.example.apppanadero.data.model
 
 import com.google.firebase.Timestamp
 
+
+
 data class Precio(
 
+    // ID documento Firestore
     val id: String = "",
 
+    // FK lógica al producto
     val productoId: String = "",
 
+    // Precio producto
     val precio: Double = 0.0,
 
-    val fechaInicio: Timestamp? = null,
+    // Fecha inicio vigencia
+    val fechaInicio: Timestamp =
+        Timestamp.now(),
 
+    // Fecha fin vigencia
+    //
+    // null mientras siga activo
     val fechaFin: Timestamp? = null,
 
-    val vigencia: Boolean = true
+    // true = precio actual
+    // false = precio histórico
+    val vigente: Boolean = true
 )

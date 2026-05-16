@@ -12,6 +12,7 @@ data class Producto(
     val categoria: String = "",
 
     // IVA producto
-    val iva: Double = 0.0
+    val iva: Double = 0.0,
+
 
 )

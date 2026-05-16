@@ -8,31 +8,32 @@ import com.example.apppanadero.data.repository.PrecioRepository
 
 class PrecioViewModel(
 
-    private val repository: PrecioRepository
+    private val repository:
+    PrecioRepository
 
 ) : ViewModel() {
 
     // ------------------------------------------------
-    // LISTA PRECIOS
+    // PRECIO ACTUAL
     // ------------------------------------------------
 
-    private val _listaPrecios =
-        MutableLiveData<List<Precio>>()
-
-    val listaPrecios:
-            LiveData<List<Precio>> =
-        _listaPrecios
-
-    // ------------------------------------------------
-    // PRECIO VIGENTE
-    // ------------------------------------------------
-
-    private val _precioVigente =
+    private val _precioActual =
         MutableLiveData<Precio?>()
 
-    val precioVigente:
+    val precioActual:
             LiveData<Precio?> =
-        _precioVigente
+        _precioActual
+
+    // ------------------------------------------------
+    // HISTORICO
+    // ------------------------------------------------
+
+    private val _historicoPrecios =
+        MutableLiveData<List<Precio>>()
+
+    val historicoPrecios:
+            LiveData<List<Precio>> =
+        _historicoPrecios
 
     // ------------------------------------------------
     // PRECIO GUARDADO
@@ -57,6 +58,76 @@ class PrecioViewModel(
         _error
 
     // ------------------------------------------------
+    // OBTENER PRECIO VIGENTE
+    // ------------------------------------------------
+
+    fun obtenerPrecioVigente(
+        productoId: String
+    ) {
+
+        repository.obtenerPrecioVigente(
+            productoId
+        ) { precio ->
+
+            _precioActual.postValue(
+                precio
+            )
+        }
+    }
+
+    // ------------------------------------------------
+    // HISTORICO PRECIOS
+    // ------------------------------------------------
+
+    fun obtenerHistoricoPrecios(
+        productoId: String
+    ) {
+
+        repository.obtenerHistoricoPrecios(
+            productoId
+        ) { lista ->
+
+            _historicoPrecios.postValue(
+                lista
+            )
+        }
+    }
+
+    // ------------------------------------------------
+    // ACTUALIZAR PRECIO
+    // ------------------------------------------------
+
+    fun actualizarPrecio(
+
+        productoId: String,
+
+        nuevoPrecio: Double
+
+    ) {
+
+        repository.actualizarPrecio(
+
+            productoId,
+            nuevoPrecio
+
+        ) { correcto ->
+
+            if (correcto) {
+
+                _precioGuardado.postValue(
+                    true
+                )
+
+            } else {
+
+                _error.postValue(
+                    "Error actualizando precio"
+                )
+            }
+        }
+    }
+
+    // ------------------------------------------------
     // GUARDAR PRECIO
     // ------------------------------------------------
 
@@ -72,7 +143,9 @@ class PrecioViewModel(
 
             if (correcto) {
 
-                _precioGuardado.postValue(true)
+                _precioGuardado.postValue(
+                    true
+                )
 
             } else {
 
@@ -81,109 +154,5 @@ class PrecioViewModel(
                 )
             }
         }
-    }
-
-    // ------------------------------------------------
-    // OBTENER PRECIO VIGENTE
-    // ------------------------------------------------
-
-    fun obtenerPrecioVigente(
-
-        productoId: String
-
-    ) {
-
-        repository.obtenerPrecioVigente(
-            productoId
-        ) { precio ->
-
-            _precioVigente.postValue(
-                precio
-            )
-        }
-    }
-
-    // ------------------------------------------------
-    // OBTENER HISTORIAL PRECIOS
-    // ------------------------------------------------
-
-    fun obtenerHistorialPrecios(
-
-        productoId: String
-
-    ) {
-
-        repository.obtenerHistorialPrecios(
-            productoId
-        ) { precios ->
-
-            _listaPrecios.postValue(
-                precios
-            )
-        }
-    }
-
-    // ------------------------------------------------
-    // ACTUALIZAR PRECIO
-    // ------------------------------------------------
-
-    fun actualizarPrecio(
-
-        precio: Precio
-
-    ) {
-
-        repository.actualizarPrecio(
-            precio
-        ) { correcto ->
-
-            if (!correcto) {
-
-                _error.postValue(
-                    "Error al actualizar precio"
-                )
-            }
-        }
-    }
-
-    // ------------------------------------------------
-    // ELIMINAR PRECIO
-    // ------------------------------------------------
-
-    fun eliminarPrecio(
-
-        precioId: String
-
-    ) {
-
-        repository.eliminarPrecio(
-            precioId
-        ) { correcto ->
-
-            if (!correcto) {
-
-                _error.postValue(
-                    "Error al eliminar precio"
-                )
-            }
-        }
-    }
-
-    // ------------------------------------------------
-    // LIMPIAR ERROR
-    // ------------------------------------------------
-
-    fun limpiarError() {
-
-        _error.value = ""
-    }
-
-    // ------------------------------------------------
-    // LIMPIAR PRECIO GUARDADO
-    // ------------------------------------------------
-
-    fun limpiarPrecioGuardado() {
-
-        _precioGuardado.value = false
     }
 }

@@ -6,5 +6,27 @@
     <fragment
         android:id="@+id/adminHomeFragment"
         android:name="com.example.apppanadero.ui.AdminHomeFragment"
-        android:label="AdminHomeFragment" />
+        android:label="AdminHomeFragment" >
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminPedidosFragment"
+            app:destination="@id/adminPedidosFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminProductosFragment"
+            app:destination="@id/adminProductosFragment" />
+        <action
+            android:id="@+id/action_adminHomeFragment_to_adminClientesFragment"
+            app:destination="@id/adminClientesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminPedidosFragment"
+        android:name="com.example.apppanadero.ui.AdminPedidosFragment"
+        android:label="AdminPedidosFragment" />
+    <fragment
+        android:id="@+id/adminClientesFragment"
+        android:name="com.example.apppanadero.ui.AdminClientesFragment"
+        android:label="AdminClientesFragment" />
+    <fragment
+        android:id="@+id/adminProductosFragment"
+        android:name="com.example.apppanadero.ui.AdminProductosFragment"
+        android:label="AdminProductosFragment" />
 </navigation>
