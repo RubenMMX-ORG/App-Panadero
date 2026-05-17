@@ -14,15 +14,15 @@ import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.data.model.LineaPedido
 import com.example.apppanadero.data.model.Pedido
 import com.example.apppanadero.data.model.Producto
-import com.example.apppanadero.databinding.FragmentNuevoPedidoBinding
+import com.example.apppanadero.databinding.FragmentClienteNuevoPedidoBinding
 import com.example.apppanadero.ui.adapters.ProductoPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 import com.google.firebase.auth.FirebaseAuth
 
-class NuevoPedidoFragment : Fragment() {
+class ClienteNuevoPedidoFragment : Fragment() {
 
-    private var _binding: FragmentNuevoPedidoBinding? = null
+    private var _binding: FragmentClienteNuevoPedidoBinding? = null
     private val binding get() = _binding!!
 
     // ------------------------------------------------
@@ -98,7 +98,7 @@ class NuevoPedidoFragment : Fragment() {
     ): View {
 
         _binding =
-            FragmentNuevoPedidoBinding.inflate(
+            FragmentClienteNuevoPedidoBinding.inflate(
                 inflater,
                 container,
                 false
@@ -140,7 +140,7 @@ class NuevoPedidoFragment : Fragment() {
         // - Modificar pedido:
         //      pedidoId tendrá valor
         val args =
-            NuevoPedidoFragmentArgs
+            ClienteNuevoPedidoFragmentArgs
                 .fromBundle(requireArguments())
 
         pedidoId = args.pedidoId

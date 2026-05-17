@@ -20,7 +20,11 @@
     <fragment
         android:id="@+id/adminPedidosFragment"
         android:name="com.example.apppanadero.ui.AdminPedidosFragment"
-        android:label="AdminPedidosFragment" />
+        android:label="AdminPedidosFragment" >
+        <action
+            android:id="@+id/action_adminPedidosFragment_to_adminDetallePedidoFragment"
+            app:destination="@id/adminDetallePedidoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/adminClientesFragment"
         android:name="com.example.apppanadero.ui.AdminClientesFragment"
@@ -28,5 +32,21 @@
     <fragment
         android:id="@+id/adminProductosFragment"
         android:name="com.example.apppanadero.ui.AdminProductosFragment"
-        android:label="AdminProductosFragment" />
+        android:label="AdminProductosFragment" >
+        <action
+            android:id="@+id/action_adminProductosFragment_to_adminNuevoProductoFragment"
+            app:destination="@id/adminNuevoProductoFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminDetallePedidoFragment"
+        android:name="com.example.apppanadero.ui.AdminDetallePedidoFragment"
+        android:label="AdminDetallePedidoFragment" >
+        <argument
+            android:name="pedidoId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/adminNuevoProductoFragment"
+        android:name="com.example.apppanadero.ui.AdminNuevoProductoFragment"
+        android:label="AdminNuevoProductoFragment" />
 </navigation>

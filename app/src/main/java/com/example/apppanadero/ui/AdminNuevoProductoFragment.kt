@@ -13,19 +13,19 @@ import androidx.navigation.fragment.findNavController
 import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.data.model.Precio
 import com.example.apppanadero.data.model.Producto
-import com.example.apppanadero.databinding.FragmentAdminCrearProductoBinding
+import com.example.apppanadero.databinding.FragmentAdminNuevoProductoBinding
 import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 import com.google.firebase.Timestamp
 
-class NuevoProductoFragment : Fragment() {
+class AdminNuevoProductoFragment : Fragment() {
 
     // ------------------------------------------------
     // VIEW BINDING
     // ------------------------------------------------
 
     private var _binding:
-            FragmentAdminCrearProductoBinding? = null
+            FragmentAdminNuevoProductoBinding? = null
 
     private val binding get() = _binding!!
 
@@ -58,7 +58,7 @@ class NuevoProductoFragment : Fragment() {
     ): View {
 
         _binding =
-            FragmentAdminCrearProductoBinding.inflate(
+            FragmentAdminNuevoProductoBinding.inflate(
 
                 inflater,
                 container,

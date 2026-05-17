@@ -20,7 +20,7 @@
     </fragment>
     <fragment
         android:id="@+id/nuevoPedidoFragment"
-        android:name="com.example.apppanadero.ui.NuevoPedidoFragment"
+        android:name="com.example.apppanadero.ui.ClienteNuevoPedidoFragment"
         android:label="NuevoPedidoFragment" >
 
         <argument
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/historicoPedidosFragment"
-        android:name="com.example.apppanadero.ui.HistoricoPedidosFragment"
+        android:name="com.example.apppanadero.ui.ClienteHistoricoPedidosFragment"
         android:label="HistoricoPedidosFragment" >
         <action
             android:id="@+id/action_historicoPedidosFragment_to_detallePedidoFragment"
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/detallePedidoFragment"
-        android:name="com.example.apppanadero.ui.DetallePedidoFragment"
+        android:name="com.example.apppanadero.ui.ClienteDetallePedidoFragment"
         android:label="DetallePedidoFragment" >
         <argument
             android:name="pedidoId"

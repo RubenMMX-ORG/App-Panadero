@@ -36,6 +36,8 @@
                 <!-- NOMBRE -->
                 <TextView
                     style="@style/TextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Nombre del producto"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -57,6 +59,8 @@
                 <!-- PRECIO -->
                 <TextView
                     style="@style/TextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Precio"/>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -79,7 +83,9 @@
                 <!-- UNIDAD -->
                 <TextView
                     style="@style/TextLabel"
-                    android:text="Unidad"/>
+                    android:text="Unidad"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.App.Dropdown"
@@ -101,7 +107,9 @@
                 <!-- CATEGORIA -->
                 <TextView
                     style="@style/TextLabel"
-                    android:text="Categoria"/>
+                    android:text="Categoria"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
 
                 <com.google.android.material.textfield.TextInputLayout
                     style="@style/Widget.App.Dropdown"
@@ -123,6 +131,8 @@
                 <!-- IVA -->
                 <TextView
                     style="@style/TextLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="iva"/>
 
                 <com.google.android.material.textfield.TextInputLayout

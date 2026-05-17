@@ -9,21 +9,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apppanadero.data.di.Injector
-import com.example.apppanadero.databinding.FragmentHistoricoPedidosBinding
 import com.google.firebase.auth.FirebaseAuth
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.apppanadero.databinding.FragmentClienteHistoricoPedidosBinding
 import com.example.apppanadero.ui.adapters.PedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
 
 
 // Fragment encargado de mostrar los pedidos del cliente actual
-class HistoricoPedidosFragment : Fragment() {
+class ClienteHistoricoPedidosFragment : Fragment() {
 
     // ------------------------------------------------
     // BINDING
     // ------------------------------------------------
-    private var _binding: FragmentHistoricoPedidosBinding? = null
+    private var _binding: FragmentClienteHistoricoPedidosBinding? = null
     private val binding get() = _binding!!
 
     // ------------------------------------------------
@@ -43,7 +43,7 @@ class HistoricoPedidosFragment : Fragment() {
             (it as? AppCompatActivity)?.supportActionBar?.title = "Pedidos"
         }
 
-        _binding = FragmentHistoricoPedidosBinding.inflate(
+        _binding = FragmentClienteHistoricoPedidosBinding.inflate(
             inflater,
             container,
             false
@@ -130,7 +130,7 @@ class HistoricoPedidosFragment : Fragment() {
 
                 val action =
 
-                    HistoricoPedidosFragmentDirections.actionHistoricoPedidosFragmentToDetallePedidoFragment(
+                    ClienteHistoricoPedidosFragmentDirections.actionHistoricoPedidosFragmentToDetallePedidoFragment(
                         pedidoId = pedido.id
                     )
 

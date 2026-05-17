@@ -6,7 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.apppanadero.databinding.FragmentClienteHomeBinding
+import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.apppanadero.R
+import com.example.apppanadero.data.di.Injector
+import com.example.apppanadero.databinding.FragmentAdminPedidosBinding
+import com.example.apppanadero.ui.adapters.AdminPedidoAdapter
+import com.example.apppanadero.viewmodel.PedidoViewModel
 
 class AdminPedidosFragment : Fragment() {
 
@@ -15,9 +22,26 @@ class AdminPedidosFragment : Fragment() {
     // ------------------------------------------------
 
     private var _binding:
-            FragmentClienteHomeBinding? = null
+            FragmentAdminPedidosBinding? = null
 
     private val binding get() = _binding!!
+
+    // ------------------------------------------------
+    // VIEWMODEL
+    // ------------------------------------------------
+
+    private val pedidoViewModel:
+            PedidoViewModel by viewModels {
+
+        Injector.providePedidoViewModelFactory()
+    }
+
+    // ------------------------------------------------
+    // ADAPTER
+    // ------------------------------------------------
+
+    private lateinit var adapter:
+            AdminPedidoAdapter
 
     // ------------------------------------------------
     // ON CREATE VIEW
@@ -33,7 +57,7 @@ class AdminPedidosFragment : Fragment() {
 
         // Inflamos layout usando ViewBinding
         _binding =
-            FragmentClienteHomeBinding.inflate(
+            FragmentAdminPedidosBinding.inflate(
                 inflater,
                 container,
                 false
@@ -64,7 +88,71 @@ class AdminPedidosFragment : Fragment() {
 
             (it as? AppCompatActivity)
                 ?.supportActionBar
-                ?.title = "Gestion-Pedidos"
+                ?.title = "Gestion Pedidos"
         }
+
+        // ------------------------------------------------
+        // RECYCLERVIEW
+        // ------------------------------------------------
+
+        binding.recyclerPedidos.layoutManager =
+            LinearLayoutManager(requireContext())
+
+        // ------------------------------------------------
+        // OBSERVAR PEDIDOS
+        // ------------------------------------------------
+
+        pedidoViewModel.listaPedidos.observe(
+            viewLifecycleOwner
+        ) { listaPedidos ->
+
+            // Filtramos solo pedidos pendientes
+            val pedidosPendientes =
+
+                listaPedidos.filter {
+
+                    it.estado == "pendiente"
+                }
+
+            adapter =
+                AdminPedidoAdapter(
+
+                    pedidosPendientes
+
+                ) { pedido ->
+
+                    // CLICK DETALLE
+                    val action =
+
+                        AdminPedidosFragmentDirections
+                            .actionAdminPedidosFragmentToAdminDetallePedidoFragment(
+
+                                pedidoId = pedido.id
+                            )
+
+                    findNavController().navigate(action)
+
+                }
+
+            binding.recyclerPedidos.adapter =
+                adapter
+        }
+
+        // ------------------------------------------------
+        // CARGAR TODOS PEDIDOS
+        // ------------------------------------------------
+
+        pedidoViewModel.obtenerTodosPedidos()
+    }
+
+    // ------------------------------------------------
+    // ON DESTROY VIEW
+    // ------------------------------------------------
+
+    override fun onDestroyView() {
+
+        super.onDestroyView()
+
+        _binding = null
     }
 }

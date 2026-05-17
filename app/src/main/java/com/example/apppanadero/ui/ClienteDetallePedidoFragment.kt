@@ -8,20 +8,19 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apppanadero.data.model.Pedido
-import com.example.apppanadero.databinding.FragmentDetallePedidoBinding
 import com.example.apppanadero.ui.adapters.LineaPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
 import com.example.apppanadero.data.di.Injector
+import com.example.apppanadero.databinding.FragmentClienteDetallePedidoBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class DetallePedidoFragment : Fragment() {
+class ClienteDetallePedidoFragment : Fragment() {
 
-    private var _binding: FragmentDetallePedidoBinding? = null
+    private var _binding: FragmentClienteDetallePedidoBinding? = null
     private val binding get() = _binding!!
 
     //Variable para recuperar el pedidoId recibido
@@ -37,7 +36,7 @@ class DetallePedidoFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDetallePedidoBinding.inflate(inflater, container, false)
+        _binding = FragmentClienteDetallePedidoBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -50,7 +49,7 @@ class DetallePedidoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Recuperamos el pedidoId de los argumentos
-        val args = DetallePedidoFragmentArgs.fromBundle(requireArguments())
+        val args = ClienteDetallePedidoFragmentArgs.fromBundle(requireArguments())
         pedidoId = args.pedidoId
 
 
@@ -132,7 +131,7 @@ class DetallePedidoFragment : Fragment() {
         binding.btnModificar.setOnClickListener {
 
             val action =
-                DetallePedidoFragmentDirections
+                ClienteDetallePedidoFragmentDirections
                     .actionDetallePedidoFragmentToNuevoPedidoFragment(
                         pedidoId = pedidoId//asignamos al action el pedidoId recibido y lo pasamos al siguiente fragment
                     )
