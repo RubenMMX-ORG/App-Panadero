@@ -3,6 +3,7 @@ package com.example.apppanadero.data.model
 data class Usuario(
 
     // 🔹 comunes
+    val id: String = "",
     val nombre: String = "",
     val apellidos: String = "",
     val email: String = "",

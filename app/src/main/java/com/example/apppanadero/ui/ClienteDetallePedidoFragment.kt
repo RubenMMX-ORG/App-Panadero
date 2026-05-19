@@ -50,7 +50,7 @@ class ClienteDetallePedidoFragment : Fragment() {
 
         // Recuperamos el pedidoId de los argumentos
         val args = ClienteDetallePedidoFragmentArgs.fromBundle(requireArguments())
-        pedidoId = args.pedidoId
+        pedidoId = args.pedidoId.toString()
 
 
         //  Observa el LiveData
@@ -132,7 +132,7 @@ class ClienteDetallePedidoFragment : Fragment() {
 
             val action =
                 ClienteDetallePedidoFragmentDirections
-                    .actionDetallePedidoFragmentToNuevoPedidoFragment(
+                    .actionClienteDetallePedidoFragmentToClienteNuevoPedidoFragment(
                         pedidoId = pedidoId//asignamos al action el pedidoId recibido y lo pasamos al siguiente fragment
                     )
 

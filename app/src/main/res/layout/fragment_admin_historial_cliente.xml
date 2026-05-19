@@ -12,13 +12,6 @@
         android:padding="16dp">
 
         <!-- TÍTULO -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Historial del Cliente"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"/>
 
         <!-- SUBTÍTULO -->
         <TextView
@@ -44,28 +37,150 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <!-- TOP -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Juan Pérez"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"/>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Cliente #1"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_secondary"
-                    android:layout_marginBottom="8dp"/>
+                    <!-- IMAGEN -->
+                    <ImageView
+                        android:id="@+id/imgComercio"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:src="@drawable/logo_panadero"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/bg_image_rounded"
+                        android:padding="4dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
+                    <!-- INFO -->
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_marginStart="14dp">
+
+                        <!-- NOMBRE -->
+                        <TextView
+                            android:id="@+id/tvNombreComercio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Panadería Central"
+                            android:textStyle="bold"
+                            android:textSize="17sp"
+                            android:textColor="@color/text_primary"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                        <!-- DIRECCIÓN -->
+                        <TextView
+                            android:id="@+id/tvDireccion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Calle Mayor 24, Madrid"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp"
+                            android:layout_marginTop="4dp"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
+
+                        <!-- TELÉFONO -->
+                        <TextView
+                            android:id="@+id/tvTelefono"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="📞 666 555 444"
+                            android:textColor="@color/primary_dark"
+                            android:textSize="14sp"
+                            android:layout_marginTop="4dp"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- RUTA + DESCUENTO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Calle Mayor, 45"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_secondary"/>
+                    android:orientation="horizontal"
+                    android:layout_marginTop="14dp"
+                    android:gravity="center_vertical">
+
+                    <!-- RUTA -->
+                    <TextView
+                        android:id="@+id/tvRuta"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="🚚 Ruta Norte"
+                        android:textColor="@color/primary_dark"
+                        android:textStyle="bold"/>
+
+                    <!-- DESCUENTO -->
+                    <TextView
+                        android:id="@+id/tvDescuento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10% dto."
+                        android:textColor="@color/estado_pendiente_text"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <!-- APROBADO + DESCUENTO -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="12dp">
+
+                    <!-- SWITCH APROBADO -->
+                    <!-- APROBADO -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aprobado"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginEnd="8dp"/>
+
+                        <com.google.android.material.materialswitch.MaterialSwitch
+                            android:id="@+id/switchAprobado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="true"
+                            android:layout_marginStart="12dp"/>
+
+                    </LinearLayout>
+                    <!-- DESCUENTO -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        app:boxCornerRadiusTopStart="12dp"
+                        app:boxCornerRadiusTopEnd="12dp"
+                        app:boxCornerRadiusBottomStart="12dp"
+                        app:boxCornerRadiusBottomEnd="12dp"
+                        android:layout_marginStart="100dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/dropdownDescuento"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:text="0%" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -168,31 +283,34 @@
                     android:text="Resumen del período"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@color/white"
+                    android:textColor="@color/text_primary"
                     android:layout_marginBottom="8dp"/>
 
                 <TextView
+                    android:id="@+id/tvTotalPedidos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total pedidos: 1530 uds"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tvTotalDevueltos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Total devueltos: 150 uds"
-                    android:textSize="14sp"
-                    android:textColor="@color/white"/>
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tvTotalNeto"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="Total neto: 1380 uds"
+                    android:textColor="@color/text_primary"
                     android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="4dp"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
@@ -203,16 +321,16 @@
             android:id="@+id/btnImprimir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Imprimir PDF"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
             android:layout_marginTop="20dp"
             android:backgroundTint="@color/boton"
+            android:text="Imprimir Facturacion PDF"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:cornerRadius="50dp"
             app:icon="@drawable/ic_print"
             app:iconGravity="textStart"
-            app:iconPadding="8dp"/>
+            app:iconPadding="8dp" />
 
     </LinearLayout>
 

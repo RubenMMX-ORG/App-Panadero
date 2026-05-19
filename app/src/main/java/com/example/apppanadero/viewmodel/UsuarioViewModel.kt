@@ -27,6 +27,19 @@ class UsuarioViewModel(
     // La UI observará este usuario
     val usuario: LiveData<Usuario?> = _usuario
 
+    // ------------------------------------------------
+    // LISTA CLIENTES
+    // ------------------------------------------------
+
+    private val _listaClientes =
+
+        MutableLiveData<List<Usuario>>()
+
+    val listaClientes:
+            LiveData<List<Usuario>> =
+
+        _listaClientes
+
 
     // ---------------------------------------------------
     // REGISTRO FIREBASE AUTH
@@ -141,6 +154,30 @@ class UsuarioViewModel(
         }
     }
 
+    // ------------------------------------------------
+    // OBTENER USUARIO POR ID
+    // ------------------------------------------------
+
+    fun obtenerUsuarioPorId(
+
+        usuarioId: String
+
+    ) {
+
+        repository.obtenerUsuarioPorId(
+
+            usuarioId
+
+        ) { usuario ->
+
+            _usuario.postValue(
+                usuario
+            )
+        }
+    }
+
+
+
 
     // ---------------------------------------------------
     // COMPROBAR SESIÓN ACTUAL
@@ -151,6 +188,18 @@ class UsuarioViewModel(
     fun getCurrentUser(): FirebaseUser? {
 
         return repository.getCurrentUser()
+    }
+
+    // ------------------------------------------------
+    // OBTENER CLIENTES
+    // ------------------------------------------------
+
+    fun obtenerClientes() {
+
+        repository.obtenerClientes {
+
+            _listaClientes.postValue(it)
+        }
     }
 
 

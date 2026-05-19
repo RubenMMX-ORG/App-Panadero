@@ -14,6 +14,7 @@ import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.databinding.FragmentAdminDetallePedidoBinding
 import com.example.apppanadero.ui.adapters.LineaPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
+import com.example.apppanadero.viewmodel.UsuarioViewModel
 
 class AdminDetallePedidoFragment : Fragment() {
 
@@ -34,6 +35,16 @@ class AdminDetallePedidoFragment : Fragment() {
             PedidoViewModel by viewModels {
 
         Injector.providePedidoViewModelFactory()
+    }
+    // ------------------------------------------------
+    // VIEWMODEL USUARIO
+    // ------------------------------------------------
+
+    private val usuarioViewModel:
+            UsuarioViewModel by viewModels {
+
+        Injector
+            .provideUsuarioViewModelFactory()
     }
 
     // ------------------------------------------------
@@ -164,9 +175,10 @@ class AdminDetallePedidoFragment : Fragment() {
                 // De momento mostramos clienteId.
                 // Más adelante podremos cargar
                 // el nombre real del cliente.
-                binding.tvNombreCliente.text =
-                    pedido.clienteId
+                usuarioViewModel.obtenerUsuarioPorId(
 
+                    pedido.clienteId
+                )
                 // ------------------------------------------------
                 // NUMERO PEDIDO
                 // ------------------------------------------------
@@ -239,6 +251,26 @@ class AdminDetallePedidoFragment : Fragment() {
                     adapter
             }
         }
+
+        // ------------------------------------------------
+        // OBSERVAR USUARIO
+        // ------------------------------------------------
+
+        usuarioViewModel.usuario.observe(
+
+            viewLifecycleOwner
+
+        ) { usuario ->
+
+            usuario?.let {
+
+                binding.tvNombreCliente.text =
+
+                    it.nombreComercio
+                        ?: "Cliente"
+            }
+        }
+
 
         // ------------------------------------------------
         // BOTÓN LISTO

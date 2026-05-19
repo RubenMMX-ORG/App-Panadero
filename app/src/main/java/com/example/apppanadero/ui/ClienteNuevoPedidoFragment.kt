@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.data.model.LineaPedido
@@ -17,88 +18,94 @@ import com.example.apppanadero.data.model.Producto
 import com.example.apppanadero.databinding.FragmentClienteNuevoPedidoBinding
 import com.example.apppanadero.ui.adapters.ProductoPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
+import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
-import com.google.firebase.auth.FirebaseAuth
 
 class ClienteNuevoPedidoFragment : Fragment() {
 
-    private var _binding: FragmentClienteNuevoPedidoBinding? = null
+    // ------------------------------------------------
+    // VIEW BINDING
+    // ------------------------------------------------
+
+    private var _binding:
+            FragmentClienteNuevoPedidoBinding? = null
+
     private val binding get() = _binding!!
+
+    // ------------------------------------------------
+    // SAFE ARGS
+    // ------------------------------------------------
+
+    private val args:
+            ClienteNuevoPedidoFragmentArgs
+            by navArgs()
 
     // ------------------------------------------------
     // VIEWMODELS
     // ------------------------------------------------
 
-    private val pedidoViewModel: PedidoViewModel by viewModels {
+    private val productoViewModel:
+            ProductoViewModel by viewModels {
 
-        Injector.providePedidoViewModelFactory()
+        Injector
+            .provideProductoViewModelFactory()
     }
 
-    private val productoViewModel: ProductoViewModel by viewModels {
+    private val pedidoViewModel:
+            PedidoViewModel by viewModels {
 
-        Injector.provideProductoViewModelFactory()
+        Injector
+            .providePedidoViewModelFactory()
     }
+
+    private val precioViewModel:
+            PrecioViewModel by viewModels {
+
+        Injector
+            .providePrecioViewModelFactory()
+    }
+
+    // ------------------------------------------------
+    // ADAPTER
+    // ------------------------------------------------
+
+    private lateinit var adapter:
+            ProductoPedidoAdapter
 
     // ------------------------------------------------
     // VARIABLES
     // ------------------------------------------------
 
-    // PedidoId si estamos editando.
-    // Si es null:
-    // estamos creando un pedido nuevo.
+    // Pedido edición
     private var pedidoId: String? = null
 
-    // Número pedido actual.
-    // Solo se reutiliza al editar.
-    private var numeroPedidoActual = 0
-
-    // Lista líneas pedido seleccionadas
+    // Líneas pedido
     private val listaLineasPedido =
         mutableListOf<LineaPedido>()
 
-    // Total pedido
-    private var totalPedido = 0.0
+    // Cantidades iniciales
+    private val cantidadesIniciales =
+        mutableMapOf<String, Int>()
+
+    // Precios reales
+    private var mapaPrecios =
+        mapOf<String, Double>()
 
     // ------------------------------------------------
-    // NUEVO 😄🔥
+    // ON CREATE VIEW
     // ------------------------------------------------
-    // Mapa precios vigentes.
-    //
-    // key   -> productoId
-    // value -> precio actual
-    //
-    // El Fragment recibe estos datos
-    // desde Firestore y luego se los
-    // pasa al Adapter.
-    //
-    // Así evitamos que el Adapter
-    // acceda directamente a Firestore.
-    private var mapaPrecios:
-            Map<String, Double> = emptyMap()
-
-    // ------------------------------------------------
-    // MAPA CANTIDADES INICIALES
-    // ------------------------------------------------
-
-    // Se usa cuando editamos un pedido.
-    //
-    // key   -> productoId
-    // value -> cantidadPedida
-    private var cantidadesIniciales:
-            Map<String, Int> = emptyMap()
-
-    // Adapter RecyclerView
-    private lateinit var adapter:
-            ProductoPedidoAdapter
 
     override fun onCreateView(
+
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
+
     ): View {
 
         _binding =
             FragmentClienteNuevoPedidoBinding.inflate(
+
                 inflater,
                 container,
                 false
@@ -107,9 +114,15 @@ class ClienteNuevoPedidoFragment : Fragment() {
         return binding.root
     }
 
+    // ------------------------------------------------
+    // ON VIEW CREATED
+    // ------------------------------------------------
+
     override fun onViewCreated(
+
         view: View,
         savedInstanceState: Bundle?
+
     ) {
 
         super.onViewCreated(
@@ -125,81 +138,24 @@ class ClienteNuevoPedidoFragment : Fragment() {
 
             (it as? AppCompatActivity)
                 ?.supportActionBar
-                ?.title = "Nuevo pedido"
+                ?.title = "Nuevo Pedido"
         }
 
         // ------------------------------------------------
-        // RECUPERAR ARGUMENTOS
+        // SAFE ARGS
         // ------------------------------------------------
-
-        // Si venimos desde:
-        //
-        // - Nuevo pedido:
-        //      pedidoId = null
-        //
-        // - Modificar pedido:
-        //      pedidoId tendrá valor
-        val args =
-            ClienteNuevoPedidoFragmentArgs
-                .fromBundle(requireArguments())
 
         pedidoId = args.pedidoId
 
         // ------------------------------------------------
-        // CONFIGURAR RECYCLERVIEW
+        // RECYCLER
         // ------------------------------------------------
 
         binding.recyclerProductos.layoutManager =
-            LinearLayoutManager(requireContext())
 
-        // ------------------------------------------------
-        // PRECIOS TEMPORALES 😄🔥
-        // ------------------------------------------------
-        // De momento simulamos precios.
-        //
-        // Más adelante:
-        // vendrán desde PrecioRepository.
-        mapaPrecios = mapOf(
-
-            "1" to 1.20,
-
-            "2" to 2.50,
-
-            "3" to 3.10
-        )
-
-        // ------------------------------------------------
-        // OBSERVAR PRODUCTOS
-        // ------------------------------------------------
-
-        productoViewModel.listaProductos.observe(
-            viewLifecycleOwner
-        ) { listaProductos ->
-
-            adapter =
-                ProductoPedidoAdapter(
-
-                    // Lista productos
-                    listaProductos,
-
-                    // NUEVO 😄🔥
-                    // Mapa precios actuales
-                    mapaPrecios,
-
-                    // Cantidades iniciales
-                    cantidadesIniciales
-
-                ) { producto, cantidad ->
-
-                    actualizarLineaPedido(
-                        producto,
-                        cantidad
-                    )
-                }
-
-            binding.recyclerProductos.adapter =
-                adapter
-        }
+            LinearLayoutManager(
+                requireContext()
+            )
 
         // ------------------------------------------------
         // CARGAR PRODUCTOS
@@ -208,114 +164,102 @@ class ClienteNuevoPedidoFragment : Fragment() {
         productoViewModel.obtenerTodosProductos()
 
         // ------------------------------------------------
-        // MODO EDICIÓN
+        // CARGAR PRECIOS
         // ------------------------------------------------
 
-        if (pedidoId != null) {
+        precioViewModel.obtenerPreciosVigentes()
 
-            pedidoViewModel.obtenerPedidoPorId(
-                pedidoId!!
-            )
+        // ------------------------------------------------
+        // OBSERVAR PRECIOS
+        // ------------------------------------------------
 
-            pedidoViewModel.pedidoDetalle.observe(
-                viewLifecycleOwner
-            ) { pedido ->
+        precioViewModel.listaPrecios.observe(
 
-                if (pedido != null) {
+            viewLifecycleOwner
 
-                    // ------------------------------------------------
-                    // RECUPERAR LINEAS PEDIDO
-                    // ------------------------------------------------
+        ) { listaPrecios ->
 
-                    listaLineasPedido.clear()
+            mapaPrecios =
 
-                    listaLineasPedido.addAll(
-                        pedido.lineasPedido
-                    )
+                listaPrecios.associate {
 
-                    // ------------------------------------------------
-                    // RECUPERAR TOTAL
-                    // ------------------------------------------------
-
-                    totalPedido =
-                        pedido.precioTotal
-
-                    // ------------------------------------------------
-                    // RECUPERAR NÚMERO PEDIDO
-                    // ------------------------------------------------
-
-                    numeroPedidoActual =
-                        pedido.numeroPedido
-
-                    // ------------------------------------------------
-                    // ACTUALIZAR TOTAL UI
-                    // ------------------------------------------------
-
-                    binding.tvTotal.text =
-                        "Total: %.2f €"
-                            .format(totalPedido)
-
-                    // ------------------------------------------------
-                    // CREAR MAPA CANTIDADES
-                    // ------------------------------------------------
-
-                    cantidadesIniciales =
-
-                        pedido.lineasPedido.associate {
-
-                            it.productoId to
-                                    it.cantidadPedida
-                        }
-
-                    // ------------------------------------------------
-                    // RECARGAR ADAPTER
-                    // ------------------------------------------------
-
-                    adapter =
-                        ProductoPedidoAdapter(
-
-                            productoViewModel
-                                .listaProductos
-                                .value ?: emptyList(),
-
-                            // NUEVO 😄🔥
-                            mapaPrecios,
-
-                            cantidadesIniciales
-
-                        ) { producto, cantidad ->
-
-                            actualizarLineaPedido(
-                                producto,
-                                cantidad
-                            )
-                        }
-
-                    binding.recyclerProductos.adapter =
-                        adapter
+                    it.productoId to it.precio
                 }
+
+            // ------------------------------------------------
+            // RECARGAR ADAPTER
+            // ------------------------------------------------
+
+            productoViewModel.listaProductos.value?.let {
+
+                cargarAdapterProductos(
+                    it
+                )
             }
         }
 
         // ------------------------------------------------
-        // BOTÓN CONFIRMAR
+        // OBSERVAR PRODUCTOS
         // ------------------------------------------------
 
-        binding.btnConfirmarPedido
+        productoViewModel.listaProductos.observe(
+
+            viewLifecycleOwner
+
+        ) { listaProductos ->
+
+            cargarAdapterProductos(
+                listaProductos
+            )
+        }
+
+        // ------------------------------------------------
+        // BOTÓN CREAR PEDIDO
+        // ------------------------------------------------
+
+        binding.btnCrearPedido
             .setOnClickListener {
 
-                confirmarPedido()
+                guardarPedido()
             }
-
-        // ------------------------------------------------
-        // OBSERVAR PEDIDO GUARDADO
-        // ------------------------------------------------
-
-        observarPedidoGuardado()
     }
 
     // ------------------------------------------------
-    // ACTUALIZAR LINEA PEDIDO
+    // CARGAR ADAPTER
+    // ------------------------------------------------
+
+    private fun cargarAdapterProductos(
+
+        listaProductos: List<Producto>
+
+    ) {
+
+        adapter =
+
+            ProductoPedidoAdapter(
+
+                listaProductos,
+
+                mapaPrecios,
+
+                cantidadesIniciales
+
+            ) { producto, cantidad ->
+
+                actualizarLineaPedido(
+
+                    producto,
+
+                    cantidad
+                )
+            }
+
+        binding.recyclerProductos.adapter =
+            adapter
+    }
+
+    // ------------------------------------------------
+    // ACTUALIZAR LÍNEA PEDIDO
     // ------------------------------------------------
 
     private fun actualizarLineaPedido(
@@ -325,208 +269,180 @@ class ClienteNuevoPedidoFragment : Fragment() {
 
     ) {
 
-        // Eliminamos línea previa
-        // para evitar duplicados.
+        // ------------------------------------------------
+        // ELIMINAR SI CANTIDAD 0
+        // ------------------------------------------------
+
+        if (cantidad == 0) {
+
+            listaLineasPedido.removeAll {
+
+                it.productoId == producto.id
+            }
+
+            cantidadesIniciales.remove(
+                producto.id
+            )
+
+            actualizarTotal()
+
+            return
+        }
+
+        // ------------------------------------------------
+        // GUARDAR CANTIDAD
+        // ------------------------------------------------
+
+        cantidadesIniciales[
+            producto.id
+        ] = cantidad
+
+        // ------------------------------------------------
+        // PRECIO REAL
+        // ------------------------------------------------
+
+        val precioUnitario =
+
+            mapaPrecios[
+                producto.id
+            ] ?: 0.0
+
+        // ------------------------------------------------
+        // CREAR LÍNEA
+        // ------------------------------------------------
+
+        val lineaPedido =
+
+            LineaPedido(
+
+                productoId = producto.id,
+
+                nombreProducto =
+                    producto.nombre,
+
+                cantidadPedida =
+                    cantidad,
+
+                cantidadFinal =
+                    cantidad,
+
+                cantidadDevuelta = 0,
+
+                precioUnitario =
+                    precioUnitario
+            )
+
+        // ------------------------------------------------
+        // REEMPLAZAR SI EXISTE
+        // ------------------------------------------------
+
         listaLineasPedido.removeAll {
 
             it.productoId == producto.id
         }
 
-        // ------------------------------------------------
-        // AÑADIR NUEVA LINEA
-        // ------------------------------------------------
+        listaLineasPedido.add(
+            lineaPedido
+        )
 
-        if (cantidad > 0) {
-
-            // ------------------------------------------------
-            // NUEVO 😄🔥
-            // ------------------------------------------------
-            // Recuperamos precio actual
-            // usando producto.id
-            //
-            // como FK lógica.
-            val precioActual =
-
-                mapaPrecios[
-                    producto.id
-                ] ?: 0.0
-
-            val linea = LineaPedido(
-
-                productoId = producto.id,
-
-                nombreProducto = producto.nombre,
-
-                cantidadPedida = cantidad,
-
-                cantidadDevuelta = 0,
-
-                // Inicialmente:
-                // cantidadFinal = cantidadPedida
-                cantidadFinal = cantidad,
-
-                // ------------------------------------------------
-                // MODIFICADO 😄🔥
-                // ------------------------------------------------
-                // Antes:
-                // producto.precio
-                //
-                // Ahora:
-                // precio recuperado
-                // desde mapaPrecios
-                precioUnitario =
-                    precioActual
-            )
-
-            listaLineasPedido.add(linea)
-        }
-
-        // Recalculamos total
-        recalcularTotal()
+        actualizarTotal()
     }
 
     // ------------------------------------------------
-    // RECALCULAR TOTAL
+    // ACTUALIZAR TOTAL
     // ------------------------------------------------
 
-    private fun recalcularTotal() {
+    private fun actualizarTotal() {
 
-        totalPedido =
+        val total =
+
             listaLineasPedido.sumOf {
 
                 it.cantidadPedida *
                         it.precioUnitario
             }
 
-        binding.tvTotal.text =
-            "Total: %.2f €"
-                .format(totalPedido)
+        binding.tvTotalPedido.text =
+
+            "Total: %.2f €".format(
+                total
+            )
     }
 
     // ------------------------------------------------
-    // CONFIRMAR PEDIDO
+    // GUARDAR PEDIDO
     // ------------------------------------------------
 
-    private fun confirmarPedido() {
-
-        val clienteId =
-            FirebaseAuth
-                .getInstance()
-                .currentUser
-                ?.uid
+    private fun guardarPedido() {
 
         // ------------------------------------------------
-        // VALIDAR USUARIO
-        // ------------------------------------------------
-
-        if (clienteId == null) {
-
-            Toast.makeText(
-                requireContext(),
-                "Usuario no autenticado",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            return
-        }
-
-        // ------------------------------------------------
-        // VALIDAR PRODUCTOS
+        // VALIDAR
         // ------------------------------------------------
 
         if (listaLineasPedido.isEmpty()) {
 
             Toast.makeText(
+
                 requireContext(),
+
                 "Añade productos",
+
                 Toast.LENGTH_SHORT
+
             ).show()
 
             return
         }
 
         // ------------------------------------------------
-        // MODO EDITAR
+        // TOTAL
         // ------------------------------------------------
 
-        if (pedidoId != null) {
+        val total =
 
-            val pedidoActualizado = Pedido(
+            listaLineasPedido.sumOf {
 
-                id = pedidoId!!,
-
-                numeroPedido =
-                    numeroPedidoActual,
-
-                clienteId = clienteId,
-
-                lineasPedido =
-                    listaLineasPedido,
-
-                estado = "pendiente",
-
-                precioTotal =
-                    totalPedido
-            )
-
-            // Actualizamos pedido existente
-            pedidoViewModel.actualizarPedido(
-                pedidoActualizado
-            )
-
-        } else {
-
-            // ------------------------------------------------
-            // NUEVO PEDIDO
-            // ------------------------------------------------
-
-            val nuevoPedido = Pedido(
-
-                clienteId = clienteId,
-
-                lineasPedido =
-                    listaLineasPedido,
-
-                estado = "pendiente",
-
-                precioTotal =
-                    totalPedido
-            )
-
-            // Guardamos nuevo pedido
-            pedidoViewModel.guardarPedido(
-                nuevoPedido
-            )
-        }
-    }
-
-    // ------------------------------------------------
-    // OBSERVAR PEDIDO GUARDADO
-    // ------------------------------------------------
-
-    private fun observarPedidoGuardado() {
-
-        pedidoViewModel.pedidoGuardado.observe(
-            viewLifecycleOwner
-        ) { guardado ->
-
-            if (guardado) {
-
-                Toast.makeText(
-                    requireContext(),
-                    "Pedido guardado correctamente",
-                    Toast.LENGTH_SHORT
-                ).show()
-
-                // Volvemos atrás
-                findNavController().popBackStack()
-
-                // Limpiamos LiveData
-                // para evitar bucles infinitos
-                pedidoViewModel
-                    .limpiarPedidoGuardado()
+                it.cantidadPedida *
+                        it.precioUnitario
             }
-        }
+
+        // ------------------------------------------------
+        // CREAR PEDIDO
+        // ------------------------------------------------
+
+        val pedido =
+
+            Pedido(
+
+                id = pedidoId ?: "",
+
+                lineasPedido =
+                    listaLineasPedido,
+
+                precioTotal =
+                    total
+            )
+
+        // ------------------------------------------------
+        // GUARDAR FIREBASE
+        // ------------------------------------------------
+
+        pedidoViewModel.guardarPedido(
+            pedido
+        )
+
+        Toast.makeText(
+
+            requireContext(),
+
+            "Pedido guardado",
+
+            Toast.LENGTH_SHORT
+
+        ).show()
+
+        findNavController()
+            .popBackStack()
     }
 
     // ------------------------------------------------

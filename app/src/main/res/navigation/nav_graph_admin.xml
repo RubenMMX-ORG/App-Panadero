@@ -28,7 +28,11 @@
     <fragment
         android:id="@+id/adminClientesFragment"
         android:name="com.example.apppanadero.ui.AdminClientesFragment"
-        android:label="AdminClientesFragment" />
+        android:label="AdminClientesFragment" >
+        <action
+            android:id="@+id/action_adminClientesFragment_to_adminHistoricoClientesFragment"
+            app:destination="@id/adminHistoricoClientesFragment" />
+    </fragment>
     <fragment
         android:id="@+id/adminProductosFragment"
         android:name="com.example.apppanadero.ui.AdminProductosFragment"
@@ -49,4 +53,12 @@
         android:id="@+id/adminNuevoProductoFragment"
         android:name="com.example.apppanadero.ui.AdminNuevoProductoFragment"
         android:label="AdminNuevoProductoFragment" />
+    <fragment
+        android:id="@+id/adminHistoricoClientesFragment"
+        android:name="com.example.apppanadero.ui.AdminHistoricoClientesFragment"
+        android:label="AdminHistoricoClientesFragment" >
+        <argument
+            android:name="clienteId"
+            app:argType="string" />
+    </fragment>
 </navigation>

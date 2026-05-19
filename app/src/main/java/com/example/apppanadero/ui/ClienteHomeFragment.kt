@@ -34,11 +34,11 @@ class ClienteHomeFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnNuevoPedido.setOnClickListener {
-            navegarHacia(R.id.action_clienteHomeFragment_to_nuevoPedidoFragment)
+            navegarHacia(R.id.action_clienteHomeFragment_to_clienteNuevoPedidoFragment)
         }
 
         binding.btnHistorico.setOnClickListener {
-            navegarHacia(R.id.action_clienteHomeFragment_to_historicoPedidosFragment)
+            navegarHacia(R.id.action_clienteHomeFragment_to_clienteHistoricoPedidosFragment)
         }
 
 

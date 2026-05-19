@@ -118,6 +118,87 @@ class UsuarioRepository {
             }
     }
 
+    // ---------------------------------------------------
+    // OBTENER USUARIO POR ID
+    // ---------------------------------------------------
+
+    fun obtenerUsuarioPorId(
+
+        usuarioId: String,
+
+        callback: (Usuario?) -> Unit
+
+    ) {
+
+        db
+            .collection("usuarios")
+            .document(usuarioId)
+            .get()
+
+            .addOnSuccessListener { documento ->
+
+                if (documento.exists()) {
+
+                    val usuario =
+
+                        documento.toObject(
+                            Usuario::class.java
+                        )
+
+                    callback(usuario)
+
+                } else {
+
+                    callback(null)
+                }
+            }
+
+            .addOnFailureListener {
+
+                callback(null)
+            }
+    }
+
+    // ------------------------------------------------
+// OBTENER CLIENTES
+// ------------------------------------------------
+
+    fun obtenerClientes(
+
+        callback: (List<Usuario>) -> Unit
+
+    ) {
+
+        db.collection("usuarios")
+
+            .whereEqualTo(
+
+                "rol",
+                "cliente"
+            )
+
+            .get()
+
+            .addOnSuccessListener { resultado ->
+
+                val listaClientes =
+
+                    resultado.documents.mapNotNull {
+
+                        it.toObject(
+                            Usuario::class.java
+                        )
+                    }
+
+                callback(listaClientes)
+            }
+
+            .addOnFailureListener {
+
+                callback(emptyList())
+            }
+    }
+
     //Funcion de Auth
     fun getCurrentUser(): FirebaseUser? {
         return auth.currentUser

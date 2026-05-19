@@ -61,16 +61,12 @@ class PrecioViewModel(
     // OBTENER PRECIO VIGENTE
     // ------------------------------------------------
 
-    fun obtenerPrecioVigente(
-        productoId: String
-    ) {
+    fun obtenerPreciosVigentes() {
 
-        repository.obtenerPrecioVigente(
-            productoId
-        ) { precio ->
+        repository.obtenerPreciosVigentes {
 
-            _precioActual.postValue(
-                precio
+            _listaPrecios.postValue(
+                it
             )
         }
     }

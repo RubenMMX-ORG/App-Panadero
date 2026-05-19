@@ -24,6 +24,12 @@ class AdminPedidoAdapter(
 
     // Lista pedidos
     private val listaPedidos: List<Pedido>,
+    // ------------------------------------------------
+    // MAPA CLIENTES
+    // ------------------------------------------------
+
+    private val mapaClientes:
+    Map<String, String>,
 
     // Callback click detalle
     private val onClickDetalle:
@@ -84,7 +90,10 @@ class AdminPedidoAdapter(
         // Más adelante podremos
         // cargar nombre real del cliente.
         holder.binding.tvNombreCliente.text =
-            pedido.clienteId
+
+            mapaClientes[
+                pedido.clienteId
+            ] ?: "Cliente"
 
         // ------------------------------------------------
         // NUMERO PEDIDO

@@ -130,7 +130,7 @@ class ClienteHistoricoPedidosFragment : Fragment() {
 
                 val action =
 
-                    ClienteHistoricoPedidosFragmentDirections.actionHistoricoPedidosFragmentToDetallePedidoFragment(
+                    ClienteHistoricoPedidosFragmentDirections.actionClienteHistoricoPedidosFragmentToClienteDetallePedidoFragment(
                         pedidoId = pedido.id
                     )
 

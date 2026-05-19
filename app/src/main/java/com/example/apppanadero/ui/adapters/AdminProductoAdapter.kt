@@ -23,6 +23,16 @@ class AdminProductoAdapter(
     private val listaProductos:
     List<Producto>,
 
+    // ------------------------------------------------
+    // NUEVO
+    // ------------------------------------------------
+    // Mapa precios vigentes
+    //
+    // key   -> productoId
+    // value -> precio actual
+    private val mapaPrecios:
+    Map<String, Double>,
+
     // Callback editar
     private val onEditarClick:
         (Producto) -> Unit,
@@ -92,6 +102,16 @@ class AdminProductoAdapter(
             listaProductos[position]
 
         // ------------------------------------------------
+        // NUEVO
+        // ------------------------------------------------
+
+        val precioActual =
+
+            mapaPrecios[
+                producto.id
+            ] ?: 0.0
+
+        // ------------------------------------------------
         // NOMBRE
         // ------------------------------------------------
 
@@ -109,10 +129,11 @@ class AdminProductoAdapter(
         // PRECIO
         // ------------------------------------------------
 
-        // Temporal hasta cargar
-        // entidad Precio real
         holder.binding.tvPrecio.text =
-            "Consultar precio"
+
+            "%.2f €".format(
+                precioActual
+            )
 
         // ------------------------------------------------
         // BOTÓN EDITAR

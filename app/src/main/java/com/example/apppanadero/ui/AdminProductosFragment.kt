@@ -14,6 +14,7 @@ import com.example.apppanadero.R
 import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.databinding.FragmentAdminProductosBinding
 import com.example.apppanadero.ui.adapters.AdminProductoAdapter
+import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 
 class AdminProductosFragment : Fragment() {
@@ -28,7 +29,7 @@ class AdminProductosFragment : Fragment() {
     private val binding get() = _binding!!
 
     // ------------------------------------------------
-    // VIEWMODEL
+    // VIEWMODEL PRODUCTOS
     // ------------------------------------------------
 
     private val productoViewModel:
@@ -39,11 +40,29 @@ class AdminProductosFragment : Fragment() {
     }
 
     // ------------------------------------------------
+    // VIEWMODEL PRECIOS
+    // ------------------------------------------------
+
+    private val precioViewModel:
+            PrecioViewModel by viewModels {
+
+        Injector
+            .providePrecioViewModelFactory()
+    }
+
+    // ------------------------------------------------
     // ADAPTER
     // ------------------------------------------------
 
     private lateinit var adapter:
             AdminProductoAdapter
+
+    // ------------------------------------------------
+    // MAPA PRECIOS
+    // ------------------------------------------------
+
+    private val mapaPrecios =
+        mutableMapOf<String, Double>()
 
     // ------------------------------------------------
     // ON CREATE VIEW
@@ -57,7 +76,6 @@ class AdminProductosFragment : Fragment() {
 
     ): View {
 
-        // Inflamos layout usando ViewBinding
         _binding =
             FragmentAdminProductosBinding.inflate(
 
@@ -97,7 +115,7 @@ class AdminProductosFragment : Fragment() {
         }
 
         // ------------------------------------------------
-        // CONFIGURAR RECYCLERVIEW
+        // RECYCLERVIEW
         // ------------------------------------------------
 
         binding.recyclerProductos.layoutManager =
@@ -116,23 +134,42 @@ class AdminProductosFragment : Fragment() {
 
         ) { listaProductos ->
 
+            // ------------------------------------------------
+            // LIMPIAR MAPA
+            // ------------------------------------------------
+
+            mapaPrecios.clear()
+
+            // ------------------------------------------------
+            // CARGAR PRECIOS
+            // ------------------------------------------------
+
+            listaProductos.forEach { producto ->
+
+                precioViewModel.obtenerPrecioVigente(
+                    producto.id
+                )
+            }
+
+            // ------------------------------------------------
+            // CREAR ADAPTER
+            // ------------------------------------------------
+
             adapter =
                 AdminProductoAdapter(
 
                     // Lista productos
                     listaProductos,
 
+                    // Mapa precios
+                    mapaPrecios,
+
                     // ------------------------------------------------
-                    // EDITAR PRODUCTO
+                    // EDITAR
                     // ------------------------------------------------
 
                     onEditarClick = { producto ->
 
-                        // Navegamos hacia:
-                        // AdminNuevoProductoFragment
-                        //
-                        // Más adelante podremos
-                        // pasar productoId para edición.
                         findNavController().navigate(
 
                             R.id.action_adminProductosFragment_to_adminNuevoProductoFragment
@@ -140,12 +177,11 @@ class AdminProductosFragment : Fragment() {
                     },
 
                     // ------------------------------------------------
-                    // ELIMINAR PRODUCTO
+                    // ELIMINAR
                     // ------------------------------------------------
 
                     onEliminarClick = { producto ->
 
-                        // Eliminamos producto
                         productoViewModel
                             .eliminarProducto(
 
@@ -164,9 +200,28 @@ class AdminProductosFragment : Fragment() {
                     }
                 )
 
-            // Asignamos adapter
             binding.recyclerProductos.adapter =
                 adapter
+        }
+
+        // ------------------------------------------------
+        // OBSERVAR PRECIO ACTUAL
+        // ------------------------------------------------
+
+        precioViewModel.precioActual.observe(
+
+            viewLifecycleOwner
+
+        ) { precio ->
+
+            precio?.let {
+
+                mapaPrecios[
+                    it.productoId
+                ] = it.precio
+
+                adapter.notifyDataSetChanged()
+            }
         }
 
         // ------------------------------------------------
@@ -176,7 +231,7 @@ class AdminProductosFragment : Fragment() {
         productoViewModel.obtenerTodosProductos()
 
         // ------------------------------------------------
-        // BOTÓN AÑADIR PRODUCTO
+        // BOTÓN NUEVO PRODUCTO
         // ------------------------------------------------
 
         binding.btnAddProducto
