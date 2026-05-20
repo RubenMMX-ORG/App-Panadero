@@ -84,8 +84,13 @@ class PedidoAdapter(
 
             it.cantidadPedida
         }
+        if (totalProductos == 1){
+             holder.binding.tvCantidad.text = "$totalProductos producto"
+        }else{
+             holder.binding.tvCantidad.text = "$totalProductos productos"
+        }
 
-        holder.binding.tvCantidad.text = "$totalProductos productos"
+       
 
         // Precio
         holder.binding.tvPrecio.text ="%.2f €".format(pedido.precioTotal)
