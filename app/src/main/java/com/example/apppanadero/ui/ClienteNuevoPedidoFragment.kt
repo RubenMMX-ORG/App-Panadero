@@ -20,6 +20,7 @@ import com.example.apppanadero.ui.adapters.ProductoPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
 import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
+import com.example.apppanadero.viewmodel.UsuarioViewModel
 
 class ClienteNuevoPedidoFragment : Fragment() {
 
@@ -40,9 +41,17 @@ class ClienteNuevoPedidoFragment : Fragment() {
             ClienteNuevoPedidoFragmentArgs
             by navArgs()
 
+
     // ------------------------------------------------
     // VIEWMODELS
     // ------------------------------------------------
+
+    private val usuarioViewModel:
+            UsuarioViewModel by viewModels {
+
+        Injector
+            .provideUsuarioViewModelFactory()
+    }
 
     private val productoViewModel:
             ProductoViewModel by viewModels {
@@ -141,11 +150,24 @@ class ClienteNuevoPedidoFragment : Fragment() {
                 ?.title = "Nuevo Pedido"
         }
 
+
+
         // ------------------------------------------------
         // SAFE ARGS
         // ------------------------------------------------
 
         pedidoId = args.pedidoId
+
+        // ------------------------------------------------
+        // MODO EDICIÓN
+        // ------------------------------------------------
+
+        pedidoId?.let {
+
+            pedidoViewModel.obtenerPedidoPorId(
+                it
+            )
+        }
 
         // ------------------------------------------------
         // RECYCLER
@@ -214,10 +236,64 @@ class ClienteNuevoPedidoFragment : Fragment() {
         }
 
         // ------------------------------------------------
+        // OBSERVAR PEDIDO DETALLE
+        // ------------------------------------------------
+
+        pedidoViewModel.pedidoDetalle.observe(
+
+            viewLifecycleOwner
+
+        ) { pedido ->
+
+            pedido?.let {
+
+                // ------------------------------------------------
+                // LIMPIAR DATOS
+                // ------------------------------------------------
+
+                listaLineasPedido.clear()
+
+                cantidadesIniciales.clear()
+
+                // ------------------------------------------------
+                // RECORRER LÍNEAS
+                // ------------------------------------------------
+
+                it.lineasPedido.forEach { linea ->
+
+                    listaLineasPedido.add(
+                        linea
+                    )
+
+                    cantidadesIniciales[
+                        linea.productoId
+                    ] = linea.cantidadPedida
+                }
+
+                // ------------------------------------------------
+                // RECARGAR ADAPTER
+                // ------------------------------------------------
+
+                productoViewModel.listaProductos.value?.let { productos ->
+
+                    cargarAdapterProductos(
+                        productos
+                    )
+                }
+
+                // ------------------------------------------------
+                // ACTUALIZAR TOTAL
+                // ------------------------------------------------
+
+                actualizarTotal()
+            }
+        }
+
+        // ------------------------------------------------
         // BOTÓN CREAR PEDIDO
         // ------------------------------------------------
 
-        binding.btnCrearPedido
+        binding.btnConfirmarPedido
             .setOnClickListener {
 
                 guardarPedido()
@@ -362,7 +438,7 @@ class ClienteNuevoPedidoFragment : Fragment() {
                         it.precioUnitario
             }
 
-        binding.tvTotalPedido.text =
+        binding.tvTotal.text =
 
             "Total: %.2f €".format(
                 total
@@ -410,11 +486,19 @@ class ClienteNuevoPedidoFragment : Fragment() {
         // CREAR PEDIDO
         // ------------------------------------------------
 
+        val usuarioActual =
+
+            usuarioViewModel
+                .getCurrentUser()
+
         val pedido =
 
             Pedido(
 
                 id = pedidoId ?: "",
+
+                clienteId =
+                    usuarioActual?.uid ?: "",
 
                 lineasPedido =
                     listaLineasPedido,
@@ -427,9 +511,18 @@ class ClienteNuevoPedidoFragment : Fragment() {
         // GUARDAR FIREBASE
         // ------------------------------------------------
 
-        pedidoViewModel.guardarPedido(
-            pedido
-        )
+        if (pedidoId == null) {
+
+            pedidoViewModel.guardarPedido(
+                pedido
+            )
+
+        } else {
+
+            pedidoViewModel.actualizarPedido(
+                pedido
+            )
+        }
 
         Toast.makeText(
 

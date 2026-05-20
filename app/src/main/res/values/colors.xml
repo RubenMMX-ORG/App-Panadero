@@ -36,7 +36,7 @@
     <color name="estado_camino_text">#0C5460</color>
 
     <color name="estado_finalizado_text">#721C24</color>
-    <color name="estado_finalizado_border">#DC3545</color>
+    <color name="estado_finalizado_bg">#DC3545</color>
     <color name="brown_light">#E8D5C0</color> <!-- fondo filtro -->
     <color name="brown_soft">#F4EDE4</color> <!-- fondo general suave -->
 

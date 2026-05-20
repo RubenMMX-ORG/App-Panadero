@@ -65,8 +65,6 @@ class AdminPedidosFragment : Fragment() {
         mutableMapOf<String, String>()
 
 
-    private var clienteIdActual = ""
-
     // ------------------------------------------------
     // ON CREATE VIEW
     // ------------------------------------------------
@@ -105,6 +103,8 @@ class AdminPedidosFragment : Fragment() {
             view,
             savedInstanceState
         )
+
+        usuarioViewModel.obtenerClientes()
 
         // ------------------------------------------------
         // ACTION BAR
@@ -148,20 +148,7 @@ class AdminPedidosFragment : Fragment() {
                     it.estado == "pendiente"
                 }
 
-            // ------------------------------------------------
-            // CARGAR CLIENTES
-            // ------------------------------------------------
 
-            pedidosPendientes.forEach { pedido ->
-
-                clienteIdActual =
-                    pedido.clienteId
-
-                usuarioViewModel.obtenerUsuarioPorId(
-
-                    pedido.clienteId
-                )
-            }
 
             // ------------------------------------------------
             // CREAR ADAPTER
@@ -200,36 +187,27 @@ class AdminPedidosFragment : Fragment() {
         // OBSERVAR USUARIO
         // ------------------------------------------------
 
-        usuarioViewModel.usuario.observe(
+        usuarioViewModel.listaClientes.observe(
 
             viewLifecycleOwner
 
-        ) { usuario ->
+        ) { listaClientes ->
 
-            usuario?.let {
+            mapaClientes.clear()
 
-                // ------------------------------------------------
-                // GUARDAR NOMBRE COMERCIO
-                // ------------------------------------------------
+            listaClientes.forEach { cliente ->
 
-                mapaClientes[
-                    clienteIdActual
-                ] =
+                mapaClientes[cliente.id] =
 
-                    usuario.nombreComercio
+                    cliente.nombreComercio
                         ?: "Cliente"
+            }
 
-                // ------------------------------------------------
-                // REFRESCAR ADAPTER
-                // ------------------------------------------------
+            if (::adapter.isInitialized) {
 
-                if (::adapter.isInitialized) {
-
-                    adapter.notifyDataSetChanged()
-                }
+                adapter.notifyDataSetChanged()
             }
         }
-
         // ------------------------------------------------
         // CARGAR TODOS PEDIDOS
         // ------------------------------------------------

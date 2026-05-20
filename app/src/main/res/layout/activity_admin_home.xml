@@ -10,7 +10,7 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarAdmin"
         android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="38dp"
         android:background="@color/primary_color"
 
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"

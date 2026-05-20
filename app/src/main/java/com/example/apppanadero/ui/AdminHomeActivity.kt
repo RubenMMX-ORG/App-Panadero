@@ -20,8 +20,14 @@ class AdminHomeActivity : AppCompatActivity() {
         binding = ActivityAdminHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // CLAVE
+
         setSupportActionBar(binding.toolbarAdmin)
+
+        //Navegacion atras de la toolbar
+        binding.toolbarAdmin.setNavigationOnClickListener {
+
+            onBackPressedDispatcher.onBackPressed()
+        }
 
     }
 
@@ -43,11 +49,8 @@ class AdminHomeActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
-        //Navegacion atras de la toolbar
-        binding.toolbarAdmin.setNavigationOnClickListener {
 
-            onBackPressedDispatcher.onBackPressed()
-        }
+
 
         return when (item.itemId) {
 

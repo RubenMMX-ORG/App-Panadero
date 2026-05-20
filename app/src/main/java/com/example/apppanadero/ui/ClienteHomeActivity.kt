@@ -21,9 +21,14 @@ class ClienteHomeActivity : AppCompatActivity() {
 
         binding = ActivityClienteHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // CLAVE
+        //Actionbar
         setSupportActionBar(binding.toolbarCliente)
+
+        //Navegacion atras de la toolbar
+        binding.toolbarCliente.setNavigationOnClickListener {
+
+            onBackPressedDispatcher.onBackPressed()
+        }
 
     }
 
@@ -45,11 +50,7 @@ class ClienteHomeActivity : AppCompatActivity() {
 
         val navController = navHostFragment.navController
 
-        //Navegacion atras de la toolbar
-        binding.toolbarCliente.setNavigationOnClickListener {
 
-            onBackPressedDispatcher.onBackPressed()
-        }
 
         return when (item.itemId) {
 

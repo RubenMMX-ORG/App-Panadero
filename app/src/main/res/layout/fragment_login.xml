@@ -123,16 +123,18 @@
                     app:iconTint="@null" />
 
                 <!-- REGISTRO -->
-                <TextView
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/tVRegistro"
-                    style="@style/TextLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:text="¿No tienes cuenta? Regístrate" />
+                    android:text="¿No tienes cuenta? Regístrate"
+                    android:textAllCaps="false"
+                    android:textColor="@color/common_google_signin_btn_text_dark_focused"
+                    android:backgroundTint="@color/brown_light"
+                    app:cornerRadius="16dp"
+                    app:rippleColor="@color/primary_light"/>
 
             </LinearLayout>
 

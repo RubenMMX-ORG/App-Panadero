@@ -10,19 +10,19 @@
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbarCliente"
         android:layout_width="0dp"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="38dp"
         android:background="@color/primary_color"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
 
-        app:title="Inicio"
-        app:titleCentered="true"
-        app:titleTextColor="@android:color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/ic_back"
         app:navigationIconTint="@android:color/white"
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:title="Inicio"
+        app:titleCentered="true"
+        app:titleTextColor="@android:color/white" />
 
     <!-- NAV HOST -->
     <androidx.fragment.app.FragmentContainerView

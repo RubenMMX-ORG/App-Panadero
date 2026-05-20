@@ -80,6 +80,28 @@ class PrecioViewModel(
     }
 
     // ------------------------------------------------
+    // OBTENER PRECIO VIGENTE
+    // ------------------------------------------------
+
+    fun obtenerPrecioVigente(
+
+        productoId: String
+
+    ) {
+
+        repository.obtenerPrecioVigente(
+
+            productoId
+
+        ) { precio ->
+
+            _precioActual.postValue(
+                precio
+            )
+        }
+    }
+
+    // ------------------------------------------------
     // HISTORICO PRECIOS
     // ------------------------------------------------
 

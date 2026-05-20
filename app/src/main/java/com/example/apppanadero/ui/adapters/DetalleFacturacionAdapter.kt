@@ -1,6 +1,7 @@
 package com.example.apppanadero.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.apppanadero.data.model.LineaPedido
@@ -96,14 +97,14 @@ class DetalleFacturacionAdapter(
     ) {
 
         // Línea actual
-        val linea =
+        val lineaPedido =
             listaLineas[position]
 
         // Producto relacionado
         val producto =
 
             mapaProductos[
-                linea.productoId
+                lineaPedido.productoId
             ]
 
         // ------------------------------------------------
@@ -119,10 +120,24 @@ class DetalleFacturacionAdapter(
         // CANTIDADES
         // ------------------------------------------------
 
-        holder.binding.tvCantidad.text =
+        if (lineaPedido.cantidadDevuelta != 0) {
 
-            "pedidas: ${linea.cantidadPedida} uds · " +
-                    "devueltas: ${linea.cantidadDevuelta} uds"
+            // como en el else quitamos visibilidad
+            // y el item se recicla
+            // hay que volverle a dar visibilidad
+
+            holder.binding.tvCantidad.visibility =
+                View.VISIBLE
+
+            holder.binding.tvCantidad.text =
+
+                "Pedidas: ${lineaPedido.cantidadPedida} uds / Devueltas: ${lineaPedido.cantidadDevuelta} uds"
+
+        } else {
+
+            holder.binding.tvCantidad.visibility =
+                View.GONE
+        }
 
         // ------------------------------------------------
         // DETALLE
@@ -130,9 +145,9 @@ class DetalleFacturacionAdapter(
 
         holder.binding.tvDetalle.text =
 
-            "${linea.cantidadPedida} uds · " +
+            "${lineaPedido.cantidadPedida} uds · " +
                     "%.2f€/u".format(
-                        linea.precioUnitario
+                        lineaPedido.precioUnitario
                     )
 
         // ------------------------------------------------
@@ -141,8 +156,8 @@ class DetalleFacturacionAdapter(
 
         val totalLinea =
 
-            linea.cantidadPedida *
-                    linea.precioUnitario
+            lineaPedido.cantidadPedida *
+                    lineaPedido.precioUnitario
 
         holder.binding.tvTotal.text =
 

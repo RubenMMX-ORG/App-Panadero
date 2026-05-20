@@ -72,23 +72,6 @@ class AdminHistoricoClientesFragment : Fragment() {
     private val mapaProductos =
         mutableMapOf<String, Producto>()
 
-    // ------------------------------------------------
-    // ON CREATE
-    // ------------------------------------------------
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-
-            clienteId =
-
-                AdminHistoricoClientesFragmentArgs
-                    .fromBundle(it)
-                    .clienteId
-        }
-    }
 
     // ------------------------------------------------
     // ON CREATE VIEW
@@ -128,6 +111,15 @@ class AdminHistoricoClientesFragment : Fragment() {
             view,
             savedInstanceState
         )
+
+        arguments?.let {
+
+            clienteId =
+
+                AdminHistoricoClientesFragmentArgs
+                    .fromBundle(it)
+                    .clienteId
+        }
 
         // ------------------------------------------------
         // ACTION BAR
@@ -257,10 +249,18 @@ class AdminHistoricoClientesFragment : Fragment() {
                                 aprobado = isChecked
                             )
 
-                        usuarioViewModel.guardarUsuario(
+                        usuarioViewModel.actualizarUsuario(
 
                             usuarioActualizado
-                        ) { }
+
+                        ) { correcto ->
+
+                            if (correcto) {
+
+                                binding.switchAprobado.isChecked =
+                                    isChecked
+                            }
+                        }
                     }
 
                 // ------------------------------------------------
@@ -291,7 +291,16 @@ class AdminHistoricoClientesFragment : Fragment() {
                         usuarioViewModel.actualizarUsuario(
 
                             usuarioActualizado
-                        ) { }
+
+                        ) { correcto ->
+
+                            if (correcto) {
+
+                                binding.tvDescuento.text =
+
+                                    "${descuentoSeleccionado.toInt()}% dto."
+                            }
+                        }
                     }
             }
         }

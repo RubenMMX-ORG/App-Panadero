@@ -64,6 +64,16 @@ class AdminProductosFragment : Fragment() {
     private val mapaPrecios =
         mutableMapOf<String, Double>()
 
+
+    //Variables para asegurar que carga antes de mostrar
+
+    private var listaProductosActual =
+        emptyList<com.example.apppanadero.data.model.Producto>()
+
+    private var productosCargados = false
+
+    private var preciosCargados = false
+
     // ------------------------------------------------
     // ON CREATE VIEW
     // ------------------------------------------------
@@ -124,6 +134,8 @@ class AdminProductosFragment : Fragment() {
                 requireContext()
             )
 
+
+
         // ------------------------------------------------
         // OBSERVAR PRODUCTOS
         // ------------------------------------------------
@@ -134,39 +146,78 @@ class AdminProductosFragment : Fragment() {
 
         ) { listaProductos ->
 
-            // ------------------------------------------------
-            // LIMPIAR MAPA
-            // ------------------------------------------------
+            listaProductosActual =
+                listaProductos
+
+            productosCargados = true
+
+            intentarCrearAdapter()
+        }
+
+        // ------------------------------------------------
+        // OBSERVAR PRECIO ACTUAL
+        // ------------------------------------------------
+
+        precioViewModel.listaPrecios.observe(
+
+            viewLifecycleOwner
+
+        ) { listaPrecios ->
 
             mapaPrecios.clear()
 
-            // ------------------------------------------------
-            // CARGAR PRECIOS
-            // ------------------------------------------------
+            listaPrecios.forEach {
 
-            listaProductos.forEach { producto ->
-
-                precioViewModel.obtenerPrecioVigente(
-                    producto.id
-                )
+                mapaPrecios[
+                    it.productoId
+                ] = it.precio
             }
 
-            // ------------------------------------------------
-            // CREAR ADAPTER
-            // ------------------------------------------------
+            preciosCargados = true
+
+            intentarCrearAdapter()
+        }
+
+        // ------------------------------------------------
+        // CARGAR PRODUCTOS
+        // ------------------------------------------------
+
+        productoViewModel.obtenerTodosProductos()
+
+        // ------------------------------------------------
+        // CARGAR PRECIOS VIGENTES
+        // ------------------------------------------------
+        precioViewModel.obtenerPreciosVigentes()
+
+        // ------------------------------------------------
+        // BOTÓN NUEVO PRODUCTO
+        // ------------------------------------------------
+
+        binding.btnAddProducto
+            .setOnClickListener {
+
+                findNavController().navigate(
+
+                    R.id.action_adminProductosFragment_to_adminNuevoProductoFragment
+                )
+            }
+    }
+    private fun intentarCrearAdapter() {
+
+        if (
+
+            productosCargados &&
+            preciosCargados
+
+        ) {
 
             adapter =
+
                 AdminProductoAdapter(
 
-                    // Lista productos
-                    listaProductos,
+                    listaProductosActual,
 
-                    // Mapa precios
                     mapaPrecios,
-
-                    // ------------------------------------------------
-                    // EDITAR
-                    // ------------------------------------------------
 
                     onEditarClick = { producto ->
 
@@ -176,15 +227,10 @@ class AdminProductosFragment : Fragment() {
                         )
                     },
 
-                    // ------------------------------------------------
-                    // ELIMINAR
-                    // ------------------------------------------------
-
                     onEliminarClick = { producto ->
 
                         productoViewModel
                             .eliminarProducto(
-
                                 producto.id
                             )
 
@@ -203,45 +249,6 @@ class AdminProductosFragment : Fragment() {
             binding.recyclerProductos.adapter =
                 adapter
         }
-
-        // ------------------------------------------------
-        // OBSERVAR PRECIO ACTUAL
-        // ------------------------------------------------
-
-        precioViewModel.precioActual.observe(
-
-            viewLifecycleOwner
-
-        ) { precio ->
-
-            precio?.let {
-
-                mapaPrecios[
-                    it.productoId
-                ] = it.precio
-
-                adapter.notifyDataSetChanged()
-            }
-        }
-
-        // ------------------------------------------------
-        // CARGAR PRODUCTOS
-        // ------------------------------------------------
-
-        productoViewModel.obtenerTodosProductos()
-
-        // ------------------------------------------------
-        // BOTÓN NUEVO PRODUCTO
-        // ------------------------------------------------
-
-        binding.btnAddProducto
-            .setOnClickListener {
-
-                findNavController().navigate(
-
-                    R.id.action_adminProductosFragment_to_adminNuevoProductoFragment
-                )
-            }
     }
 
     // ------------------------------------------------

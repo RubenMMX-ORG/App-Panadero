@@ -75,13 +75,12 @@
                                 android:layout_marginStart="12dp">
 
                                 <TextView
-                                    android:id="@+id/tvNombreCliente"
+                                    android:id="@+id/tvNombreComercio"
+                                    style="@style/TextTitle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Juan Pérez"
-                                    android:textStyle="bold"
                                     android:textSize="16sp"
-                                    style="@style/TextTitle"/>
+                                    android:textStyle="bold" />
 
                                 <TextView
                                     android:id="@+id/tvNumeroPedido"

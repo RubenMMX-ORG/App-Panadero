@@ -75,34 +75,10 @@
                         android:layout_height="wrap_content"
                         android:hint="Precio del producto"
                         android:inputType="numberDecimal"
-                        android:text="Precio del producto"
                         android:textColor="@color/text_primary"
                         android:textColorHint="@color/text_hint" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- UNIDAD -->
-                <TextView
-                    style="@style/TextLabel"
-                    android:text="Unidad"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.App.Dropdown"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/dropUnidad"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Unidad"
-                        android:inputType="none"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_hint"
-                        android:popupBackground="@color/background_card"/>
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- CATEGORIA -->
                 <TextView

@@ -94,6 +94,8 @@ class LineaPedidoAdapter(
         // Subtotal
         val subtotal = cantidadMostrar * lineaPedido.precioUnitario
         holder.binding.tvTotal.text = "%.2f €".format(subtotal)
+
+
     }
 
     // ------------------------------------------------

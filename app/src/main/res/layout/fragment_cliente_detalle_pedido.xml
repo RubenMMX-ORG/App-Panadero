@@ -180,7 +180,7 @@
                 android:text="Cancelar"
                 android:textAllCaps="false"
                 android:textColor="@color/estado_finalizado_text"
-                app:strokeColor="@color/estado_finalizado_border"
+                app:strokeColor="@color/estado_finalizado_bg"
                 app:strokeWidth="2dp"
                 app:backgroundTint="@android:color/transparent"
                 app:cornerRadius="16dp"/>

@@ -1,15 +1,18 @@
 package com.example.apppanadero.ui
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.apppanadero.R
 import com.example.apppanadero.data.model.Pedido
 import com.example.apppanadero.ui.adapters.LineaPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
@@ -102,6 +105,68 @@ class ClienteDetallePedidoFragment : Fragment() {
 
         // Precio total
         binding.tvTotal.text = "%.2f €".format(pedido.precioTotal)
+
+        // ------------------------------------------------
+        // ASIGNACION DE COLORES POR ESTADO
+        // ------------------------------------------------
+
+        if (pedido.estado == "pendiente") {
+
+            binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_pendiente_bg)
+            )
+
+        } else if (pedido.estado == "preparado") {
+
+            binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_camino_bg)
+            )
+
+        } else if (pedido.estado == "entregado") {
+
+            binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_entregado_bg)
+            )
+
+        } else if (pedido.estado == "finalizado") {
+
+            binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_finalizado_bg)
+            )
+        }
+
+        if (pedido.estado == "pendiente") {
+
+            binding.chipEstado.setTextColor(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_pendiente_text)
+            )
+
+        } else if (pedido.estado == "preparado") {
+
+            binding.chipEstado.setTextColor(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_camino_text)
+            )
+
+        } else if (pedido.estado == "entregado") {
+
+            binding.chipEstado.setTextColor(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_entregado_text)
+            )
+
+        } else if (pedido.estado == "finalizado") {
+
+            binding.chipEstado.setTextColor(
+
+                ContextCompat.getColor(requireContext(), R.color.estado_finalizado_text)
+            )
+        }
 
         // RecyclerView con las líneas de pedido
         val adapter = LineaPedidoAdapter(pedido.lineasPedido, pedido.estado)

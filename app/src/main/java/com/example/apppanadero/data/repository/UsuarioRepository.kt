@@ -206,6 +206,33 @@ class UsuarioRepository {
             }
     }
 
+    fun actualizarUsuario(
+
+        usuarioId: String,
+
+        usuario: Usuario,
+
+        respuesta: (Boolean) -> Unit
+
+    ) {
+
+        db.collection("usuarios")
+
+            .document(usuarioId)
+
+            .set(usuario)
+
+            .addOnSuccessListener {
+
+                respuesta(true)
+            }
+
+            .addOnFailureListener {
+
+                respuesta(false)
+            }
+    }
+
     // ------------------------------------------------
     // OBTENER USUARIO
     // ------------------------------------------------
