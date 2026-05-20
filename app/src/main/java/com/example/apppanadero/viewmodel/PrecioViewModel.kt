@@ -34,6 +34,14 @@ class PrecioViewModel(
     val historicoPrecios:
             LiveData<List<Precio>> =
         _historicoPrecios
+    
+    //Lista de precios
+    private val _listaPrecios =
+    MutableLiveData<List<Precio>>()
+
+    val listaPrecios:
+        LiveData<List<Precio>> =
+        _listaPrecios
 
     // ------------------------------------------------
     // PRECIO GUARDADO
