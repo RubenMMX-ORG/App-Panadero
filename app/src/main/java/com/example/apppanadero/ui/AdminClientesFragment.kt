@@ -105,15 +105,6 @@ class AdminClientesFragment : Fragment() {
                 requireContext()
             )
 
-        // ------------------------------------------------
-        // OBSERVAR CLIENTES
-        // ------------------------------------------------
-
-        usuarioViewModel.usuario.observe(
-
-            viewLifecycleOwner
-
-        ) {  }
 
         // ------------------------------------------------
         // CARGAR CLIENTES
