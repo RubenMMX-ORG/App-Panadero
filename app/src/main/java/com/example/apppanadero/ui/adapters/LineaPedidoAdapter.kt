@@ -92,7 +92,7 @@ class LineaPedidoAdapter(
         holder.binding.tvDetalle.text = "$cantidadMostrar uds -> ${lineaPedido.precioUnitario} €/u"
 
         // Subtotal
-        val subtotal = lineaPedido.cantidadFinal * lineaPedido.precioUnitario
+        val subtotal = cantidadMostrar * lineaPedido.precioUnitario
         holder.binding.tvTotal.text = "%.2f €".format(subtotal)
     }
 
