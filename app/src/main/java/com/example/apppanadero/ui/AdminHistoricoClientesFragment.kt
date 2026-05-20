@@ -288,7 +288,7 @@ class AdminHistoricoClientesFragment : Fragment() {
                                 descuento = descuentoSeleccionado
                             )
 
-                        usuarioViewModel.guardarUsuario(
+                        usuarioViewModel.actualizarUsuario(
 
                             usuarioActualizado
                         ) { }
