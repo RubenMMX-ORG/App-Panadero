@@ -131,10 +131,31 @@ class UsuarioViewModel(
         val uid = repository.getCurrentUser()?.uid ?: return
 
         // Guardamos documento Firestore
-        repository.guardarUsuario(
-            uid,
-            usuario,
-            respuesta
+            repository.guardarUsuario(
+                uid,
+                usuario,
+                respuesta
+            )
+      }
+    // ---------------------------------------------------
+    // ACTUALIZAR USUARIO EN FIRESTORE
+    // ---------------------------------------------------
+
+    fun actualizarUsuario(
+
+    usuario: Usuario,
+
+    respuesta: (Boolean) -> Unit
+
+    ) {
+
+    repository.guardarUsuario(
+
+        usuario.id,
+
+        usuario,
+
+        respuesta
         )
     }
 
