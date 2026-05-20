@@ -24,7 +24,7 @@ class ClienteDetallePedidoFragment : Fragment() {
     private val binding get() = _binding!!
 
     //Variable para recuperar el pedidoId recibido
-    private lateinit var pedidoId : String
+    private var pedidoId: String? = null
 
     // ViewModel con Injector
     private val pedidoViewModel: PedidoViewModel by viewModels {
@@ -41,16 +41,16 @@ class ClienteDetallePedidoFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+         super.onViewCreated(view, savedInstanceState)
         // Cambiar el título de la ActionBar
         activity?.let {
             (it as? AppCompatActivity)?.supportActionBar?.title = "Detalle Pedido"
         }
-        super.onViewCreated(view, savedInstanceState)
+       
 
         // Recuperamos el pedidoId de los argumentos
         val args = ClienteDetallePedidoFragmentArgs.fromBundle(requireArguments())
-        pedidoId = args.pedidoId.toString()
+        pedidoId = args.pedidoId
 
 
         //  Observa el LiveData
@@ -63,8 +63,13 @@ class ClienteDetallePedidoFragment : Fragment() {
             }
         }
 
-        //  Pide al ViewModel que cargue el pedido
-        pedidoViewModel.obtenerPedidoPorId(pedidoId)
+        //  Pide al ViewModel que cargue el pedido, si no es nulo pasa el pedidoid como parametro dela funcion obtenerpedidoPOrId,
+        //  que en la clase viewModel es  quien guarda ese pedido en el liveData 
+    
+        pedidoId?.let {
+
+            pedidoViewModel.obtenerPedidoPorId(it)
+        }
 
         configurarBotones()
     }
@@ -110,8 +115,8 @@ class ClienteDetallePedidoFragment : Fragment() {
             val pedido = pedidoViewModel.pedidoDetalle.value
 
             if (pedido != null) {
-                // Solo cancelar si está pendiente o en camino
-                if (pedido.estado == "pendiente" || pedido.estado == "en_camino") {
+                // Solo cancelar si está pendiente 
+                if (pedido.estado == "pendiente") {
                     pedidoViewModel.eliminarPedido(pedido.id)
 
                     Toast.makeText(requireContext(), "Pedido cancelado", Toast.LENGTH_SHORT).show()
