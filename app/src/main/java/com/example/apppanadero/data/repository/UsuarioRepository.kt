@@ -2,125 +2,269 @@ package com.example.apppanadero.data.repository
 
 import com.example.apppanadero.data.model.Usuario
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 class UsuarioRepository {
 
-    //Variable para auth
-    private val auth = FirebaseAuth.getInstance()
+    // ------------------------------------------------
+    // FIREBASE AUTH
+    // ------------------------------------------------
 
-    //variable para Firestore
-    private val db = FirebaseFirestore.getInstance()
+    private val auth =
+        FirebaseAuth.getInstance()
 
-    //Funcion para firebase auth
+    // ------------------------------------------------
+    // FIRESTORE
+    // ------------------------------------------------
+
+    private val db =
+        FirebaseFirestore.getInstance()
+
+    // ------------------------------------------------
+    // REGISTRAR USUARIO
+    // ------------------------------------------------
+
+    // SOLO registra en FirebaseAuth
+    //
+    // Firestore se guarda después
     fun registrarUsuario(
+
         email: String,
+
         password: String,
+
         respuesta: (FirebaseUser?, String?) -> Unit
+
     ) {
 
-        auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { resultado ->
+        auth.createUserWithEmailAndPassword(
 
-                if (resultado.isSuccessful) {
-                    respuesta(auth.currentUser, null)
+            email,
+            password
+
+        ).addOnCompleteListener { resultado ->
+
+            if (resultado.isSuccessful) {
+
+                respuesta(
+                    auth.currentUser,
+                    null
+                )
+
+            } else {
+
+                if (resultado.exception
+                    is FirebaseAuthUserCollisionException
+                ) {
+
+                    respuesta(
+
+                        null,
+
+                        "Ya existe una cuenta con este email"
+                    )
+
                 } else {
-                    if (resultado.exception is FirebaseAuthUserCollisionException) {
 
-                        respuesta(null, "Ya existe una cuenta con este email")
+                    respuesta(
 
-                    } else {
+                        null,
 
-                        respuesta(null, "Error al registrarse")
-                    }
+                        "Error al registrarse"
+                    )
                 }
             }
+        }
     }
 
-    //Funcion para firebase auth
+    // ------------------------------------------------
+    // LOGIN GOOGLE
+    // ------------------------------------------------
+
     fun loginConGoogle(
+
         idToken: String,
+
         respuesta: (FirebaseUser?, String?) -> Unit
+
     ) {
 
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        val credential =
 
-        auth.signInWithCredential(credential)
+            GoogleAuthProvider.getCredential(
+
+                idToken,
+                null
+            )
+
+        auth.signInWithCredential(
+            credential
+        )
+
             .addOnCompleteListener { resultado ->
 
                 if (resultado.isSuccessful) {
-                    respuesta(auth.currentUser,null)
+
+                    respuesta(
+                        auth.currentUser,
+                        null
+                    )
+
                 } else {
-                    respuesta(null, "Credenciales incorrectas")
+
+                    respuesta(
+
+                        null,
+
+                        "Credenciales incorrectas"
+                    )
                 }
             }
     }
 
+    // ------------------------------------------------
+    // LOGIN EMAIL/PASSWORD
+    // ------------------------------------------------
 
-    //Funcion para firebase auth
     fun loginUsuario(
+
         email: String,
+
         password: String,
+
         respuesta: (FirebaseUser?, String?) -> Unit
+
     ) {
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { resultado ->
+        auth.signInWithEmailAndPassword(
 
-                if (resultado.isSuccessful) {
-                    respuesta(auth.currentUser,null)
-                } else {
-                    respuesta(null, "Email o contraseña incorrectos")
-                }
+            email,
+            password
+
+        ).addOnCompleteListener { resultado ->
+
+            if (resultado.isSuccessful) {
+
+                respuesta(
+                    auth.currentUser,
+                    null
+                )
+
+            } else {
+
+                respuesta(
+
+                    null,
+
+                    "Email o contraseña incorrectos"
+                )
             }
+        }
     }
 
-    //Funcion para Firebase Firestore
+    // ------------------------------------------------
+    // GUARDAR USUARIO FIRESTORE
+    // ------------------------------------------------
+
+    // IMPORTANTE:
+    //
+    // El uid FirebaseAuth
+    // se usa como:
+    //
+    // - documentId Firestore
+    // - id real usuario
+    // - referencia pedidos
+    //
+    // usuarios/{uid}
     fun guardarUsuario(
+
         uid: String,
+
         usuario: Usuario,
+
         respuesta: (Boolean) -> Unit
+
     ) {
 
         db.collection("usuarios")
+
             .document(uid)
+
             .set(usuario)
+
             .addOnSuccessListener {
+
                 respuesta(true)
             }
+
             .addOnFailureListener {
+
                 respuesta(false)
             }
     }
 
+    // ------------------------------------------------
+    // OBTENER USUARIO
+    // ------------------------------------------------
+
+    // IMPORTANTE:
+    //
+    // Firestore NO mete automáticamente
+    // el document.id dentro del data class.
+    //
+    // Por eso usamos:
+    //
+    // copy(id = document.id)
+    //
+    // para que Usuario.id tenga
+    // el uid FirebaseAuth real.
     fun obtenerUsuario(
+
         uid: String,
+
         respuesta: (Usuario?) -> Unit
+
     ) {
 
         db.collection("usuarios")
+
             .document(uid)
+
             .get()
+
             .addOnSuccessListener { document ->
 
                 if (document.exists()) {
-                    val usuario = document.toObject(Usuario::class.java)
+
+                    val usuario =
+
+                        document.toObject(
+                            Usuario::class.java
+                        )?.copy(
+
+                            id = document.id
+                        )
+
                     respuesta(usuario)
+
                 } else {
+
                     respuesta(null)
                 }
             }
+
             .addOnFailureListener {
+
                 respuesta(null)
             }
     }
 
-    // ---------------------------------------------------
+    // ------------------------------------------------
     // OBTENER USUARIO POR ID
-    // ---------------------------------------------------
+    // ------------------------------------------------
 
     fun obtenerUsuarioPorId(
 
@@ -130,9 +274,10 @@ class UsuarioRepository {
 
     ) {
 
-        db
-            .collection("usuarios")
+        db.collection("usuarios")
+
             .document(usuarioId)
+
             .get()
 
             .addOnSuccessListener { documento ->
@@ -143,6 +288,9 @@ class UsuarioRepository {
 
                         documento.toObject(
                             Usuario::class.java
+                        )?.copy(
+
+                            id = documento.id
                         )
 
                     callback(usuario)
@@ -160,9 +308,10 @@ class UsuarioRepository {
     }
 
     // ------------------------------------------------
-// OBTENER CLIENTES
-// ------------------------------------------------
+    // OBTENER CLIENTES
+    // ------------------------------------------------
 
+    // Solo usuarios con rol cliente
     fun obtenerClientes(
 
         callback: (List<Usuario>) -> Unit
@@ -183,10 +332,28 @@ class UsuarioRepository {
 
                 val listaClientes =
 
-                    resultado.documents.mapNotNull {
+                    resultado.documents.mapNotNull { documento ->
 
-                        it.toObject(
-                            Usuario::class.java
+                        val usuario =
+
+                            documento.toObject(
+                                Usuario::class.java
+                            )
+
+                        // ------------------------------------------------
+                        // IMPORTANTE
+                        // ------------------------------------------------
+                        //
+                        // Inyectamos document.id
+                        // dentro del data class.
+                        //
+                        // Así:
+                        //
+                        // usuario.id == uid FirebaseAuth
+                        //
+                        usuario?.copy(
+
+                            id = documento.id
                         )
                     }
 
@@ -199,13 +366,21 @@ class UsuarioRepository {
             }
     }
 
-    //Funcion de Auth
+    // ------------------------------------------------
+    // USUARIO ACTUAL
+    // ------------------------------------------------
+
     fun getCurrentUser(): FirebaseUser? {
+
         return auth.currentUser
     }
 
-    //Funcion de Auth
+    // ------------------------------------------------
+    // LOGOUT
+    // ------------------------------------------------
+
     fun logout() {
+
         auth.signOut()
     }
 }
