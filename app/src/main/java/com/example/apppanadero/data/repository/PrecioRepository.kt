@@ -88,6 +88,44 @@ class PrecioRepository {
     }
 
     // ------------------------------------------------
+    // OBTENER TODOS LOS PRECIOS VIGENTES
+    // ------------------------------------------------
+    fun obtenerPreciosVigentes(
+
+    respuesta: (List<Precio>) -> Unit
+
+) {
+
+    db.collection("precios")
+
+        .whereEqualTo(
+            "vigente",
+            true
+        )
+
+        .get()
+
+        .addOnSuccessListener { resultado ->
+
+            val listaPrecios =
+
+                resultado.documents.mapNotNull {
+
+                    it.toObject(
+                        Precio::class.java
+                    )
+                }
+
+            respuesta(listaPrecios)
+        }
+
+        .addOnFailureListener {
+
+            respuesta(emptyList())
+        }
+}
+
+    // ------------------------------------------------
     // OBTENER HISTORICO PRECIOS
     // ------------------------------------------------
 
