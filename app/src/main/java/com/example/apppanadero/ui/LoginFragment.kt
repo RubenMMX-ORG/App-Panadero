@@ -78,18 +78,51 @@ class LoginFragment : Fragment() {
     ) {
 
         super.onViewCreated(view, savedInstanceState)
+        
+        val preferencias =
 
-        // Inicializamos CredentialManager
-        credentialManager = CredentialManager.create(requireContext())
+        requireActivity()
+            .getSharedPreferences(
+    
+                "sesion",
+    
+                AppCompatActivity.MODE_PRIVATE
+            )
+    
+    val mantenerSesion =
+    
+        preferencias.getBoolean(
+    
+            "mantener_sesion",
+    
+            false
+        )
+    
+    val usuarioActual = viewModel.getCurrentUser()
 
-        configurarRegistro()
-        configurarLogin()
-        configurarLoginGoogle()
-
-        // SOLO observamos Firestore
-        // porque sí es estado persistente UI
-        observarUsuarioFirestore()
-    }
+            if (
+        
+            mantenerSesion == true &&
+            usuarioActual != null
+        
+        ) {
+        
+            viewModel.obtenerUsuario(
+                usuarioActual.uid
+            )
+        }
+        
+            // Inicializamos CredentialManager
+            credentialManager = CredentialManager.create(requireContext())
+    
+            configurarRegistro()
+            configurarLogin()
+            configurarLoginGoogle()
+    
+            // SOLO observamos Firestore
+            // porque sí es estado persistente UI
+            observarUsuarioFirestore()
+        }
 
 
     // ---------------------------------------------------
@@ -208,6 +241,26 @@ class LoginFragment : Fragment() {
 
                 // Login correcto
                 if (usuarioFirebase != null) {
+                    val preferencias =
+
+                    requireActivity()
+                        .getSharedPreferences(
+                
+                            "sesion",
+                
+                            AppCompatActivity.MODE_PRIVATE
+                        )
+                
+                val editor = preferencias.edit()
+                
+                editor.putBoolean(
+                
+                    "mantener_sesion",
+                
+                    binding.checkMantenerSesion.isChecked
+                )
+                
+                editor.commit()
 
                     // Obtener datos Firestore
                     viewModel.obtenerUsuario(
@@ -305,6 +358,7 @@ class LoginFragment : Fragment() {
         if (
             credential is CustomCredential
             &&
+                
             credential.type ==
             GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
         ) {
@@ -330,7 +384,26 @@ class LoginFragment : Fragment() {
 
                 // Login correcto
                 if (usuarioFirebase != null) {
-
+                    val preferencias =
+                
+                    requireActivity()
+                        .getSharedPreferences(
+                
+                            "sesion",
+                
+                            AppCompatActivity.MODE_PRIVATE
+                        )
+                
+                val editor = preferencias.edit()
+                
+                editor.putBoolean(
+                
+                    "mantener_sesion",
+                
+                    binding.checkMantenerSesion.isChecked
+                )
+                
+                editor.commit()
                     // Buscar usuario Firestore
                     viewModel.obtenerUsuario(
                         usuarioFirebase.uid
