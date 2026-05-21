@@ -68,8 +68,55 @@ class ClienteHomeActivity : AppCompatActivity() {
             }
 
             R.id.menu_logout -> {
-                // logout()
-                true
+
+            // ------------------------------------------------
+            // FIREBASE LOGOUT
+            // ------------------------------------------------
+        
+            val repository = UsuarioRepository()
+        
+            repository.logout()
+        
+            // ------------------------------------------------
+            // SHARED PREFERENCES
+            // ------------------------------------------------
+        
+            val preferencias = getSharedPreferences(
+        
+                "sesion",
+        
+                MODE_PRIVATE
+            )
+        
+            val editor = preferencias.edit()
+        
+            editor.putBoolean(
+        
+                "mantener_sesion",
+        
+                false
+            )
+        
+            editor.commit()
+        
+            // ------------------------------------------------
+            // VOLVER LOGIN
+            // ------------------------------------------------
+        
+            startActivity(
+        
+                Intent(
+        
+                    this,
+        
+                    LoginActivity::class.java
+                )
+            )
+        
+            finish()
+        
+            true
+        }
             }
 
             else -> super.onOptionsItemSelected(item)
