@@ -18,6 +18,7 @@ import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 import com.google.firebase.Timestamp
 
+
 class AdminNuevoProductoFragment : Fragment() {
 
     // ------------------------------------------------

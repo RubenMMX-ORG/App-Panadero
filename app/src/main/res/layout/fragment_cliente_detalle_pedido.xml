@@ -6,7 +6,10 @@
     android:layout_height="match_parent"
     android:background="@drawable/fondo_pan">
 
+    <!-- ========================================================= -->
     <!-- SCROLL -->
+    <!-- ========================================================= -->
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -17,16 +20,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!-- ========================================================= -->
         <!-- CARD PRINCIPAL -->
+        <!-- ========================================================= -->
+
         <com.google.android.material.card.MaterialCardView
+            style="@style/CardPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
-            android:backgroundTint="@color/background_card"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="8dp"
-            app:strokeColor="@color/brown_light"
-            app:strokeWidth="1dp">
+            android:layout_margin="20dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,25 +36,28 @@
                 android:orientation="vertical"
                 android:padding="20dp">
 
+                <!-- ========================================================= -->
                 <!-- Nº PEDIDO -->
+                <!-- ========================================================= -->
+
                 <TextView
                     android:id="@+id/tvNumeroPedido"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
                     android:text="Pedido #1"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
                     android:textColor="@color/text_primary"
-                    android:layout_marginBottom="12dp"/>
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
+                <!-- ========================================================= -->
                 <!-- CARD INFO -->
+                <!-- ========================================================= -->
+
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/CardSecondary"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:backgroundTint="@color/brown_light"
-                    app:cardCornerRadius="16dp"
-                    app:strokeColor="@color/primary_light"
-                    app:strokeWidth="1dp">
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -60,41 +65,51 @@
                         android:orientation="vertical"
                         android:padding="16dp">
 
+                        <!-- ========================================================= -->
                         <!-- FECHA -->
+                        <!-- ========================================================= -->
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Fecha"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp" />
 
                         <TextView
                             android:id="@+id/tvFecha"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="8dp"
                             android:text="2026-03-30"
-                            android:textSize="15sp"
-                            android:textStyle="bold"
                             android:textColor="@color/primary_dark"
-                            android:layout_marginBottom="8dp"/>
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
 
+                        <!-- ========================================================= -->
                         <!-- ESTADO -->
+                        <!-- ========================================================= -->
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Estado"
-                            android:textSize="13sp"
-                            android:textColor="@color/text_secondary"/>
+                            android:textColor="@color/text_secondary"
+                            android:textSize="13sp" />
+
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chipEstado"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
                             android:text="En preparación"
                             app:chipCornerRadius="16dp"
-                            app:chipStrokeWidth="1dp"
-                            android:layout_marginBottom="10dp"/>
+                            app:chipStrokeWidth="1dp" />
 
+                        <!-- ========================================================= -->
                         <!-- RESUMEN -->
+                        <!-- ========================================================= -->
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -108,7 +123,7 @@
                                 android:layout_weight="1"
                                 android:text="5 productos"
                                 android:textColor="@color/text_primary"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
 
                             <!-- TOTAL -->
                             <TextView
@@ -117,8 +132,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="€24.50"
                                 android:textColor="@color/primary_dark"
-                                android:textStyle="bold"
-                                android:textSize="16sp"/>
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -126,23 +141,28 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <!-- ========================================================= -->
                 <!-- TÍTULO PRODUCTOS -->
+                <!-- ========================================================= -->
+
                 <TextView
-                    android:text="Productos"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/primary_dark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="8dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:text="Productos"
+                    android:textColor="@color/primary_dark"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
+                <!-- ========================================================= -->
                 <!-- LISTA -->
+                <!-- ========================================================= -->
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerDetalle"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"/>
+                    android:layout_height="350dp" />
 
             </LinearLayout>
 
@@ -150,16 +170,15 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <!-- ========================================================= -->
     <!-- CARD BOTONES -->
+    <!-- ========================================================= -->
+
     <com.google.android.material.card.MaterialCardView
+        style="@style/CardPrimary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/background_card"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        app:strokeColor="@color/brown_light"
-        app:strokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -171,7 +190,10 @@
             android:padding="12dp"
             android:weightSum="2">
 
-            <!-- CANCELAR -->
+            <!-- ========================================================= -->
+            <!-- BOTÓN CANCELAR -->
+            <!-- ========================================================= -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancelar"
                 android:layout_width="0dp"
@@ -180,23 +202,25 @@
                 android:text="Cancelar"
                 android:textAllCaps="false"
                 android:textColor="@color/estado_finalizado_text"
-                app:strokeColor="@color/estado_finalizado_bg"
-                app:strokeWidth="2dp"
                 app:backgroundTint="@android:color/transparent"
-                app:cornerRadius="16dp"/>
+                app:cornerRadius="16dp"
+                app:strokeColor="@color/estado_finalizado_bg"
+                app:strokeWidth="2dp" />
 
-            <!-- MODIFICAR -->
+            <!-- ========================================================= -->
+            <!-- BOTÓN MODIFICAR -->
+            <!-- ========================================================= -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnModificar"
+                style="@style/ButtonPrimary"
                 android:layout_width="0dp"
                 android:layout_height="48dp"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
                 android:text="Modificar"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:backgroundTint="@color/primary_color"
-                app:cornerRadius="16dp"/>
+                app:cornerRadius="16dp" />
 
         </LinearLayout>
 

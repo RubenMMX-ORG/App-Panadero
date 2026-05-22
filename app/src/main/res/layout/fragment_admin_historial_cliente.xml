@@ -3,32 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/text_secondary">
+    android:background="@color/brown_light">
 
+    <!-- CONTENEDOR PRINCIPAL -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- TÍTULO -->
-
         <!-- SUBTÍTULO -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Análisis de pedidos por período"
-            android:textSize="16sp"
-            android:textColor="@color/text_secondary"
-            android:layout_marginBottom="16dp"/>
 
-        <!-- CARD CLIENTE -->
-        <androidx.cardview.widget.CardView
+        <!-- ========================================================= -->
+        <!-- CARD PRINCIPAL -->
+        <!-- ========================================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/CardPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/background_lightgray"
             android:layout_marginBottom="16dp">
 
             <LinearLayout
@@ -37,76 +30,82 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- ========================================================= -->
                 <!-- TOP -->
+                <!-- ========================================================= -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <!-- IMAGEN -->
                     <ImageView
                         android:id="@+id/imgComercio"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:src="@drawable/logo_panadero"
-                        android:scaleType="centerCrop"
                         android:background="@drawable/bg_image_rounded"
-                        android:padding="4dp"/>
+                        android:padding="4dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/logo_panadero" />
 
-                    <!-- INFO -->
+                    <!-- INFORMACIÓN -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
                         android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="14dp">
+                        android:orientation="vertical">
 
                         <!-- NOMBRE -->
                         <TextView
                             android:id="@+id/tvNombreComercio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Panadería Central"
-                            android:textStyle="bold"
-                            android:textSize="17sp"
-                            android:textColor="@color/text_primary"
+                            android:ellipsize="end"
                             android:maxLines="1"
-                            android:ellipsize="end"/>
+                            android:text="Panadería Central"
+                            android:textColor="@color/text_primary"
+                            android:textSize="17sp"
+                            android:textStyle="bold" />
 
                         <!-- DIRECCIÓN -->
                         <TextView
                             android:id="@+id/tvDireccion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:text="Calle Mayor 24, Madrid"
                             android:textColor="@color/text_secondary"
-                            android:textSize="14sp"
-                            android:layout_marginTop="4dp"
-                            android:maxLines="1"
-                            android:ellipsize="end"/>
+                            android:textSize="14sp" />
 
                         <!-- TELÉFONO -->
                         <TextView
                             android:id="@+id/tvTelefono"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
                             android:text="📞 666 555 444"
                             android:textColor="@color/primary_dark"
-                            android:textSize="14sp"
-                            android:layout_marginTop="4dp"/>
+                            android:textSize="14sp" />
 
                     </LinearLayout>
 
                 </LinearLayout>
 
+                <!-- ========================================================= -->
                 <!-- RUTA + DESCUENTO -->
+                <!-- ========================================================= -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
                     android:layout_marginTop="14dp"
-                    android:gravity="center_vertical">
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
                     <!-- RUTA -->
                     <TextView
@@ -116,7 +115,7 @@
                         android:layout_weight="1"
                         android:text="🚚 Ruta Norte"
                         android:textColor="@color/primary_dark"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                     <!-- DESCUENTO -->
                     <TextView
@@ -125,68 +124,71 @@
                         android:layout_height="wrap_content"
                         android:text="10% dto."
                         android:textColor="@color/estado_pendiente_text"
-                        android:textStyle="bold"/>
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
-                <!-- APROBADO + DESCUENTO -->
+                <!-- ========================================================= -->
+                <!-- APROBADO + SELECTOR DESCUENTO -->
+                <!-- ========================================================= -->
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginTop="12dp"
                     android:gravity="center_vertical"
-                    android:layout_marginTop="12dp">
+                    android:orientation="horizontal">
 
-                    <!-- SWITCH APROBADO -->
-                    <!-- APROBADO -->
-                    <LinearLayout
+                    <!-- TEXTO -->
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
+                        android:layout_marginEnd="8dp"
+                        android:text="Aprobado"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Aprobado"
-                            android:textStyle="bold"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginEnd="8dp"/>
-
-                        <com.google.android.material.materialswitch.MaterialSwitch
-                            android:id="@+id/switchAprobado"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="true"
-                            android:layout_marginStart="12dp"/>
-
-                    </LinearLayout>
-                    <!-- DESCUENTO -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="100dp"
+                    <!-- SWITCH -->
+                    <com.google.android.material.materialswitch.MaterialSwitch
+                        android:id="@+id/switchAprobado"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        app:boxCornerRadiusTopStart="12dp"
-                        app:boxCornerRadiusTopEnd="12dp"
-                        app:boxCornerRadiusBottomStart="12dp"
-                        app:boxCornerRadiusBottomEnd="12dp"
-                        android:layout_marginStart="100dp">
+                        android:checked="true"
+                        app:thumbTint="@color/primary_color"
+                        app:trackTint="@color/primary_light" />
+
+                    <!-- ESPACIADOR -->
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1" />
+
+                    <!-- DROPDOWN -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.App.Dropdown"
+                        android:layout_width="110dp"
+                        android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
                             android:id="@+id/dropdownDescuento"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="none"
-                            android:text="0%" />
+                            android:text="0%"
+                            android:textColor="@color/text_primary" />
 
                     </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
+        <!-- ========================================================= -->
         <!-- FILA FECHAS -->
+        <!-- ========================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -194,82 +196,80 @@
 
             <!-- FECHA INICIO -->
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="6dp"
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etFechaInicio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Desde"
-                    android:focusable="false"
                     android:clickable="true"
                     android:drawableStart="@android:drawable/ic_menu_today"
+                    android:focusable="false"
+                    android:hint="Desde"
                     android:padding="12dp"
-                    android:textColor="@color/text_primary"/>
+                    android:textColor="@color/text_primary" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <!-- FECHA FIN -->
             <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.App.TextInputLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="6dp"
-                app:boxBackgroundMode="filled"
-                app:boxBackgroundColor="@color/white"
-                app:boxCornerRadiusTopStart="12dp"
-                app:boxCornerRadiusTopEnd="12dp"
-                app:boxCornerRadiusBottomStart="12dp"
-                app:boxCornerRadiusBottomEnd="12dp">
+                android:layout_weight="1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etFechaFin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Hasta"
-                    android:focusable="false"
                     android:clickable="true"
                     android:drawableStart="@android:drawable/ic_menu_today"
+                    android:focusable="false"
+                    android:hint="Hasta"
                     android:padding="12dp"
-                    android:textColor="@color/text_primary"/>
+                    android:textColor="@color/text_primary" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-        <!-- DETALLE PRODUCTOS -->
+        <!-- ========================================================= -->
+        <!-- TÍTULO PRODUCTOS -->
+        <!-- ========================================================= -->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Detalle por producto"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_primary"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="12dp"/>
+            android:layout_marginBottom="12dp"
+            android:text="Detalle por producto"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
-        <!-- LISTA -->
+        <!-- ========================================================= -->
+        <!-- RECYCLER -->
+        <!-- ========================================================= -->
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerProductos"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-             />
+            android:layout_height="140dp" />
 
-        <!-- RESUMEN -->
-        <androidx.cardview.widget.CardView
+        <!-- ========================================================= -->
+        <!-- CARD RESUMEN -->
+        <!-- ========================================================= -->
+
+        <com.google.android.material.card.MaterialCardView
+            style="@style/CardPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="@color/background_lightgray"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="16dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -277,15 +277,17 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
+                <!-- TÍTULO -->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
                     android:text="Resumen del período"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
                     android:textColor="@color/text_primary"
-                    android:layout_marginBottom="8dp"/>
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
+                <!-- TOTAL PEDIDOS -->
                 <TextView
                     android:id="@+id/tvTotalPedidos"
                     android:layout_width="wrap_content"
@@ -294,6 +296,7 @@
                     android:textColor="@color/text_primary"
                     android:textSize="14sp" />
 
+                <!-- TOTAL DEVUELTOS -->
                 <TextView
                     android:id="@+id/tvTotalDevueltos"
                     android:layout_width="wrap_content"
@@ -302,6 +305,7 @@
                     android:textColor="@color/text_primary"
                     android:textSize="14sp" />
 
+                <!-- TOTAL NETO -->
                 <TextView
                     android:id="@+id/tvTotalNeto"
                     android:layout_width="wrap_content"
@@ -314,16 +318,19 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <!-- BOTÓN -->
+        <!-- ========================================================= -->
+        <!-- BOTÓN PDF -->
+        <!-- ========================================================= -->
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnImprimir"
+            style="@style/ButtonPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:backgroundTint="@color/boton"
-            android:text="Imprimir Facturacion PDF"
+            android:text="Imprimir Facturación PDF"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"

@@ -1,5 +1,6 @@
 package com.example.apppanadero.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -8,13 +9,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import com.example.apppanadero.R
 import com.example.apppanadero.databinding.ActivityClienteHomeBinding
-
-
+import androidx.activity.viewModels
+import com.example.apppanadero.data.di.Injector
+import com.example.apppanadero.viewmodel.UsuarioViewModel
 
 
 class ClienteHomeActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityClienteHomeBinding
+
+    private val usuarioViewModel:
+            UsuarioViewModel by viewModels {
+
+        Injector
+            .provideUsuarioViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +38,7 @@ class ClienteHomeActivity : AppCompatActivity() {
 
             onBackPressedDispatcher.onBackPressed()
         }
+
 
     }
 
@@ -69,55 +79,53 @@ class ClienteHomeActivity : AppCompatActivity() {
 
             R.id.menu_logout -> {
 
-            // ------------------------------------------------
-            // FIREBASE LOGOUT
-            // ------------------------------------------------
-        
-            val repository = UsuarioRepository()
-        
-            repository.logout()
-        
-            // ------------------------------------------------
-            // SHARED PREFERENCES
-            // ------------------------------------------------
-        
-            val preferencias = getSharedPreferences(
-        
-                "sesion",
-        
-                MODE_PRIVATE
-            )
-        
-            val editor = preferencias.edit()
-        
-            editor.putBoolean(
-        
-                "mantener_sesion",
-        
-                false
-            )
-        
-            editor.commit()
-        
-            // ------------------------------------------------
-            // VOLVER LOGIN
-            // ------------------------------------------------
-        
-            startActivity(
-        
-                Intent(
-        
-                    this,
-        
-                    LoginActivity::class.java
+                // ------------------------------------------------
+                // FIREBASE LOGOUT
+                // ------------------------------------------------
+
+                usuarioViewModel.logout()
+
+                // ------------------------------------------------
+                // SHARED PREFERENCES
+                // ------------------------------------------------
+
+                val preferencias = getSharedPreferences(
+
+                    "sesion",
+
+                    MODE_PRIVATE
                 )
-            )
-        
-            finish()
-        
-            true
-        }
+
+                val editor = preferencias.edit()
+
+                editor.putBoolean(
+
+                    "mantener_sesion",
+
+                    false
+                )
+
+                editor.commit()
+
+                // ------------------------------------------------
+                // VOLVER LOGIN
+                // ------------------------------------------------
+
+                startActivity(
+
+                    Intent(
+
+                        this,
+
+                        LoginActivity::class.java
+                    )
+                )
+
+                finish()
+
+                true
             }
+
 
             else -> super.onOptionsItemSelected(item)
         }

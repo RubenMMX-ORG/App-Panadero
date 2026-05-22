@@ -2,13 +2,16 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    style="@style/CardSecondary"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="1dp"
-    style="@style/CardPrimary">
+    android:layout_marginBottom="16dp">
+
+    <!-- ========================================================= -->
+    <!-- CONTENEDOR -->
+    <!-- ========================================================= -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,114 +19,128 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- ========================================================= -->
         <!-- TOP -->
+        <!-- ========================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <!-- ========================================================= -->
             <!-- IMAGEN COMERCIO -->
+            <!-- ========================================================= -->
+
             <ImageView
                 android:id="@+id/imgComercio"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/logo_panadero"
-                android:scaleType="centerCrop"
                 android:background="@drawable/bg_image_rounded"
-                android:padding="4dp"/>
+                android:padding="4dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/logo_panadero" />
 
+            <!-- ========================================================= -->
             <!-- INFORMACIÓN -->
+            <!-- ========================================================= -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="14dp">
+                android:orientation="vertical">
 
                 <!-- NOMBRE -->
                 <TextView
                     android:id="@+id/tvNombreComercio"
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Panadería Central"
-                    android:textStyle="bold"
-                    android:textSize="17sp"
-                    android:maxLines="1"
                     android:ellipsize="end"
-                    style="@style/TextTitle"/>
+                    android:maxLines="1"
+                    android:text="Panadería Central"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
 
                 <!-- DIRECCIÓN -->
                 <TextView
                     android:id="@+id/tvDireccion"
+                    style="@style/TextLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Calle Mayor 24, Madrid"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
                     android:layout_marginTop="4dp"
+                    android:ellipsize="end"
                     android:maxLines="1"
-                    android:ellipsize="end"/>
+                    android:text="Calle Mayor 24, Madrid"
+                    android:textColor="@color/text_secondary" />
 
                 <!-- TELÉFONO -->
                 <TextView
                     android:id="@+id/tvTelefono"
+                    style="@style/TextLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
                     android:text="📞 666 555 444"
-                    android:textColor="@color/primary_dark"
-                    android:textSize="14sp"
-                    android:layout_marginTop="4dp"/>
+                    android:textColor="@color/primary_dark" />
 
             </LinearLayout>
 
-
-
         </LinearLayout>
 
-        <!-- RUTA + DESCUENTO -->
+        <!-- ========================================================= -->
         <!-- ACCIONES -->
+        <!-- ========================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
             android:gravity="center_vertical"
-            android:layout_marginTop="16dp">
+            android:orientation="horizontal">
 
-            <!-- CHIP -->
+            <!-- ========================================================= -->
+            <!-- CHIP APROBADO -->
+            <!-- ========================================================= -->
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAprobado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Aprobado"
+                android:textColor="@color/text_primary"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"
                 app:chipBackgroundColor="@color/estado_entregado_bg"
                 app:chipCornerRadius="16dp"
-                app:chipStrokeWidth="1dp"
-                app:chipStrokeColor="@color/primary_color"/>
+                app:chipStrokeColor="@color/primary_color"
+                app:chipStrokeWidth="1dp" />
 
+            <!-- ========================================================= -->
             <!-- ESPACIADOR -->
+            <!-- ========================================================= -->
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="1dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1" />
 
-            <!-- BOTÓN -->
+            <!-- ========================================================= -->
+            <!-- BOTÓN DETALLE -->
+            <!-- ========================================================= -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDetalleCliente"
+                style="@style/ButtonPrimary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:text="Detalle cliente"
                 android:textAllCaps="false"
-                android:textColor="@color/primary_color"
-                android:backgroundTint="@android:color/transparent"
-                app:strokeColor="@color/primary_color"
-                app:strokeWidth="2dp"
-                app:cornerRadius="16dp"/>
+                app:cornerRadius="16dp" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 

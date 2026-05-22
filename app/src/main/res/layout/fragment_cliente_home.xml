@@ -47,9 +47,19 @@
                     style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="16dp"
                     android:gravity="center"
                     android:text="¡Bienvenido!" />
+
+                <TextView
+                    android:id="@+id/tvNombreComercio"
+                    style="@style/TextSubtitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:text="Nombre cliente"
+                    android:textColor="@color/text_secondary" />
 
                 <TextView
                     style="@style/TextSubtitle"
@@ -61,13 +71,15 @@
                     android:textColor="@color/text_secondary"/>
 
                 <!-- ESPACIO FLEXIBLE -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:layout_marginTop="16dp" />
 
                 <!-- BOTÓN NUEVO PEDIDO -->
+                <ImageView
+                    android:id="@+id/imageView"
+                    android:layout_width="200dp"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="8dp"
+                    app:srcCompat="@drawable/img_pedidos" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnNuevoPedido"
                     style="@style/ButtonPrimary"

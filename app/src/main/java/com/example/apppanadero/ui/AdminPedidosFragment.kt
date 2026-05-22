@@ -175,6 +175,8 @@ class AdminPedidosFragment : Fragment() {
                                 pedidoId = pedido.id
                             )
 
+
+
                     findNavController()
                         .navigate(action)
                 }

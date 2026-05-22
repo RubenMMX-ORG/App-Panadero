@@ -6,9 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.apppanadero.R
+import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.databinding.FragmentClienteHomeBinding
+import com.example.apppanadero.viewmodel.UsuarioViewModel
+import kotlin.getValue
+import kotlin.text.replace
 
 
 class ClienteHomeFragment: Fragment() {
@@ -16,6 +21,17 @@ class ClienteHomeFragment: Fragment() {
 
     private var _binding: FragmentClienteHomeBinding? = null
     private val binding get() = _binding!!
+
+    // ------------------------------------------------
+    // VIEWMODELS
+    // ------------------------------------------------
+
+    private val usuarioViewModel:
+            UsuarioViewModel by viewModels {
+
+        Injector
+            .provideUsuarioViewModelFactory()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,6 +55,28 @@ class ClienteHomeFragment: Fragment() {
 
         binding.btnHistorico.setOnClickListener {
             navegarHacia(R.id.action_clienteHomeFragment_to_clienteHistoricoPedidosFragment)
+        }
+        // ------------------------------------------------
+        // OBSERVAR CLIENTE
+        // ------------------------------------------------
+
+        usuarioViewModel.usuario.observe(
+
+            viewLifecycleOwner
+
+        ) { cliente ->
+
+            cliente?.let {
+
+                // ------------------------------------------------
+                // DATOS CLIENTE
+                // ------------------------------------------------
+
+                binding.tvNombreComercio.text =
+
+                    it.nombreComercio
+
+                }
         }
 
 

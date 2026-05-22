@@ -93,11 +93,12 @@
 
                 <!-- RECORDAR -->
                 <CheckBox
+                    android:id="@+id/checkMantenerSesion"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Recordar contraseña"
-                    android:textColor="@color/text_primary"/>
+                    android:text="Mantener sesion"
+                    android:textColor="@color/text_primary" />
 
                 <!-- BOTON -->
                 <com.google.android.material.button.MaterialButton

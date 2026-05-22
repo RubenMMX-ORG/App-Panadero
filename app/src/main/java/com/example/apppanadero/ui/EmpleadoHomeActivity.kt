@@ -1,14 +1,31 @@
 package com.example.apppanadero.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.fragment.NavHostFragment
+import com.example.apppanadero.R
+import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.databinding.ActivityEmpleadoHomeBinding
+import com.example.apppanadero.viewmodel.UsuarioViewModel
+import kotlin.getValue
 
 
-class EmpleadoHomeActivity: AppCompatActivity() {
+class EmpleadoHomeActivity : AppCompatActivity() {
 
 
-     private lateinit var binding: ActivityEmpleadoHomeBinding
+    private lateinit var binding: ActivityEmpleadoHomeBinding
+
+    private val usuarioViewModel:
+            UsuarioViewModel by viewModels {
+
+        Injector
+            .provideUsuarioViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,16 +33,15 @@ class EmpleadoHomeActivity: AppCompatActivity() {
         binding = ActivityEmpleadoHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbarAdmin)
+        setSupportActionBar(binding.toolbarEmpleado)
 
         //Navegacion atras de la toolbar
-        binding.toolbarAdmin.setNavigationOnClickListener {
+        binding.toolbarEmpleado.setNavigationOnClickListener {
 
             onBackPressedDispatcher.onBackPressed()
         }
 
     }
-
 
 
     // CREAR MENÚ
@@ -42,10 +58,9 @@ class EmpleadoHomeActivity: AppCompatActivity() {
 
         //  Obtener NavController correctamente
         val navHostFragment = supportFragmentManager
-            .findFragmentById(R.id.nav_host_fragment_admin) as NavHostFragment
+            .findFragmentById(R.id.nav_host_fragment_cliente) as NavHostFragment
 
         val navController = navHostFragment.navController
-
 
 
 
@@ -53,8 +68,8 @@ class EmpleadoHomeActivity: AppCompatActivity() {
 
             R.id.menu_home -> {
                 // Evitar navegar si ya estás en Home
-                if (navController.currentDestination?.id != R.id.adminHomeFragment) {
-                    navController.popBackStack(R.id.adminHomeFragment, false)
+                if (navController.currentDestination?.id != R.id.clienteHomeFragment) {
+                    navController.popBackStack(R.id.clienteHomeFragment, false)
                 }
                 true
             }
@@ -64,59 +79,60 @@ class EmpleadoHomeActivity: AppCompatActivity() {
                 true
             }
 
-           R.id.menu_logout -> {
+            R.id.menu_logout -> {
 
-            // ------------------------------------------------
-            // FIREBASE LOGOUT
-            // ------------------------------------------------
-        
-            val repository = UsuarioRepository()
-        
-            repository.logout()
-        
-            // ------------------------------------------------
-            // SHARED PREFERENCES
-            // ------------------------------------------------
-        
-            val preferencias = getSharedPreferences(
-        
-                "sesion",
-        
-                MODE_PRIVATE
-            )
-        
-            val editor = preferencias.edit()
-        
-            editor.putBoolean(
-        
-                "mantener_sesion",
-        
-                false
-            )
-        
-            editor.commit()
-        
-            // ------------------------------------------------
-            // VOLVER LOGIN
-            // ------------------------------------------------
-        
-            startActivity(
-        
-                Intent(
-        
-                    this,
-        
-                    LoginActivity::class.java
+                // ------------------------------------------------
+                // FIREBASE LOGOUT
+                // ------------------------------------------------
+
+                usuarioViewModel.logout()
+
+                // ------------------------------------------------
+                // SHARED PREFERENCES
+                // ------------------------------------------------
+
+                val preferencias = getSharedPreferences(
+
+                    "sesion",
+
+                    MODE_PRIVATE
                 )
-            )
-        
-            finish()
-        
-            true
-        }
+
+                val editor = preferencias.edit()
+
+                editor.putBoolean(
+
+                    "mantener_sesion",
+
+                    false
+                )
+
+                editor.commit()
+
+                // ------------------------------------------------
+                // VOLVER LOGIN
+                // ------------------------------------------------
+
+                startActivity(
+
+                    Intent(
+
+                        this,
+
+                        LoginActivity::class.java
+                    )
+                )
+
+                finish()
+
+                true
             }
+
 
             else -> super.onOptionsItemSelected(item)
         }
+
+
     }
+
 }

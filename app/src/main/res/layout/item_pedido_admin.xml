@@ -2,13 +2,16 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    style="@style/CardSecondary"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="16dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="1dp"
-    style="@style/CardPrimary">
+    android:layout_marginBottom="16dp">
+
+    <!-- ========================================================= -->
+    <!-- CONTENEDOR -->
+    <!-- ========================================================= -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,89 +19,118 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- ========================================================= -->
         <!-- TOP -->
+        <!-- ========================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <!-- ========================================================= -->
             <!-- ICONO -->
+            <!-- ========================================================= -->
+
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_user"
                 android:background="@drawable/bg_circle_light"
-                android:padding="8dp"/>
+                android:padding="8dp"
+                android:src="@drawable/ic_user" />
 
-            <!-- NOMBRE + ID -->
+            <!-- ========================================================= -->
+            <!-- NOMBRE + PEDIDO -->
+            <!-- ========================================================= -->
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="12dp">
+                android:orientation="vertical">
 
+                <!-- NOMBRE -->
                 <TextView
                     android:id="@+id/tvNombreComercio"
+                    style="@style/TextTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Juan Pérez"
-                    android:textStyle="bold"
                     android:textSize="16sp"
-                    style="@style/TextTitle"/>
+                    android:textStyle="bold" />
 
+                <!-- PEDIDO -->
                 <TextView
                     android:id="@+id/tvNumeroPedido"
+                    style="@style/TextLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pedido #1"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary" />
 
             </LinearLayout>
 
-            <!-- ESTADO -->
+            <!-- ========================================================= -->
+            <!-- CHIP ESTADO -->
+            <!-- ========================================================= -->
+
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipEstado"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pendiente"
                 app:chipCornerRadius="16dp"
-                app:chipStrokeWidth="1dp"/>
+                app:chipStrokeWidth="1dp" />
 
         </LinearLayout>
 
+        <!-- ========================================================= -->
         <!-- FECHA Y HORA -->
+        <!-- ========================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp">
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
 
+            <!-- FECHA -->
             <TextView
                 android:id="@+id/tvFecha"
+                style="@style/TextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:text="📅 2026-03-31"
-                android:textColor="@color/primary_dark"
-                android:layout_marginEnd="16dp"/>
+                android:textColor="@color/primary_dark" />
 
+            <!-- HORA -->
             <TextView
                 android:id="@+id/tvHora"
+                style="@style/TextLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="⏰ 09:30"
-                android:textColor="@color/primary_dark"/>
+                android:textColor="@color/primary_dark" />
 
         </LinearLayout>
 
-        <!-- PRODUCTOS + PRECIO + BOTÓN -->
+        <!-- ========================================================= -->
+        <!-- PRODUCTOS + PRECIO + BOTONES -->
+        <!-- ========================================================= -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical">
+            android:layout_marginTop="14dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <!-- ========================================================= -->
+            <!-- INFO -->
+            <!-- ========================================================= -->
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -106,36 +138,53 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+                <!-- PRODUCTOS -->
                 <TextView
                     android:id="@+id/tvCantidad"
+                    style="@style/TextLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="5 productos"
-                    android:textColor="@color/text_secondary"/>
+                    android:textColor="@color/text_secondary" />
 
+                <!-- PRECIO -->
                 <TextView
                     android:id="@+id/tvPrecio"
+                    style="@style/TextPrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="€24.50"
-                    android:textStyle="bold"
                     android:textSize="16sp"
-                    android:textColor="@color/primary_dark"/>
+                    android:textStyle="bold" />
 
             </LinearLayout>
 
-            <!-- BOTÓN -->
+            <!-- ========================================================= -->
+            <!-- BOTÓN INICIAR RUTA -->
+            <!-- ========================================================= -->
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnIniciarRuta"
+                style="@style/ButtonSecondary"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginEnd="8dp"
+                android:text="Iniciar ruta"
+                android:textAllCaps="false"
+                app:cornerRadius="16dp" />
+
+            <!-- ========================================================= -->
+            <!-- BOTÓN DETALLE -->
+            <!-- ========================================================= -->
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDetalle"
+                style="@style/ButtonPrimary"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ver Detalle"
+                android:layout_height="48dp"
+                android:text="Ver detalle"
                 android:textAllCaps="false"
-                android:textColor="@color/primary_color"
-                app:strokeColor="@color/primary_color"
-                app:strokeWidth="2dp"
-                app:cornerRadius="16dp"
-                android:backgroundTint="@android:color/transparent"/>
+                app:cornerRadius="16dp" />
 
         </LinearLayout>
 

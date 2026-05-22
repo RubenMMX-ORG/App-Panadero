@@ -2,6 +2,7 @@ package com.example.apppanadero.ui.adapters
 
 import android.content.res.ColorStateList
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +37,14 @@ class AdminPedidoAdapter(
 
     // Callback click detalle
     private val onClickDetalle:
-        (Pedido) -> Unit
+        (Pedido) -> Unit,
+
+    // Callback click iniciar ruta
+    private val onClickIniciarRuta:
+        (Pedido) -> Unit,
+
+    private val mostrarBotonRuta:
+    Boolean,
 
 ) : RecyclerView.Adapter<
         AdminPedidoAdapter.AdminPedidoViewHolder>() {
@@ -149,6 +157,27 @@ class AdminPedidoAdapter(
             .setOnClickListener {
 
                 onClickDetalle(pedido)
+            }
+
+        // ------------------------------------------------
+        // BOTÓN INICIAR NAVEGACION, SOLO ROL REPARTIDOR
+        // ------------------------------------------------
+        if (mostrarBotonRuta) {
+
+            holder.binding.btnIniciarRuta.visibility =
+                View.VISIBLE
+
+        } else {
+
+            holder.binding.btnIniciarRuta.visibility =
+                View.GONE
+        }
+
+        holder.binding.btnIniciarRuta
+            .setOnClickListener {
+
+
+                onClickIniciarRuta(pedido)
             }
 
         // ------------------------------------------------

@@ -19,12 +19,10 @@
 
         <!-- CARD PRINCIPAL -->
         <com.google.android.material.card.MaterialCardView
+            style="@style/CardPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:backgroundTint="@color/background_card"
-            app:cardCornerRadius="24dp"
-            app:cardElevation="8dp"
             app:strokeColor="@color/brown_light"
             app:strokeWidth="1dp">
 
@@ -36,14 +34,11 @@
 
                 <!-- CARD PEDIDO -->
                 <com.google.android.material.card.MaterialCardView
+                    style="@style/CardSecondary"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    app:cardCornerRadius="16dp"
-                    app:cardElevation="4dp"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="@color/brown_light"
-                    android:backgroundTint="@color/brown_light">
+                    app:strokeColor="@color/primary_dark">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -79,8 +74,7 @@
                                     style="@style/TextTitle"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:textSize="16sp"
-                                    android:textStyle="bold" />
+                                    android:textSize="16sp"/>
 
                                 <TextView
                                     android:id="@+id/tvNumeroPedido"
@@ -190,17 +184,14 @@
 
     <!-- CARD BOTÓN -->
     <com.google.android.material.card.MaterialCardView
+        style="@style/CardSecondary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:backgroundTint="@color/background_card"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="10dp"
-        app:strokeColor="@color/brown_light"
-        app:strokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/brown_light">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -214,13 +205,10 @@
                 android:layout_width="200dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center"
-                android:backgroundTint="@color/primary_color"
-                android:gravity="center_horizontal|center_vertical"
+                style="@style/ButtonPrimary"
                 android:text="¡Listo!"
                 android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:textStyle="bold"
-                app:cornerRadius="16dp" />
+                android:textStyle="bold"/>
 
         </LinearLayout>
 

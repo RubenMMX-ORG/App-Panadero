@@ -48,12 +48,21 @@
     </style>
 
     <!-- 🧱 CARD SECUNDARIA -->
-    <style name="CardSecondary" parent="Widget.MaterialComponents.CardView">
+    <style name="CardSecondary" parent="Widget.Material3.CardView.Outlined">
+
+        <!-- Forma -->
         <item name="cardCornerRadius">16dp</item>
-        <item name="cardElevation">4dp</item>
-        <item name="cardBackgroundColor">@color/background_card</item>
-        <item name="strokeColor">@color/stroke_soft</item>
+
+        <!-- Elevación -->
+        <item name="cardElevation">2dp</item>
+
+        <!-- Fondo -->
+        <item name="cardBackgroundColor">@color/brown_light</item>
+
+        <!-- Borde -->
+        <item name="strokeColor">@color/primary_dark</item>
         <item name="strokeWidth">1dp</item>
+
     </style>
 
     <!-- 🔘 BOTÓN PRINCIPAL -->
