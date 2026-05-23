@@ -52,7 +52,13 @@
     <fragment
         android:id="@+id/adminNuevoProductoFragment"
         android:name="com.example.apppanadero.ui.AdminNuevoProductoFragment"
-        android:label="AdminNuevoProductoFragment" />
+        android:label="AdminNuevoProductoFragment" >
+        <argument
+            android:name="productoId"
+            app:argType="string"
+            android:defaultValue="@null"
+            app:nullable="true"/>
+    </fragment>
     <fragment
         android:id="@+id/adminHistoricoClientesFragment"
         android:name="com.example.apppanadero.ui.AdminHistoricoClientesFragment"

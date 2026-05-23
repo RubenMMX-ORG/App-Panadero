@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.example.apppanadero.R
 import com.example.apppanadero.data.di.Injector
 import com.example.apppanadero.data.model.Precio
 import com.example.apppanadero.data.model.Producto
@@ -17,7 +18,6 @@ import com.example.apppanadero.databinding.FragmentAdminNuevoProductoBinding
 import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 import com.google.firebase.Timestamp
-
 
 class AdminNuevoProductoFragment : Fragment() {
 
@@ -37,14 +37,24 @@ class AdminNuevoProductoFragment : Fragment() {
     private val productoViewModel:
             ProductoViewModel by viewModels {
 
-        Injector.provideProductoViewModelFactory()
+        Injector
+            .provideProductoViewModelFactory()
     }
 
     private val precioViewModel:
             PrecioViewModel by viewModels {
 
-        Injector.providePrecioViewModelFactory()
+        Injector
+            .providePrecioViewModelFactory()
     }
+
+    // ------------------------------------------------
+    // VARIABLES
+    // ------------------------------------------------
+
+    // null -> nuevo producto
+    // id   -> edición
+    private var productoId: String? = null
 
     // ------------------------------------------------
     // ON CREATE VIEW
@@ -74,14 +84,27 @@ class AdminNuevoProductoFragment : Fragment() {
     // ------------------------------------------------
 
     override fun onViewCreated(
+
         view: View,
         savedInstanceState: Bundle?
+
     ) {
 
         super.onViewCreated(
             view,
             savedInstanceState
         )
+
+        // ------------------------------------------------
+        // RECUPERAR SAFEARGS
+        // ------------------------------------------------
+
+        val args =
+            AdminNuevoProductoFragmentArgs
+                .fromBundle(requireArguments())
+
+        productoId =
+            args.productoId
 
         // ------------------------------------------------
         // ACTION BAR
@@ -91,7 +114,26 @@ class AdminNuevoProductoFragment : Fragment() {
 
             (it as? AppCompatActivity)
                 ?.supportActionBar
-                ?.title = "Nuevo producto"
+                ?.title =
+
+                if (productoId.isNullOrEmpty()) {
+
+                    "Nuevo producto"
+
+                } else {
+
+                    "Editar producto"
+                }
+        }
+
+        // ------------------------------------------------
+        // CAMBIAR TEXTO BOTÓN
+        // ------------------------------------------------
+
+        if (!productoId.isNullOrEmpty()) {
+
+            binding.btnCrearProducto.text =
+                "Actualizar producto"
         }
 
         // ------------------------------------------------
@@ -106,16 +148,27 @@ class AdminNuevoProductoFragment : Fragment() {
 
         observarProductoGuardado()
 
+        observarPrecioActual()
+
         observarErrores()
 
         // ------------------------------------------------
-        // BOTÓN CREAR PRODUCTO
+        // MODO EDICIÓN
+        // ------------------------------------------------
+
+        if (!productoId.isNullOrEmpty()) {
+
+            cargarProducto()
+        }
+
+        // ------------------------------------------------
+        // BOTÓN GUARDAR
         // ------------------------------------------------
 
         binding.btnCrearProducto
             .setOnClickListener {
 
-                crearProducto()
+                guardarProducto()
             }
     }
 
@@ -126,7 +179,7 @@ class AdminNuevoProductoFragment : Fragment() {
     private fun configurarDropdowns() {
 
         // ------------------------------------------------
-        // LISTA IVA
+        // IVA
         // ------------------------------------------------
 
         val listaIva = listOf(
@@ -152,7 +205,7 @@ class AdminNuevoProductoFragment : Fragment() {
         )
 
         // ------------------------------------------------
-        // LISTA CATEGORÍAS
+        // CATEGORÍAS
         // ------------------------------------------------
 
         val listaCategorias = listOf(
@@ -185,13 +238,102 @@ class AdminNuevoProductoFragment : Fragment() {
     }
 
     // ------------------------------------------------
-    // CREAR PRODUCTO
+    // CARGAR PRODUCTO PARA EDICIÓN
     // ------------------------------------------------
 
-    private fun crearProducto() {
+    private fun cargarProducto() {
 
         // ------------------------------------------------
-        // RECUPERAR DATOS FORMULARIO
+        // CARGAR PRODUCTO
+        // ------------------------------------------------
+
+        productoViewModel.obtenerProductoPorId(
+            productoId!!
+        )
+
+        // ------------------------------------------------
+        // OBSERVAR PRODUCTO
+        // ------------------------------------------------
+
+        productoViewModel.productoDetalle.observe(
+
+            viewLifecycleOwner
+
+        ) { producto ->
+
+            producto?.let {
+
+                // ------------------------------------------------
+                // NOMBRE
+                // ------------------------------------------------
+
+                binding.etNombreProducto.setText(
+                    it.nombre
+                )
+
+                // ------------------------------------------------
+                // CATEGORÍA
+                // ------------------------------------------------
+
+                binding.dropCategoria.setText(
+
+                    it.categoria,
+
+                    false
+                )
+
+                // ------------------------------------------------
+                // IVA
+                // ------------------------------------------------
+
+                binding.dropIva.setText(
+
+                    it.iva.toString(),
+
+                    false
+                )
+
+                // ------------------------------------------------
+                // CARGAR PRECIO VIGENTE
+                // ------------------------------------------------
+
+                precioViewModel.obtenerPrecioVigente(
+                    it.id
+                )
+            }
+        }
+    }
+
+    // ------------------------------------------------
+    // OBSERVAR PRECIO ACTUAL
+    // ------------------------------------------------
+
+    private fun observarPrecioActual() {
+
+        precioViewModel.precioActual.observe(
+
+            viewLifecycleOwner
+
+        ) { precio ->
+
+            precio?.let {
+
+                binding.etPrecio.setText(
+
+                    it.precio.toString()
+                )
+            }
+        }
+    }
+
+    // ------------------------------------------------
+    // GUARDAR PRODUCTO
+    // ------------------------------------------------
+
+    private fun guardarProducto() {
+
+        // ------------------------------------------------
+        // RECUPERAR DATOS
         // ------------------------------------------------
 
         val nombre =
@@ -247,7 +389,7 @@ class AdminNuevoProductoFragment : Fragment() {
 
                 requireContext(),
 
-                "Selecciona una categoría",
+                "Selecciona categoría",
 
                 Toast.LENGTH_SHORT
 
@@ -262,7 +404,7 @@ class AdminNuevoProductoFragment : Fragment() {
 
                 requireContext(),
 
-                "Selecciona un IVA",
+                "Selecciona IVA",
 
                 Toast.LENGTH_SHORT
 
@@ -277,7 +419,7 @@ class AdminNuevoProductoFragment : Fragment() {
 
                 requireContext(),
 
-                "Introduce un precio",
+                "Introduce precio",
 
                 Toast.LENGTH_SHORT
 
@@ -290,22 +432,19 @@ class AdminNuevoProductoFragment : Fragment() {
         // CONVERSIONES
         // ------------------------------------------------
 
-        val iva = ivaTexto.toDouble()
+        val iva =
+            ivaTexto.toDouble()
 
-        val precio = precioTexto.toDouble()
+        val precioDouble =
+            precioTexto.toDouble()
 
         // ------------------------------------------------
         // CREAR PRODUCTO
         // ------------------------------------------------
 
-        // IMPORTANTE 😄🔥
-        //
-        // Producto ya NO tiene:
-        // val precio
-        //
-        // El precio se guarda
-        // en entidad independiente.
         val producto = Producto(
+
+            id = productoId ?: "",
 
             nombre = nombre,
 
@@ -315,12 +454,45 @@ class AdminNuevoProductoFragment : Fragment() {
         )
 
         // ------------------------------------------------
-        // GUARDAR PRODUCTO
+        // NUEVO PRODUCTO
         // ------------------------------------------------
 
-        productoViewModel.guardarProducto(
-            producto
-        )
+        if (productoId.isNullOrEmpty()) {
+
+            productoViewModel.guardarProducto(
+                producto
+            )
+
+        } else {
+
+            // ------------------------------------------------
+            // ACTUALIZAR PRODUCTO
+            // ------------------------------------------------
+
+            productoViewModel.actualizarProducto(
+                producto
+            )
+
+            precioViewModel.actualizarPrecio(
+
+                producto.id,
+
+                precioDouble
+            )
+
+            Toast.makeText(
+
+                requireContext(),
+
+                "Producto actualizado",
+
+                Toast.LENGTH_SHORT
+
+            ).show()
+
+            findNavController()
+                .popBackStack()
+        }
     }
 
     // ------------------------------------------------
@@ -329,22 +501,16 @@ class AdminNuevoProductoFragment : Fragment() {
 
     private fun observarProductoGuardado() {
 
-        // ------------------------------------------------
-        // OBSERVAMOS PRODUCTO CREADO
-        // ------------------------------------------------
-
         productoViewModel.productoGuardado.observe(
 
             viewLifecycleOwner
 
         ) { producto ->
 
-            // Si producto != null:
-            // guardado correcto
-            if (producto != null) {
+            producto?.let {
 
                 // ------------------------------------------------
-                // RECUPERAR PRECIO FORMULARIO
+                // RECUPERAR PRECIO
                 // ------------------------------------------------
 
                 val precioTexto =
@@ -357,16 +523,11 @@ class AdminNuevoProductoFragment : Fragment() {
                     precioTexto.toDouble()
 
                 // ------------------------------------------------
-                // CREAR ENTIDAD PRECIO
+                // CREAR PRECIO INICIAL
                 // ------------------------------------------------
 
-                // El producto ya existe.
-                //
-                // Ahora creamos el
-                // precio inicial asociado.
                 val precio = Precio(
 
-                    // FK lógica
                     productoId = producto.id,
 
                     precio = precioDouble,
@@ -395,11 +556,17 @@ class AdminNuevoProductoFragment : Fragment() {
 
                 ).show()
 
-                // Volvemos atrás
+                // ------------------------------------------------
+                // VOLVER ATRÁS
+                // ------------------------------------------------
+
                 findNavController()
                     .popBackStack()
 
-                // Limpiamos LiveData
+                // ------------------------------------------------
+                // LIMPIAR LIVEDATA
+                // ------------------------------------------------
+
                 productoViewModel
                     .limpiarProductoGuardado()
             }
@@ -413,7 +580,9 @@ class AdminNuevoProductoFragment : Fragment() {
     private fun observarErrores() {
 
         productoViewModel.error.observe(
+
             viewLifecycleOwner
+
         ) { error ->
 
             if (error.isNotEmpty()) {

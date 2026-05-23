@@ -158,17 +158,58 @@ class ProductoRepository {
     fun eliminarProducto(
 
         productoId: String,
+
         respuesta: (Boolean) -> Unit
 
     ) {
 
-        db.collection("productos")
-            .document(productoId)
-            .delete()
-            .addOnSuccessListener {
+        // ------------------------------------------------
+        // ELIMINAR PRECIOS DEL PRODUCTO
+        // ------------------------------------------------
 
-                respuesta(true)
+        db.collection("precios")
+
+            .whereEqualTo(
+
+                "productoId",
+
+                productoId
+            )
+
+            .get()
+
+            .addOnSuccessListener { resultado ->
+
+                // ------------------------------------------------
+                // BORRAR PRECIOS
+                // ------------------------------------------------
+
+                resultado.documents.forEach { documento ->
+
+                    documento.reference.delete()
+                }
+
+                // ------------------------------------------------
+                // ELIMINAR PRODUCTO
+                // ------------------------------------------------
+
+                db.collection("productos")
+
+                    .document(productoId)
+
+                    .delete()
+
+                    .addOnSuccessListener {
+
+                        respuesta(true)
+                    }
+
+                    .addOnFailureListener {
+
+                        respuesta(false)
+                    }
             }
+
             .addOnFailureListener {
 
                 respuesta(false)

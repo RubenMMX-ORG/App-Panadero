@@ -8,19 +8,22 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apppanadero.R
 import com.example.apppanadero.data.di.Injector
-import com.example.apppanadero.databinding.FragmentRepartidorHomeBinding
+import com.example.apppanadero.databinding.FragmentRepartidorPedidosBinding
+import com.example.apppanadero.ui.adapters.AdminPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
+import com.example.apppanadero.viewmodel.UsuarioViewModel
 
-class EmpleadoHomeFragment : Fragment() {
+class EmpleadoPedidosFragment : Fragment() {
 
     // ------------------------------------------------
     // VIEW BINDING
     // ------------------------------------------------
 
     private var _binding:
-            FragmentRepartidorHomeBinding? = null
+            FragmentRepartidorPedidosBinding? = null
 
     private val binding get() = _binding!!
 
@@ -34,6 +37,34 @@ class EmpleadoHomeFragment : Fragment() {
         Injector
             .providePedidoViewModelFactory()
     }
+
+    // ------------------------------------------------
+    // VIEWMODEL USUARIOS
+    // ------------------------------------------------
+
+    private val usuarioViewModel:
+            UsuarioViewModel by viewModels {
+
+        Injector
+            .provideUsuarioViewModelFactory()
+    }
+
+    // ------------------------------------------------
+    // ADAPTER
+    // ------------------------------------------------
+
+    private lateinit var adapter:
+            AdminPedidoAdapter
+
+    // ------------------------------------------------
+    // MAPA CLIENTES
+    // ------------------------------------------------
+
+    // key   -> clienteId
+    // value -> nombreComercio
+    private val mapaClientes =
+
+        mutableMapOf<String, String>()
 
     // ------------------------------------------------
     // ON CREATE VIEW
@@ -52,7 +83,7 @@ class EmpleadoHomeFragment : Fragment() {
         // ------------------------------------------------
 
         _binding =
-            FragmentRepartidorHomeBinding.inflate(
+            FragmentRepartidorPedidosBinding.inflate(
 
                 inflater,
                 container,
@@ -86,14 +117,30 @@ class EmpleadoHomeFragment : Fragment() {
 
             (it as? AppCompatActivity)
                 ?.supportActionBar
-                ?.title = "Repartidor"
+                ?.title = "Pedidos de hoy"
         }
+
+        // ------------------------------------------------
+        // CARGAR CLIENTES
+        // ------------------------------------------------
+
+        usuarioViewModel.obtenerClientes()
 
         // ------------------------------------------------
         // CARGAR TODOS LOS PEDIDOS
         // ------------------------------------------------
 
         pedidoViewModel.obtenerTodosPedidos()
+
+        // ------------------------------------------------
+        // RECYCLERVIEW
+        // ------------------------------------------------
+
+        binding.recyclerPedidos.layoutManager =
+
+            LinearLayoutManager(
+                requireContext()
+            )
 
         // ------------------------------------------------
         // OBSERVAR PEDIDOS
@@ -117,74 +164,86 @@ class EmpleadoHomeFragment : Fragment() {
                 }
 
             // ------------------------------------------------
-            // FILTRAR SOLO ENTREGADO
+            // CREAR ADAPTER
             // ------------------------------------------------
 
-            val pedidosEntregados =
+            adapter =
 
-                listaPedidos.filter {
+                AdminPedidoAdapter(
 
-                    it.estado == "entregado"
-                }
+                    // Lista pedidos
+                    pedidosPreparados,
+
+                    // Mapa clientes
+                    mapaClientes,
+
+                    // ------------------------------------------------
+                    // CLICK DETALLE
+                    // ------------------------------------------------
+
+                    onClickDetalle = { pedido ->
+
+                        navegarHacia(
+                            R.id.action_empleadoPedidosFragment_to_empleadoDetallePedidoFragment
+                        )
+                    },
+
+                    // ------------------------------------------------
+                    // CLICK INICIAR RUTA
+                    // ------------------------------------------------
+
+                    onClickIniciarRuta = { pedido ->
+
+                        // Próximamente:
+                        // Google Maps
+                    },
+
+                    // ------------------------------------------------
+                    // MOSTRAR BOTÓN RUTA
+                    // ------------------------------------------------
+
+                    mostrarBotonRuta = true
+                )
 
             // ------------------------------------------------
-            // MOSTRAR TOTAL PEDIDOS PENDIENTES
+            // ASIGNAR ADAPTER
             // ------------------------------------------------
 
-            binding.tvPedidosPendientes.text =
-
-                pedidosPreparados
-                    .size
-                    .toString()
-
-            // ------------------------------------------------
-            // MOSTRAR TOTAL PEDIDOS ENTREGADOS
-            // ------------------------------------------------
-
-            binding.tvPedidosEntregados.text =
-
-                pedidosEntregados
-                    .size
-                    .toString()
+            binding.recyclerPedidos.adapter =
+                adapter
         }
 
         // ------------------------------------------------
-        // BOTÓN PEDIDOS HOY
+        // OBSERVAR CLIENTES
         // ------------------------------------------------
 
-        binding.btnPedidosHoy
-            .setOnClickListener {
+        usuarioViewModel.listaClientes.observe(
 
-                navegarHacia(
+            viewLifecycleOwner
 
-                    R.id.action_empleadoHomeFragment_to_empleadoPedidosFragment
-                )
+        ) { listaClientes ->
+
+            // ------------------------------------------------
+            // LIMPIAR MAPA
+            // ------------------------------------------------
+
+            mapaClientes.clear()
+
+            // ------------------------------------------------
+            // RELLENAR MAPA
+            // ------------------------------------------------
+
+            listaClientes.forEach { cliente ->
+
+                mapaClientes[cliente.id] =
+
+                    cliente.nombreComercio
+                        ?: "Cliente"
             }
 
-        // ------------------------------------------------
-        // BOTÓN DEVOLUCIONES
-        // ------------------------------------------------
 
-        binding.btnDevoluciones
-            .setOnClickListener {
-
-                navegarHacia(
-                    R.id.action_empleadoHomeFragment_to_empleadoDevolucionesFragment
-                )
-
-            }
-
-        // ------------------------------------------------
-        // BOTÓN RUTA
-        // ------------------------------------------------
-
-        binding.btnRuta
-            .setOnClickListener {
-
-                // Próximamente Google Maps
-            }
+        }
     }
-
     // ------------------------------------------------
     // NAVEGACIÓN GENÉRICA
     // ------------------------------------------------

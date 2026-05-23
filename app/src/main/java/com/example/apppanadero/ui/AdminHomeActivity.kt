@@ -71,8 +71,8 @@ class AdminHomeActivity : AppCompatActivity() {
 
             R.id.menu_home -> {
                 // Evitar navegar si ya estás en Home
-                if (navController.currentDestination?.id != R.id.clienteHomeFragment) {
-                    navController.popBackStack(R.id.clienteHomeFragment, false)
+                if (navController.currentDestination?.id != R.id.adminHomeFragment) {
+                    navController.popBackStack(R.id.adminHomeFragment, false)
                 }
                 true
             }

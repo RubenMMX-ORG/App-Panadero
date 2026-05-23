@@ -139,7 +139,7 @@ class AdminProductoAdapter(
         // BOTÓN EDITAR
         // ------------------------------------------------
 
-        holder.binding.btnEditar
+        holder.binding.imgEditar
             .setOnClickListener {
 
                 onEditarClick(producto)
@@ -149,7 +149,7 @@ class AdminProductoAdapter(
         // BOTÓN ELIMINAR
         // ------------------------------------------------
 
-        holder.binding.btnEliminar
+        holder.binding.imgEliminar
             .setOnClickListener {
 
                 onEliminarClick(producto)

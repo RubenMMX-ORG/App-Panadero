@@ -75,6 +75,12 @@
                 <!-- BOTÓN RUTA -->
                 <!-- ========================================================= -->
 
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="160dp"
+                    android:layout_height="124dp"
+                    app:srcCompat="@drawable/img_reparto" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnRuta"
                     style="@style/ButtonSecondary"
@@ -134,7 +140,31 @@
                         android:text="Pedidos Pendientes" />
 
                     <TextView
-                        android:id="@+id/pedidosPendientesId"
+                        android:id="@+id/tvPedidosPendientes"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:background="@drawable/bg_button_primary"
+                        android:gravity="center"
+                        android:text="3"
+                        android:textColor="@color/white" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        style="@style/TextSubtitle"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Pedidos Entregados" />
+
+                    <TextView
+                        android:id="@+id/tvPedidosEntregados"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:background="@drawable/bg_button_primary"

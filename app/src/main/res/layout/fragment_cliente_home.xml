@@ -75,9 +75,9 @@
                 <!-- BOTÓN NUEVO PEDIDO -->
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="16dp"
                     app:srcCompat="@drawable/img_pedidos" />
 
                 <com.google.android.material.button.MaterialButton
@@ -85,7 +85,7 @@
                     style="@style/ButtonPrimary"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="20dp"
                     android:text="Nuevo Pedido"
                     android:textAllCaps="false"
                     app:icon="@drawable/add_shopping_cart"

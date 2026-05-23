@@ -20,9 +20,9 @@ data class Pedido(
     val fecha: Timestamp = Timestamp.now(),
 
     // pendiente
-    // en_camino
+    // preparado
     // entregado
-    // cancelado
+    // finalizado
     val estado: String = "pendiente",
 
     // Precio total pedido

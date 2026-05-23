@@ -7,22 +7,21 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apppanadero.data.di.Injector
-import com.example.apppanadero.databinding.FragmentAdminPedidosBinding
+import com.example.apppanadero.databinding.FragmentRepartidorPedidosBinding
 import com.example.apppanadero.ui.adapters.AdminPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
 import com.example.apppanadero.viewmodel.UsuarioViewModel
 
-class AdminPedidosFragment : Fragment() {
+class EmpleadoDevolucionesFragment : Fragment() {
 
     // ------------------------------------------------
     // VIEW BINDING
     // ------------------------------------------------
 
     private var _binding:
-            FragmentAdminPedidosBinding? = null
+            FragmentRepartidorPedidosBinding? = null
 
     private val binding get() = _binding!!
 
@@ -33,7 +32,8 @@ class AdminPedidosFragment : Fragment() {
     private val pedidoViewModel:
             PedidoViewModel by viewModels {
 
-        Injector.providePedidoViewModelFactory()
+        Injector
+            .providePedidoViewModelFactory()
     }
 
     // ------------------------------------------------
@@ -64,7 +64,6 @@ class AdminPedidosFragment : Fragment() {
 
         mutableMapOf<String, String>()
 
-
     // ------------------------------------------------
     // ON CREATE VIEW
     // ------------------------------------------------
@@ -77,8 +76,12 @@ class AdminPedidosFragment : Fragment() {
 
     ): View {
 
+        // ------------------------------------------------
+        // INFLAR VIEW BINDING
+        // ------------------------------------------------
+
         _binding =
-            FragmentAdminPedidosBinding.inflate(
+            FragmentRepartidorPedidosBinding.inflate(
 
                 inflater,
                 container,
@@ -104,8 +107,6 @@ class AdminPedidosFragment : Fragment() {
             savedInstanceState
         )
 
-        usuarioViewModel.obtenerClientes()
-
         // ------------------------------------------------
         // ACTION BAR
         // ------------------------------------------------
@@ -114,8 +115,20 @@ class AdminPedidosFragment : Fragment() {
 
             (it as? AppCompatActivity)
                 ?.supportActionBar
-                ?.title = "Gestion Pedidos"
+                ?.title = "Devoluciones"
         }
+
+        // ------------------------------------------------
+        // CARGAR CLIENTES
+        // ------------------------------------------------
+
+        usuarioViewModel.obtenerClientes()
+
+        // ------------------------------------------------
+        // CARGAR TODOS LOS PEDIDOS
+        // ------------------------------------------------
+
+        pedidoViewModel.obtenerTodosPedidos()
 
         // ------------------------------------------------
         // RECYCLERVIEW
@@ -128,16 +141,8 @@ class AdminPedidosFragment : Fragment() {
             )
 
         // ------------------------------------------------
-        // CARGAR TODOS PEDIDOS
-        // ------------------------------------------------
-
-        pedidoViewModel.obtenerTodosPedidos()
-
-        // ------------------------------------------------
         // OBSERVAR PEDIDOS
         // ------------------------------------------------
-
-
 
         pedidoViewModel.listaPedidos.observe(
 
@@ -146,17 +151,15 @@ class AdminPedidosFragment : Fragment() {
         ) { listaPedidos ->
 
             // ------------------------------------------------
-            // FILTRAR PENDIENTES
+            // FILTRAR SOLO PREPARADOS
             // ------------------------------------------------
 
-
-            val pedidosPendientes =
+            val pedidosPreparados =
 
                 listaPedidos.filter {
 
-                    it.estado == "pendiente"
+                    it.estado == "entregado"
                 }
-
 
             // ------------------------------------------------
             // CREAR ADAPTER
@@ -167,7 +170,7 @@ class AdminPedidosFragment : Fragment() {
                 AdminPedidoAdapter(
 
                     // Lista pedidos
-                    pedidosPendientes,
+                    pedidosPreparados,
 
                     // Mapa clientes
                     mapaClientes,
@@ -178,63 +181,67 @@ class AdminPedidosFragment : Fragment() {
 
                     onClickDetalle = { pedido ->
 
-                        val action =
-
-                            AdminPedidosFragmentDirections
-                                .actionAdminPedidosFragmentToAdminDetallePedidoFragment(
-
-                                    pedidoId = pedido.id
-                                )
-
-                        findNavController()
-                            .navigate(action)
+                        // Próximamente:
+                        // detalle repartidor
                     },
 
                     // ------------------------------------------------
                     // CLICK INICIAR RUTA
                     // ------------------------------------------------
 
-                    onClickIniciarRuta = {
+                    onClickIniciarRuta = { pedido ->
 
-                        // Admin no usa esto
+                        // Próximamente:
+                        // Google Maps
                     },
 
                     // ------------------------------------------------
                     // MOSTRAR BOTÓN RUTA
                     // ------------------------------------------------
 
-                    mostrarBotonRuta = false
+                    mostrarBotonRuta = true
                 )
+
+            // ------------------------------------------------
+            // ASIGNAR ADAPTER
+            // ------------------------------------------------
+
             binding.recyclerPedidos.adapter =
                 adapter
-
-            // ------------------------------------------------
-            // OBSERVAR USUARIO
-            // ------------------------------------------------
-
-            usuarioViewModel.listaClientes.observe(
-
-                viewLifecycleOwner
-
-            ) { listaClientes ->
-
-                mapaClientes.clear()
-
-                listaClientes.forEach { cliente ->
-
-                    mapaClientes[cliente.id] =
-
-                        cliente.nombreComercio
-                            ?: "Cliente"
-                }
-
-
-            }
-
         }
 
+        // ------------------------------------------------
+        // OBSERVAR CLIENTES
+        // ------------------------------------------------
 
+        usuarioViewModel.listaClientes.observe(
+
+            viewLifecycleOwner
+
+        ) { listaClientes ->
+
+            // ------------------------------------------------
+            // LIMPIAR MAPA
+            // ------------------------------------------------
+
+            mapaClientes.clear()
+
+            // ------------------------------------------------
+            // RELLENAR MAPA
+            // ------------------------------------------------
+
+            listaClientes.forEach { cliente ->
+
+                mapaClientes[cliente.id] =
+
+                    cliente.nombreComercio
+                        ?: "Cliente"
+            }
+
+
+        }
     }
+
     // ------------------------------------------------
     // ON DESTROY VIEW
     // ------------------------------------------------

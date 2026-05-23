@@ -118,70 +118,69 @@
         </LinearLayout>
 
         <!-- ========================================================= -->
-        <!-- PRODUCTOS + PRECIO + BOTONES -->
+        <!-- PRODUCTOS + PRECIO -->
         <!-- ========================================================= -->
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <!-- ========================================================= -->
-            <!-- INFO -->
-            <!-- ========================================================= -->
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <!-- PRODUCTOS -->
+            <TextView
+                android:id="@+id/tvCantidad"
+                style="@style/TextLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:text="11 productos"
+                android:textColor="@color/text_secondary" />
 
-                <!-- PRODUCTOS -->
-                <TextView
-                    android:id="@+id/tvCantidad"
-                    style="@style/TextLabel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="5 productos"
-                    android:textColor="@color/text_secondary" />
+            <!-- PRECIO -->
+            <TextView
+                android:id="@+id/tvPrecio"
+                style="@style/TextPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginStart="50dp"
+                android:text="€23,80"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
-                <!-- PRECIO -->
-                <TextView
-                    android:id="@+id/tvPrecio"
-                    style="@style/TextPrice"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="€24.50"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+        </LinearLayout>
 
-            </LinearLayout>
+        <!-- ========================================================= -->
+        <!-- BOTONES -->
+        <!-- ========================================================= -->
 
-            <!-- ========================================================= -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
             <!-- BOTÓN INICIAR RUTA -->
-            <!-- ========================================================= -->
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnIniciarRuta"
                 style="@style/ButtonSecondary"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
+                android:layout_weight="1"
                 android:layout_marginEnd="8dp"
                 android:text="Iniciar ruta"
                 android:textAllCaps="false"
                 app:cornerRadius="16dp" />
 
-            <!-- ========================================================= -->
             <!-- BOTÓN DETALLE -->
-            <!-- ========================================================= -->
-
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnDetalle"
                 style="@style/ButtonPrimary"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
+                android:layout_weight="1"
+                android:layout_marginStart="8dp"
                 android:text="Ver detalle"
                 android:textAllCaps="false"
                 app:cornerRadius="16dp" />

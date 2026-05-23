@@ -221,10 +221,16 @@ class AdminProductosFragment : Fragment() {
 
                     onEditarClick = { producto ->
 
-                        findNavController().navigate(
+                        val action =
 
-                            R.id.action_adminProductosFragment_to_adminNuevoProductoFragment
-                        )
+                            AdminProductosFragmentDirections
+                                .actionAdminProductosFragmentToAdminNuevoProductoFragment(
+
+                                    productoId = producto.id
+                                )
+
+                        findNavController()
+                            .navigate(action)
                     },
 
                     onEliminarClick = { producto ->
@@ -233,6 +239,9 @@ class AdminProductosFragment : Fragment() {
                             .eliminarProducto(
                                 producto.id
                             )
+
+                        productoViewModel
+                            .obtenerTodosProductos()// llamamos para refresca el reycler
 
                         Toast.makeText(
 

@@ -82,7 +82,12 @@ class RegistroFragment : Fragment() {
 
         configurarSelectorRol()
         configurarBotonRegistro()
+
+
     }
+
+
+
 
 
     // ---------------------------------------------------

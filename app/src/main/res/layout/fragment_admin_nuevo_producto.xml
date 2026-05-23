@@ -99,9 +99,9 @@
                         android:layout_height="wrap_content"
                         android:hint="Categoria"
                         android:inputType="none"
+                        android:popupBackground="@color/primary_color"
                         android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_hint"
-                        android:popupBackground="@color/background_card"/>
+                        android:textColorHint="@color/text_hint" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- IVA -->
@@ -122,9 +122,9 @@
                         android:layout_height="wrap_content"
                         android:hint="iva"
                         android:inputType="none"
+                        android:popupBackground="@color/primary_color"
                         android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_hint"
-                        android:popupBackground="@color/background_card"/>
+                        android:textColorHint="@color/text_hint" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- BOTÓN -->

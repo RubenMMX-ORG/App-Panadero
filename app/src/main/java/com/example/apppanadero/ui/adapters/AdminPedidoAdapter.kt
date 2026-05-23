@@ -145,7 +145,7 @@ class AdminPedidoAdapter(
         // ------------------------------------------------
 
         holder.binding.tvPrecio.text =
-            "€%.2f".format(
+            "Total: %.2f €".format(
                 pedido.precioTotal
             )
 

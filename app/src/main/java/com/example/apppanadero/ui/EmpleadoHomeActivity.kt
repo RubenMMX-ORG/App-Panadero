@@ -68,8 +68,8 @@ class EmpleadoHomeActivity : AppCompatActivity() {
 
             R.id.menu_home -> {
                 // Evitar navegar si ya estás en Home
-                if (navController.currentDestination?.id != R.id.clienteHomeFragment) {
-                    navController.popBackStack(R.id.clienteHomeFragment, false)
+                if (navController.currentDestination?.id != R.id.empleadoHomeFragment) {
+                    navController.popBackStack(R.id.empleadoHomeFragment, false)
                 }
                 true
             }
