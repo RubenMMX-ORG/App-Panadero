@@ -182,10 +182,16 @@ class EmpleadoPedidosFragment : Fragment() {
                     // ------------------------------------------------
 
                     onClickDetalle = { pedido ->
+                        val action =
 
-                        navegarHacia(
-                            R.id.action_empleadoPedidosFragment_to_empleadoDetallePedidoFragment
-                        )
+                            EmpleadoPedidosFragmentDirections
+                                .actionEmpleadoPedidosFragmentToEmpleadoDetallePedidoFragment(
+
+                                    pedidoId = pedido.id
+                                )
+
+                        findNavController()
+                            .navigate(action)
                     },
 
                     // ------------------------------------------------
@@ -243,19 +249,6 @@ class EmpleadoPedidosFragment : Fragment() {
 
 
         }
-    }
-    // ------------------------------------------------
-    // NAVEGACIÓN GENÉRICA
-    // ------------------------------------------------
-
-    private fun navegarHacia(
-
-        actionId: Int
-
-    ) {
-
-        findNavController()
-            .navigate(actionId)
     }
 
     // ------------------------------------------------

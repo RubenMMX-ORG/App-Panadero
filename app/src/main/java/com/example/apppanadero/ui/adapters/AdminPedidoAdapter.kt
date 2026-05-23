@@ -140,6 +140,7 @@ class AdminPedidoAdapter(
         holder.binding.tvCantidad.text =
             "$totalProductos productos"
 
+
         // ------------------------------------------------
         // PRECIO TOTAL
         // ------------------------------------------------
@@ -148,6 +149,7 @@ class AdminPedidoAdapter(
             "Total: %.2f €".format(
                 pedido.precioTotal
             )
+
 
         // ------------------------------------------------
         // BOTÓN DETALLE

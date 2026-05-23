@@ -2,7 +2,9 @@ package com.example.apppanadero.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apppanadero.R
 import com.example.apppanadero.data.model.Producto
 import com.example.apppanadero.databinding.ItemProductoAdminBinding
 
@@ -135,6 +137,9 @@ class AdminProductoAdapter(
                 precioActual
             )
 
+
+
+
         // ------------------------------------------------
         // BOTÓN EDITAR
         // ------------------------------------------------
@@ -148,12 +153,14 @@ class AdminProductoAdapter(
         // ------------------------------------------------
         // BOTÓN ELIMINAR
         // ------------------------------------------------
+        holder.itemView.setOnClickListener{
+            holder.binding.imgEliminar
+                .setOnClickListener {
 
-        holder.binding.imgEliminar
-            .setOnClickListener {
+                    onEliminarClick(producto)
+                }
+        }
 
-                onEliminarClick(producto)
-            }
     }
 
     // ------------------------------------------------

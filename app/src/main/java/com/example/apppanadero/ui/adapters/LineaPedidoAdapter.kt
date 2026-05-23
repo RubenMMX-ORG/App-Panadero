@@ -3,7 +3,9 @@ package com.example.apppanadero.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apppanadero.R
 import com.example.apppanadero.data.model.LineaPedido
 import com.example.apppanadero.databinding.ItemDetalleProductoBinding
 
@@ -94,6 +96,20 @@ class LineaPedidoAdapter(
         // Subtotal
         val subtotal = cantidadMostrar * lineaPedido.precioUnitario
         holder.binding.tvTotal.text = "%.2f €".format(subtotal)
+
+        holder.itemView.setOnClickListener {
+
+            holder.itemView.setBackgroundColor(
+
+                ContextCompat.getColor(
+
+                    holder.itemView.context,
+
+                    R.color.background_click_item
+                )
+            )
+
+        }
 
 
     }

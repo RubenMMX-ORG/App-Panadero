@@ -1,6 +1,7 @@
 package com.example.apppanadero.ui.adapters
 
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContentProviderCompat.requireContext
@@ -93,6 +94,8 @@ class PedidoAdapter(
         }else{
              holder.binding.tvCantidad.text = "$totalProductos productos"
         }
+
+
 
         // ------------------------------------------------
         // ASIGNACION DE COLORES POR ESTADO
