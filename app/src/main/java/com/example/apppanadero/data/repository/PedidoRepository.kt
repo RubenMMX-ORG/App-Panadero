@@ -109,8 +109,8 @@ class PedidoRepository {
     }
 
     // ------------------------------------------------
-// OBTENER PEDIDO POR ID
-// ------------------------------------------------
+    // OBTENER PEDIDO POR ID
+    // ------------------------------------------------
 
     fun obtenerPedidoPorId(
 
@@ -209,6 +209,101 @@ class PedidoRepository {
 
                 respuesta(true)
             }
+            .addOnFailureListener {
+
+                respuesta(false)
+            }
+    }
+
+    // ------------------------------------------------
+    // ACTUALIZAR DEVOLUCIÓN
+    // ------------------------------------------------
+
+    fun actualizarCantidadDevuelta(
+
+        pedidoId: String,
+
+        lineaPedidoId: String,
+
+        cantidadDevuelta: Int,
+
+        respuesta: (Boolean) -> Unit
+
+    ) {
+
+        // ------------------------------------------------
+        // OBTENER PEDIDO
+        // ------------------------------------------------
+
+        db.collection("pedidos")
+
+            .document(pedidoId)
+
+            .get()
+
+            .addOnSuccessListener { documento ->
+
+                val pedido =
+
+                    documento.toObject(
+                        Pedido::class.java
+                    )
+
+                if (pedido != null) {
+
+                    // ------------------------------------------------
+                    // MODIFICAR LÍNEA PEDIDO
+                    // ------------------------------------------------
+
+                    val nuevasLineas =
+
+                        pedido.lineasPedido.map { linea ->
+
+                            if (linea.productoId == lineaPedidoId) {
+
+                                linea.copy(
+
+                                    cantidadDevuelta =
+                                        cantidadDevuelta
+                                )
+
+                            } else {
+
+                                linea
+                            }
+                        }
+
+                    // ------------------------------------------------
+                    // ACTUALIZAR PEDIDO
+                    // ------------------------------------------------
+
+                    db.collection("pedidos")
+
+                        .document(pedidoId)
+
+                        .update(
+
+                            "lineasPedido",
+
+                            nuevasLineas
+                        )
+
+                        .addOnSuccessListener {
+
+                            respuesta(true)
+                        }
+
+                        .addOnFailureListener {
+
+                            respuesta(false)
+                        }
+
+                } else {
+
+                    respuesta(false)
+                }
+            }
+
             .addOnFailureListener {
 
                 respuesta(false)

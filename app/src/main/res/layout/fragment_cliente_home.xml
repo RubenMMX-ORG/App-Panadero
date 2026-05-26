@@ -52,16 +52,6 @@
                     android:text="¡Bienvenido!" />
 
                 <TextView
-                    android:id="@+id/tvNombreComercio"
-                    style="@style/TextSubtitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="Nombre cliente"
-                    android:textColor="@color/text_secondary" />
-
-                <TextView
                     style="@style/TextSubtitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

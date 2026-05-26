@@ -56,28 +56,7 @@ class ClienteHomeFragment: Fragment() {
         binding.btnHistorico.setOnClickListener {
             navegarHacia(R.id.action_clienteHomeFragment_to_clienteHistoricoPedidosFragment)
         }
-        // ------------------------------------------------
-        // OBSERVAR CLIENTE
-        // ------------------------------------------------
 
-        usuarioViewModel.usuario.observe(
-
-            viewLifecycleOwner
-
-        ) { cliente ->
-
-            cliente?.let {
-
-                // ------------------------------------------------
-                // DATOS CLIENTE
-                // ------------------------------------------------
-
-                binding.tvNombreComercio.text =
-
-                    it.nombreComercio
-
-                }
-        }
 
 
 

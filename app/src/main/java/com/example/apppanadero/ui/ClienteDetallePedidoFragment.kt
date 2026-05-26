@@ -169,7 +169,7 @@ class ClienteDetallePedidoFragment : Fragment() {
         }
 
         // RecyclerView con las líneas de pedido
-        val adapter = LineaPedidoAdapter(pedido.lineasPedido, pedido.estado)
+        val adapter = LineaPedidoAdapter(pedido.lineasPedido, pedido.estado,onClickLinea = { })
         binding.recyclerDetalle.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerDetalle.adapter = adapter
     }

@@ -82,6 +82,7 @@ dependencies {
     implementation(libs.google.maps)
     implementation(libs.google.location)
     implementation(libs.googleid)
+    implementation(libs.androidx.ui.graphics)
 
     // TESTING
     testImplementation(libs.junit)

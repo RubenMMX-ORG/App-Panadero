@@ -11,9 +11,6 @@
         <action
             android:id="@+id/action_empleadoHomeFragment_to_empleadoPedidosFragment"
             app:destination="@id/empleadoPedidosFragment" />
-        <action
-            android:id="@+id/action_empleadoHomeFragment_to_empleadoDevolucionesFragment"
-            app:destination="@id/empleadoDevolucionesFragment" />
     </fragment>
     <fragment
         android:id="@+id/empleadoPedidosFragment"
@@ -22,11 +19,10 @@
         <action
             android:id="@+id/action_empleadoPedidosFragment_to_empleadoDetallePedidoFragment"
             app:destination="@id/empleadoDetallePedidoFragment" />
+        <argument
+            android:name="estadoFiltro"
+            app:argType="string" />
     </fragment>
-    <fragment
-        android:id="@+id/empleadoDevolucionesFragment"
-        android:name="com.example.apppanadero.ui.EmpleadoDevolucionesFragment"
-        android:label="EmpleadoDevolucionesFragment" />
     <fragment
         android:id="@+id/empleadoDetallePedidoFragment"
         android:name="com.example.apppanadero.ui.EmpleadoDetallePedidoFragment"

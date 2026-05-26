@@ -1,10 +1,13 @@
 package com.example.apppanadero.ui
 
+import android.app.AlertDialog
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -31,16 +34,21 @@ class EmpleadoDetallePedidoFragment : Fragment() {
     private val binding get() = _binding!!
 
     // ------------------------------------------------
-    // VIEWMODEL
+    // VIEWMODEL PEDIDOS
     // ------------------------------------------------
+
 
     private val pedidoViewModel:
             PedidoViewModel by viewModels {
 
         Injector.providePedidoViewModelFactory()
     }
+
+    //ASIGNACION DE ESTADO DE PEDIOD
+    private var estadoPedido: String = ""
+
     // ------------------------------------------------
-    // VIEWMODEL USUARIO
+    // VIEWMODEL USUARIOS
     // ------------------------------------------------
 
     private val usuarioViewModel:
@@ -54,7 +62,6 @@ class EmpleadoDetallePedidoFragment : Fragment() {
     // VARIABLES
     // ------------------------------------------------
 
-    // PedidoId recibido por navegación
     private var pedidoId: String? = null
 
     // ------------------------------------------------
@@ -76,7 +83,6 @@ class EmpleadoDetallePedidoFragment : Fragment() {
 
     ): View {
 
-        // Inflamos layout con ViewBinding
         _binding =
             FragmentAdminDetallePedidoBinding.inflate(
 
@@ -120,20 +126,24 @@ class EmpleadoDetallePedidoFragment : Fragment() {
         // ------------------------------------------------
 
         val args =
+
             AdminDetallePedidoFragmentArgs
                 .fromBundle(requireArguments())
 
         pedidoId = args.pedidoId
 
         // ------------------------------------------------
-        // CONFIGURAR RECYCLER
+        // RECYCLER
         // ------------------------------------------------
 
         binding.recyclerDetalle.layoutManager =
-            LinearLayoutManager(requireContext())
+
+            LinearLayoutManager(
+                requireContext()
+            )
 
         // ------------------------------------------------
-        // VALIDAR PEDIDO ID
+        // VALIDAR PEDIDO
         // ------------------------------------------------
 
         if (pedidoId == null) {
@@ -162,31 +172,34 @@ class EmpleadoDetallePedidoFragment : Fragment() {
         )
 
         // ------------------------------------------------
-        // OBSERVAR DETALLE PEDIDO
+        // OBSERVAR PEDIDO
         // ------------------------------------------------
 
         pedidoViewModel.pedidoDetalle.observe(
+
             viewLifecycleOwner
+
         ) { pedido ->
 
             if (pedido != null) {
+
+                estadoPedido = pedido.estado
 
                 // ------------------------------------------------
                 // CLIENTE
                 // ------------------------------------------------
 
-                // De momento mostramos clienteId.
-                // Más adelante podremos cargar
-                // el nombre real del cliente.
                 usuarioViewModel.obtenerUsuarioPorId(
 
                     pedido.clienteId
                 )
+
                 // ------------------------------------------------
                 // NUMERO PEDIDO
                 // ------------------------------------------------
 
                 binding.tvNumeroPedido.text =
+
                     "Pedido #${pedido.numeroPedido}"
 
                 // ------------------------------------------------
@@ -197,10 +210,9 @@ class EmpleadoDetallePedidoFragment : Fragment() {
                     pedido.estado
 
                 // ------------------------------------------------
-                // FECHA Y HORA
+                // FECHA
                 // ------------------------------------------------
 
-                // Temporal hasta implementar fechas reales
                 binding.tvFecha.text =
                     "📅 Próximamente"
 
@@ -232,85 +244,232 @@ class EmpleadoDetallePedidoFragment : Fragment() {
                     )
 
                 // ------------------------------------------------
-                // RECYCLER DETALLE
+                // ADAPTER
                 // ------------------------------------------------
 
-                // Reutilizamos el adapter ya creado
-                // para mostrar líneas pedido.
-                //
-                // Como el pedido todavía está:
-                // pendiente/preparado
-                //
-                // usamos cantidadPedida.
                 adapter =
+
                     LineaPedidoAdapter(
 
                         pedido.lineasPedido,
 
-                        pedido.estado
+                        pedido.estado,
+
+                        // ------------------------------------------------
+                        // CLICK ITEM DEVOLUCIÓN
+                        // ------------------------------------------------
+
+                        onClickLinea = { lineaPedido ->
+
+                            // ------------------------------------------------
+                            // SOLO PEDIDOS ENTREGADOS
+                            // ------------------------------------------------
+
+                            if (pedido.estado == "entregado") {
+
+                                // ------------------------------------------------
+                                // EDITTEXT NUMÉRICO
+                                // ------------------------------------------------
+
+                                val editText =
+
+                                    EditText(
+                                        requireContext()
+                                    )
+
+                                editText.inputType =
+
+                                    InputType.TYPE_CLASS_NUMBER
+
+                                // ------------------------------------------------
+                                // ALERT DIALOG
+                                // ------------------------------------------------
+
+                                AlertDialog.Builder(
+                                    requireContext()
+                                )
+
+                                    .setTitle(
+                                        "Cantidad devuelta"
+                                    )
+
+                                    .setMessage(
+                                        "Introduce cantidad devuelta"
+                                    )
+
+                                    .setView(editText)
+
+                                    // ------------------------------------------------
+                                    // BOTÓN ACEPTAR
+                                    // ------------------------------------------------
+
+                                    .setPositiveButton(
+
+                                        "Aceptar"
+
+                                    ) { _, _ ->
+
+                                        val cantidadDevuelta =
+
+                                            editText.text
+                                                .toString()
+                                                .toIntOrNull() ?: 0
+
+                                        // ------------------------------------------------
+                                        // ACTUALIZAR DEVOLUCIÓN
+                                        // ------------------------------------------------
+
+                                        pedidoViewModel
+                                            .actualizarCantidadDevuelta(
+
+                                                pedido.id,
+
+                                                lineaPedido.productoId,
+
+                                                cantidadDevuelta
+                                            )
+
+
+                                        Toast.makeText(
+
+                                            requireContext(),
+
+                                            "Devolución actualizada",
+
+                                            Toast.LENGTH_SHORT
+
+                                        ).show()
+                                    }
+
+                                    // ------------------------------------------------
+                                    // BOTÓN CANCELAR
+                                    // ------------------------------------------------
+
+                                    .setNegativeButton(
+
+                                        "Cancelar",
+
+                                        null
+                                    )
+
+                                    .show()
+                            }
+                        }
                     )
 
                 // ------------------------------------------------
-                // ASIGNACION DE COLORES POR ESTADO
+                // COLORES ESTADO
                 // ------------------------------------------------
 
                 if (pedido.estado == "pendiente") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor =
+                        ColorStateList.valueOf(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_pendiente_bg)
-                    )
+                            ContextCompat.getColor(
+
+                                requireContext(),
+
+                                R.color.estado_pendiente_bg
+                            )
+                        )
 
                 } else if (pedido.estado == "preparado") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor =
+                        ColorStateList.valueOf(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_camino_bg)
-                    )
+                            ContextCompat.getColor(
+
+                                requireContext(),
+
+                                R.color.estado_camino_bg
+                            )
+                        )
 
                 } else if (pedido.estado == "entregado") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor =
+                        ColorStateList.valueOf(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_entregado_bg)
-                    )
+                            ContextCompat.getColor(
+
+                                requireContext(),
+
+                                R.color.estado_entregado_bg
+                            )
+                        )
 
                 } else if (pedido.estado == "finalizado") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor =
+                        ColorStateList.valueOf(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_finalizado_bg)
-                    )
+                            ContextCompat.getColor(
+
+                                requireContext(),
+
+                                R.color.estado_finalizado_bg
+                            )
+                        )
                 }
+
+                // ------------------------------------------------
+                // COLOR TEXTO ESTADO
+                // ------------------------------------------------
 
                 if (pedido.estado == "pendiente") {
 
                     binding.chipEstado.setTextColor(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_pendiente_text)
+                        ContextCompat.getColor(
+
+                            requireContext(),
+
+                            R.color.estado_pendiente_text
+                        )
                     )
 
                 } else if (pedido.estado == "preparado") {
 
                     binding.chipEstado.setTextColor(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_camino_text)
+                        ContextCompat.getColor(
+
+                            requireContext(),
+
+                            R.color.estado_camino_text
+                        )
                     )
 
                 } else if (pedido.estado == "entregado") {
 
                     binding.chipEstado.setTextColor(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_entregado_text)
+                        ContextCompat.getColor(
+
+                            requireContext(),
+
+                            R.color.estado_entregado_text
+                        )
                     )
 
                 } else if (pedido.estado == "finalizado") {
 
                     binding.chipEstado.setTextColor(
 
-                        ContextCompat.getColor(requireContext(), R.color.estado_finalizado_text)
+                        ContextCompat.getColor(
+
+                            requireContext(),
+
+                            R.color.estado_finalizado_text
+                        )
                     )
                 }
+
+                // ------------------------------------------------
+                // ASIGNAR ADAPTER
+                // ------------------------------------------------
 
                 binding.recyclerDetalle.adapter =
                     adapter
@@ -318,7 +477,7 @@ class EmpleadoDetallePedidoFragment : Fragment() {
         }
 
         // ------------------------------------------------
-        // OBSERVAR USUARIO
+        // OBSERVAR CLIENTE
         // ------------------------------------------------
 
         usuarioViewModel.usuario.observe(
@@ -336,34 +495,51 @@ class EmpleadoDetallePedidoFragment : Fragment() {
             }
         }
 
-
         // ------------------------------------------------
         // BOTÓN LISTO
         // ------------------------------------------------
 
         binding.btnListo.setOnClickListener {
 
-            // Cambiamos estado:
-            //
-            // pendiente -> preparado
+            val nuevoEstado =
+
+                if (estadoPedido == "preparado") {
+
+                    "entregado"
+
+                } else {
+
+                    "finalizado"
+                }
+
             pedidoViewModel.actualizarEstadoPedido(
 
                 pedidoId!!,
 
-                "entregado"
+                nuevoEstado
             )
+
+            val mensaje =
+
+                if (estadoPedido == "preparado") {
+
+                    "Pedido entregado"
+
+                } else {
+
+                    "Pedido finalizado"
+                }
 
             Toast.makeText(
 
                 requireContext(),
 
-                "Pedido Entregado!!",
+                mensaje,
 
                 Toast.LENGTH_SHORT
 
             ).show()
 
-            // Volvemos atrás
             findNavController().popBackStack()
         }
     }

@@ -153,15 +153,23 @@ class EmpleadoPedidosFragment : Fragment() {
         ) { listaPedidos ->
 
             // ------------------------------------------------
-            // FILTRAR SOLO PREPARADOS
+            // FILTRAR PARA PREPARADOS Y ENTREGADOS
             // ------------------------------------------------
+            val args =
 
-            val pedidosPreparados =
+                EmpleadoPedidosFragmentArgs
+                    .fromBundle(requireArguments())
+
+            val filtroEstado =
+                args.estadoFiltro
+
+            val pedidosfiltrados =
 
                 listaPedidos.filter {
 
-                    it.estado == "preparado"
+                    it.estado == filtroEstado
                 }
+
 
             // ------------------------------------------------
             // CREAR ADAPTER
@@ -172,7 +180,7 @@ class EmpleadoPedidosFragment : Fragment() {
                 AdminPedidoAdapter(
 
                     // Lista pedidos
-                    pedidosPreparados,
+                    pedidosfiltrados,
 
                     // Mapa clientes
                     mapaClientes,

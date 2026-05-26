@@ -211,7 +211,8 @@
                     android:focusable="false"
                     android:hint="Desde"
                     android:padding="12dp"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -232,7 +233,8 @@
                     android:focusable="false"
                     android:hint="Hasta"
                     android:padding="12dp"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_hint"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

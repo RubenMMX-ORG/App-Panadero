@@ -155,10 +155,16 @@ class EmpleadoHomeFragment : Fragment() {
         binding.btnPedidosHoy
             .setOnClickListener {
 
-                navegarHacia(
+                val action =
 
-                    R.id.action_empleadoHomeFragment_to_empleadoPedidosFragment
-                )
+                    EmpleadoHomeFragmentDirections
+                        .actionEmpleadoHomeFragmentToEmpleadoPedidosFragment(
+
+                            estadoFiltro = "preparado"
+                        )
+
+                findNavController()
+                    .navigate(action)
             }
 
         // ------------------------------------------------
@@ -168,9 +174,16 @@ class EmpleadoHomeFragment : Fragment() {
         binding.btnDevoluciones
             .setOnClickListener {
 
-                navegarHacia(
-                    R.id.action_empleadoHomeFragment_to_empleadoDevolucionesFragment
-                )
+                val action =
+
+                    EmpleadoHomeFragmentDirections
+                        .actionEmpleadoHomeFragmentToEmpleadoPedidosFragment(
+
+                            estadoFiltro = "entregado"
+                        )
+
+                findNavController()
+                    .navigate(action)
 
             }
 
@@ -185,19 +198,7 @@ class EmpleadoHomeFragment : Fragment() {
             }
     }
 
-    // ------------------------------------------------
-    // NAVEGACIÓN GENÉRICA
-    // ------------------------------------------------
 
-    private fun navegarHacia(
-
-        actionId: Int
-
-    ) {
-
-        findNavController()
-            .navigate(actionId)
-    }
 
     // ------------------------------------------------
     // ON DESTROY VIEW

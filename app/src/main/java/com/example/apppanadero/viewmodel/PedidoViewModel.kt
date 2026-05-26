@@ -171,6 +171,46 @@ class PedidoViewModel(
     }
 
     // ------------------------------------------------
+    // ACTUALIZAR CANTIDAD DEVUELTA
+    // ------------------------------------------------
+
+    fun actualizarCantidadDevuelta(
+
+        pedidoId: String,
+
+        productoId: String,
+
+        cantidadDevuelta: Int
+
+    ) {
+
+        repository.actualizarCantidadDevuelta(
+
+            pedidoId,
+
+            productoId,
+
+            cantidadDevuelta
+
+        ) { correcto ->
+
+            if (correcto) {
+
+                _pedidoGuardado.postValue(
+                    true
+                )
+
+            } else {
+
+                _error.postValue(
+
+                    "Error actualizando devolución"
+                )
+            }
+        }
+    }
+
+    // ------------------------------------------------
     // LIMPIAR ERROR
     // ------------------------------------------------
 

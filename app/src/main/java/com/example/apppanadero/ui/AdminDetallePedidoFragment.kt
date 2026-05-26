@@ -247,7 +247,10 @@ class AdminDetallePedidoFragment : Fragment() {
 
                         pedido.lineasPedido,
 
-                        pedido.estado
+                        pedido.estado,
+
+                        onClickLinea = { lineaPedido -> {}
+                        }
                     )
 
                 // ------------------------------------------------
@@ -256,28 +259,28 @@ class AdminDetallePedidoFragment : Fragment() {
 
                 if (pedido.estado == "pendiente") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor = ColorStateList.valueOf(
 
                         ContextCompat.getColor(requireContext(), R.color.estado_pendiente_bg)
                     )
 
                 } else if (pedido.estado == "preparado") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor = ColorStateList.valueOf(
 
                         ContextCompat.getColor(requireContext(), R.color.estado_camino_bg)
                     )
 
                 } else if (pedido.estado == "entregado") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor = ColorStateList.valueOf(
 
                         ContextCompat.getColor(requireContext(), R.color.estado_entregado_bg)
                     )
 
                 } else if (pedido.estado == "finalizado") {
 
-                    binding.chipEstado.chipBackgroundColor  = ColorStateList.valueOf(
+                    binding.chipEstado.chipBackgroundColor = ColorStateList.valueOf(
 
                         ContextCompat.getColor(requireContext(), R.color.estado_finalizado_bg)
                     )

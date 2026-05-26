@@ -99,7 +99,8 @@
                                 android:clickable="true"
                                 android:drawableStart="@android:drawable/ic_menu_today"
                                 android:padding="12dp"
-                                android:textColor="@color/text_primary"/>
+                                android:textColor="@color/text_primary"
+                                android:textColorHint="@color/text_hint"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <!-- FECHA FIN -->
@@ -124,7 +125,8 @@
                                 android:clickable="true"
                                 android:drawableStart="@android:drawable/ic_menu_today"
                                 android:padding="12dp"
-                                android:textColor="@color/text_primary"/>
+                                android:textColor="@color/text_primary"
+                                android:textColorHint="@color/text_hint"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>

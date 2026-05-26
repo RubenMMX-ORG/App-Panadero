@@ -17,7 +17,10 @@ class LineaPedidoAdapter(
     private val listaLineasPedido: List<LineaPedido>,
 
 
-    private val estadoPedido: String
+    private val estadoPedido: String,
+
+    private val onClickLinea:
+        (LineaPedido) -> Unit
 
 ) : RecyclerView.Adapter<LineaPedidoAdapter.LineaPedidoViewHolder>() {
 
@@ -110,6 +113,14 @@ class LineaPedidoAdapter(
             )
 
         }
+
+        if (estadoPedido == "entregado"){
+            holder.itemView.setOnClickListener {
+
+                onClickLinea(lineaPedido)
+            }
+        }
+
 
 
     }
