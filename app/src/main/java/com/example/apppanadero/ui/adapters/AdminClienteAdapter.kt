@@ -145,12 +145,7 @@ class AdminClienteAdapter(
                 "No Aprobado"
         }
 
-        // ------------------------------------------------
-        // RUTA TEMPORAL
-        // ------------------------------------------------
 
-        /*holder.binding.tvRuta.text =
-            "🚚 Ruta pendiente"*/
 
         // ------------------------------------------------
         // BOTÓN DETALLE
@@ -172,23 +167,3 @@ class AdminClienteAdapter(
         return listaClientes.size
     }
 }
-/*``` 😄🔥
-
-Y sí 🤣🔥
-me quedo grabado el roadmap 😄🔥
-
-Lo siguiente importante que NO debemos olvidar 😄🔥:
-
-- AdminClientesFragment
-- detalle cliente
-- pedidos FINALIZADOS por cliente
-- filtro fechas
-- agrupación productos
-- aplicar descuento cliente
-- cálculo IVA
-- PDF facturación
-- estadísticas / resumen
-- rutas reales
-- impresión/exportación
-
-😄🔥 :contentReference[oaicite:0]{index=0}*/

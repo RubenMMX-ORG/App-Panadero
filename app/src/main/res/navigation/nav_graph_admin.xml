@@ -67,4 +67,8 @@
             android:name="clienteId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.example.apppanadero.ui.PerfilFragment"
+        android:label="Perfil" />
 </navigation>

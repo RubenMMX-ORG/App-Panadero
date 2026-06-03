@@ -157,7 +157,11 @@ class ProductoViewModel(
             productoId
         ) { correcto ->
 
-            if (!correcto) {
+            if (correcto) {
+
+                obtenerTodosProductos()
+
+            } else {
 
                 _error.postValue(
                     "Error al eliminar producto"

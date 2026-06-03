@@ -212,12 +212,25 @@ class EmpleadoDetallePedidoFragment : Fragment() {
                 // ------------------------------------------------
                 // FECHA
                 // ------------------------------------------------
+                val fecha = pedido.fecha.toDate()
+
+                val formatoFecha =
+                    java.text.SimpleDateFormat(
+                        "dd/MM/yyyy",
+                        java.util.Locale.getDefault()
+                    )
+
+                val formatoHora =
+                    java.text.SimpleDateFormat(
+                        "HH:mm",
+                        java.util.Locale.getDefault()
+                    )
 
                 binding.tvFecha.text =
-                    "📅 Próximamente"
+                    "📅 ${formatoFecha.format(fecha)}"
 
                 binding.tvHora.text =
-                    "⏰ --:--"
+                    "⏰ ${formatoHora.format(fecha)}"
 
                 // ------------------------------------------------
                 // TOTAL PRODUCTOS

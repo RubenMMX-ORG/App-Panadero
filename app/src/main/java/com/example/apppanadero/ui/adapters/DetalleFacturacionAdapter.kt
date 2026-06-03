@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.apppanadero.data.model.LineaPedido
 import com.example.apppanadero.data.model.Producto
 import com.example.apppanadero.databinding.ItemDetalleProductoBinding
-
+import android.util.Log
 // ------------------------------------------------
 // ADAPTER DETALLE FACTURACIÓN CLIENTE
 // ------------------------------------------------
@@ -106,6 +106,15 @@ class DetalleFacturacionAdapter(
             mapaProductos[
                 lineaPedido.productoId
             ]
+        Log.d(
+            "FACTURA",
+            "productoId linea = ${lineaPedido.productoId}"
+        )
+
+        Log.d(
+            "FACTURA",
+            "producto encontrado = ${producto?.nombre}"
+        )
 
         // ------------------------------------------------
         // NOMBRE PRODUCTO
