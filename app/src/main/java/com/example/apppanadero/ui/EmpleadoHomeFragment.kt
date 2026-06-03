@@ -194,7 +194,17 @@ class EmpleadoHomeFragment : Fragment() {
         binding.btnRuta
             .setOnClickListener {
 
-                // Próximamente Google Maps
+                val action =
+
+                    EmpleadoHomeFragmentDirections
+                        .actionEmpleadoHomeFragmentToMapaFragment(
+
+
+                        )
+
+                findNavController()
+                    .navigate(action)
+
             }
     }
 

@@ -29,6 +29,9 @@ class ClienteDetallePedidoFragment : Fragment() {
     //Variable para recuperar el pedidoId recibido
     private var pedidoId: String? = null
 
+    //Pedido actual
+    private var pedidoActual: Pedido? = null
+
     // ViewModel con Injector
     private val pedidoViewModel: PedidoViewModel by viewModels {
         Injector.providePedidoViewModelFactory()
@@ -57,12 +60,23 @@ class ClienteDetallePedidoFragment : Fragment() {
 
 
         //  Observa el LiveData
-        pedidoViewModel.pedidoDetalle.observe(viewLifecycleOwner) { pedido ->
+        pedidoViewModel.pedidoDetalle.observe(
+            viewLifecycleOwner
+        ) { pedido ->
+
+            pedidoActual = pedido
+
             if (pedido != null) {
+
                 mostrarDatosPedido(pedido)
+
             } else {
-                Toast.makeText(requireContext(), "No se encontró el pedido", Toast.LENGTH_SHORT)
-                    .show()
+
+                Toast.makeText(
+                    requireContext(),
+                    "No se encontró el pedido",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
@@ -173,23 +187,24 @@ class ClienteDetallePedidoFragment : Fragment() {
         binding.recyclerDetalle.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerDetalle.adapter = adapter
     }
+    // Observamos el pedido actual
 
     private fun configurarBotones() {
         binding.btnCancelar.setOnClickListener {
-            // Observamos el pedido actual
-            val pedido = pedidoViewModel.pedidoDetalle.value
 
-            if (pedido != null) {
-                // Solo cancelar si está pendiente 
-                if (pedido.estado == "pendiente") {
-                    pedidoViewModel.eliminarPedido(pedido.id)
+
+
+            if (pedidoActual != null) {
+                // Solo cancelar si está pendiente o preparado
+                if (pedidoActual!!.estado == "pendiente"||pedidoActual!!.estado == "preparado") {
+                    pedidoViewModel.eliminarPedido( pedidoActual!!.id)
 
                     Toast.makeText(requireContext(), "Pedido cancelado", Toast.LENGTH_SHORT).show()
                     findNavController().popBackStack()
                 } else {
                     Toast.makeText(
                         requireContext(),
-                        "No se puede cancelar un pedido finalizado",
+                        "ya no se puede cancelar este pedido",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -200,13 +215,29 @@ class ClienteDetallePedidoFragment : Fragment() {
 
         binding.btnModificar.setOnClickListener {
 
-            val action =
-                ClienteDetallePedidoFragmentDirections
-                    .actionClienteDetallePedidoFragmentToClienteNuevoPedidoFragment(
-                        pedidoId = pedidoId//asignamos al action el pedidoId recibido y lo pasamos al siguiente fragment
-                    )
+            if (pedidoActual != null) {
+                // Solo cancelar si está pendiente
+                if (pedidoActual!!.estado == "pendiente"||pedidoActual!!.estado == "preparado") {
+                    val action =
+                        ClienteDetallePedidoFragmentDirections
+                            .actionClienteDetallePedidoFragmentToClienteNuevoPedidoFragment(
+                                pedidoId = pedidoId//asignamos al action el pedidoId recibido del anterior fragment  y lo pasamos al siguiente fragment
+                            )
 
-            findNavController().navigate(action)
+                    findNavController().navigate(action)
+
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "ya no se puede modificar este pedido",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Pedido no cargado aún", Toast.LENGTH_SHORT).show()
+            }
+
+
         }
     }
 

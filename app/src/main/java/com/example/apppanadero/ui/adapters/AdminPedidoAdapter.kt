@@ -120,12 +120,25 @@ class AdminPedidoAdapter(
         // FECHA
         // ------------------------------------------------
 
-        // Temporal hasta implementar fechas reales
+        val fecha = pedido.fecha.toDate()
+
+        val formatoFecha =
+            java.text.SimpleDateFormat(
+                "dd/MM/yyyy",
+                java.util.Locale.getDefault()
+            )
+
+        val formatoHora =
+            java.text.SimpleDateFormat(
+                "HH:mm",
+                java.util.Locale.getDefault()
+            )
+
         holder.binding.tvFecha.text =
-            "📅 Próximamente"
+            "📅 ${formatoFecha.format(fecha)}"
 
         holder.binding.tvHora.text =
-            "⏰ --:--"
+            "⏰ ${formatoHora.format(fecha)}"
 
         // ------------------------------------------------
         // CANTIDAD PRODUCTOS

@@ -15,7 +15,7 @@ class ProductoPedidoAdapter(
     private val listaProductos: List<Producto>,
 
     // ------------------------------------------------
-    // NUEVO 😄🔥
+    // NUEVO
     // ------------------------------------------------
     // Mapa con precios vigentes.
     //
@@ -135,7 +135,7 @@ class ProductoPedidoAdapter(
             listaProductos[position]
 
         // ------------------------------------------------
-        // NUEVO 😄🔥
+        // NUEVO
         // ------------------------------------------------
         // Recuperamos precio actual usando:
         //
@@ -173,7 +173,7 @@ class ProductoPedidoAdapter(
             producto.categoria
 
         // ------------------------------------------------
-        // MODIFICADO 😄🔥
+        // MODIFICADO
         // ------------------------------------------------
         // Antes:
         //

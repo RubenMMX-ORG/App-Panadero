@@ -18,6 +18,7 @@ import com.example.apppanadero.viewmodel.PedidoViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 import com.example.apppanadero.viewmodel.UsuarioViewModel
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Environment
 import android.graphics.pdf.PdfDocument
 import android.graphics.Paint
@@ -31,6 +32,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import androidx.core.content.FileProvider
 
 class AdminHistoricoClientesFragment : Fragment() {
 
@@ -443,7 +445,7 @@ class AdminHistoricoClientesFragment : Fragment() {
                 // ------------------------------------------------
 
                 binding.tvRuta.text =
-                    "🚚 Ruta pendiente"
+                    "🚚 Ruta 1"
 
                 // ------------------------------------------------
                 // CAMBIO APROBADO
@@ -1324,12 +1326,47 @@ class AdminHistoricoClientesFragment : Fragment() {
         // ------------------------------------------------
 
         pdfDocument.close()
+        val uri = FileProvider.getUriForFile(
+
+            requireContext(),
+
+            "${requireContext().packageName}.provider",
+
+            archivo
+        )
+
+        val intent = Intent(
+
+            Intent.ACTION_SEND
+        ).apply {
+
+            type = "application/pdf"
+
+            putExtra(
+                Intent.EXTRA_STREAM,
+                uri
+            )
+
+            addFlags(
+                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            )
+        }
+
+        startActivity(
+
+            Intent.createChooser(
+
+                intent,
+
+                "Enviar factura"
+            )
+        )
 
         Toast.makeText(
 
             requireContext(),
 
-            "PDF guardado en Descargas",
+            "Factura guardada y lista para compartir",
 
             Toast.LENGTH_LONG
 

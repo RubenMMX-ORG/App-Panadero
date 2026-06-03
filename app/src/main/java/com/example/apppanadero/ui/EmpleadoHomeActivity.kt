@@ -75,7 +75,7 @@ class EmpleadoHomeActivity : AppCompatActivity() {
             }
 
             R.id.menu_perfil -> {
-                // navController.navigate(R.id.perfilFragment)
+                navController.navigate(R.id.perfilFragment)
                 true
             }
 

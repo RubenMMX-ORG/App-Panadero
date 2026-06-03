@@ -1,5 +1,7 @@
 package com.example.apppanadero.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.apppanadero.R
 import com.example.apppanadero.data.di.Injector
+import com.example.apppanadero.data.model.Usuario
 import com.example.apppanadero.databinding.FragmentRepartidorPedidosBinding
 import com.example.apppanadero.ui.adapters.AdminPedidoAdapter
 import com.example.apppanadero.viewmodel.PedidoViewModel
@@ -67,6 +70,13 @@ class EmpleadoPedidosFragment : Fragment() {
         mutableMapOf<String, String>()
 
     // ------------------------------------------------
+    // LISTA DE CLIENTES ACTUALES PARA NAVEGACION
+    // ------------------------------------------------
+
+    private var listaClientesActual =
+        emptyList<Usuario>()
+
+    // ------------------------------------------------
     // ON CREATE VIEW
     // ------------------------------------------------
 
@@ -119,6 +129,8 @@ class EmpleadoPedidosFragment : Fragment() {
                 ?.supportActionBar
                 ?.title = "Pedidos de hoy"
         }
+
+
 
         // ------------------------------------------------
         // CARGAR CLIENTES
@@ -208,8 +220,34 @@ class EmpleadoPedidosFragment : Fragment() {
 
                     onClickIniciarRuta = { pedido ->
 
-                        // Próximamente:
-                        // Google Maps
+                        val cliente =
+
+                            listaClientesActual.find {
+
+                                it.id == pedido.clienteId
+                            }
+
+                        cliente?.direccion?.let { direccion ->
+
+                            val uri = Uri.parse(
+
+                                "google.navigation:q=$direccion"
+                            )
+
+                            val intent = Intent(
+
+                                Intent.ACTION_VIEW,
+
+                                uri
+                            )
+
+                            intent.setPackage(
+
+                                "com.google.android.apps.maps"
+                            )
+
+                            startActivity(intent)
+                        }
                     },
 
                     // ------------------------------------------------
@@ -236,6 +274,8 @@ class EmpleadoPedidosFragment : Fragment() {
             viewLifecycleOwner
 
         ) { listaClientes ->
+
+            listaClientesActual = listaClientes
 
             // ------------------------------------------------
             // LIMPIAR MAPA

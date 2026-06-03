@@ -153,13 +153,11 @@ class AdminProductoAdapter(
         // ------------------------------------------------
         // BOTÓN ELIMINAR
         // ------------------------------------------------
-        holder.itemView.setOnClickListener{
-            holder.binding.imgEliminar
-                .setOnClickListener {
+        holder.binding.imgEliminar
+            .setOnClickListener {
 
-                    onEliminarClick(producto)
-                }
-        }
+                onEliminarClick(producto)
+            }
 
     }
 

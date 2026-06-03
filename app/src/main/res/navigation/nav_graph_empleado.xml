@@ -11,6 +11,9 @@
         <action
             android:id="@+id/action_empleadoHomeFragment_to_empleadoPedidosFragment"
             app:destination="@id/empleadoPedidosFragment" />
+        <action
+            android:id="@+id/action_empleadoHomeFragment_to_mapaFragment"
+            app:destination="@id/mapaFragment" />
     </fragment>
     <fragment
         android:id="@+id/empleadoPedidosFragment"
@@ -31,4 +34,12 @@
             android:name="pedidoId"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/mapaFragment"
+        android:name="com.example.apppanadero.ui.MapaFragment"
+        android:label="MapaFragment" />
+    <fragment
+        android:id="@+id/perfilFragment"
+        android:name="com.example.apppanadero.ui.PerfilFragment"
+        android:label="Perfil" />
 </navigation>
