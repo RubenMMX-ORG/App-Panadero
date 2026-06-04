@@ -645,11 +645,11 @@ class AdminHistoricoClientesFragment : Fragment() {
 
             binding.tvTotalPedidos.text =
 
-                "Total pedidos: $totalPedidos uds"
+                "Total productos pedidos: $totalPedidos uds"
 
             binding.tvTotalDevueltos.text =
 
-                "Total devueltos: $totalDevueltos uds"
+                "Total productos devueltos: $totalDevueltos uds"
 
 
 
@@ -792,7 +792,9 @@ class AdminHistoricoClientesFragment : Fragment() {
                         importeDescuento
             binding.tvTotalNeto.text =
 
-                "Total neto: $totalFinal €"
+
+            "Total neto: %.2f €"
+                .format(totalFinal)
 
 
 
