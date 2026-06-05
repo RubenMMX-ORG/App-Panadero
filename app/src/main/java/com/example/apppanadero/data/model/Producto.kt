@@ -14,5 +14,8 @@ data class Producto(
     // IVA producto
     val iva: Double = 0.0,
 
+    //URI imagen
+    val imagenUri: String = ""
+
 
 )

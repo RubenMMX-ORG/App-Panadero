@@ -84,6 +84,8 @@ class PedidoAdapter(
         // Estado
         holder.binding.chipEstado.text = pedido.estado
 
+
+
         // Total productos
         val totalProductos = pedido.lineasPedido.sumOf {
 

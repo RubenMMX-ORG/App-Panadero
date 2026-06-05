@@ -1,5 +1,6 @@
 package com.example.apppanadero.ui
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,17 @@ import com.example.apppanadero.databinding.FragmentAdminNuevoProductoBinding
 import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
 import com.google.firebase.Timestamp
+import androidx.activity.result.contract.ActivityResultContracts
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
+import android.content.ContentValues
+import android.graphics.Bitmap
+import android.os.Build
+import android.provider.MediaStore
+import android.util.Log
+import java.io.File
+import java.io.FileOutputStream
 
 class AdminNuevoProductoFragment : Fragment() {
 
@@ -55,6 +67,108 @@ class AdminNuevoProductoFragment : Fragment() {
     // null -> nuevo producto
     // id   -> edición
     private var productoId: String? = null
+
+    //VARIABLE PARA IMAGEN
+    private var imagenUri: Uri? = null
+
+    //LAUNCHE PARA PERMISOS
+    // Launcher moderno para pedir el permiso de cámara
+    private val requestCameraPermissionLauncher =
+
+        registerForActivityResult(
+
+            ActivityResultContracts.RequestPermission()
+
+        ) { isGranted ->
+
+            if (isGranted) {
+
+                abrirCamara()
+
+            } else {
+
+                Toast.makeText(
+
+                    requireContext(),
+
+                    "Permiso de cámara denegado",
+
+                    Toast.LENGTH_SHORT
+
+                ).show()
+            }
+        }
+
+
+    // ------------------------------------------------
+    // LAUNCHER GALERIA
+    // ------------------------------------------------
+
+
+    private val seleccionarImagenLauncher =
+
+        registerForActivityResult(
+
+            ActivityResultContracts.GetContent()
+
+        ) { uri ->
+
+            uri?.let {
+
+                val ruta =
+
+                    copiarImagenAlmacenInterno(
+                        it
+                    )
+
+                ruta?.let { rutaGuardada ->
+
+                    imagenUri = Uri.fromFile(
+
+                        File(
+                            rutaGuardada
+                        )
+                    )
+
+                    binding.imgProducto.setImageURI(
+                        imagenUri
+                    )
+                }
+            }
+        }
+
+    // ------------------------------------------------
+    // LAUNCHER CAMMARA
+    // ------------------------------------------------
+
+    private val takePicturePreviewLauncher =
+
+        registerForActivityResult(
+
+            ActivityResultContracts.TakePicturePreview()
+
+        ) { bitmap ->
+            //SE LLAMA AL METODO DE GUARDAR SI NO ES NULL
+            bitmap?.let {
+
+                binding.imgProducto.setImageBitmap(
+                    it
+                )
+
+                imagenUri =
+                    guardarBitmapInterno(it)
+
+                Toast.makeText(
+
+                    requireContext(),
+
+                    "Foto guardada",
+
+                    Toast.LENGTH_SHORT
+
+                ).show()
+            }
+        }
 
     // ------------------------------------------------
     // ON CREATE VIEW
@@ -126,6 +240,7 @@ class AdminNuevoProductoFragment : Fragment() {
                 }
         }
 
+
         // ------------------------------------------------
         // CAMBIAR TEXTO BOTÓN
         // ------------------------------------------------
@@ -135,6 +250,8 @@ class AdminNuevoProductoFragment : Fragment() {
             binding.btnCrearProducto.text =
                 "Actualizar producto"
         }
+
+
 
         // ------------------------------------------------
         // CONFIGURAR DROPDOWNS
@@ -151,6 +268,20 @@ class AdminNuevoProductoFragment : Fragment() {
         observarPrecioActual()
 
         observarErrores()
+
+        //BOTON PARA CARGAR IMAGENES AL IMAGEVIEW
+        binding.btnGaleria.setOnClickListener {
+
+            seleccionarImagenLauncher.launch(
+                "image/*"
+            )
+        }
+
+        //BOTON PARA CAMARA
+        binding.btnCamara.setOnClickListener {
+
+            comprobarPermisoCamara()
+        }
 
         // ------------------------------------------------
         // MODO EDICIÓN
@@ -300,6 +431,21 @@ class AdminNuevoProductoFragment : Fragment() {
                 precioViewModel.obtenerPrecioVigente(
                     it.id
                 )
+
+                // ------------------------------------------------
+                // CARGAR IMAGEN
+                // ------------------------------------------------
+
+                if (it.imagenUri.isNotEmpty()) {
+
+                    imagenUri = Uri.parse(
+                        it.imagenUri
+                    )
+
+                    binding.imgProducto.setImageURI(
+                        imagenUri
+                    )
+                }
             }
         }
     }
@@ -443,15 +589,14 @@ class AdminNuevoProductoFragment : Fragment() {
         // ------------------------------------------------
 
         val producto = Producto(
-
             id = productoId ?: "",
-
             nombre = nombre,
-
             categoria = categoria,
-
-            iva = iva
+            iva = iva,
+            imagenUri = imagenUri?.toString() ?: ""
         )
+
+
 
         // ------------------------------------------------
         // NUEVO PRODUCTO
@@ -574,6 +719,63 @@ class AdminNuevoProductoFragment : Fragment() {
     }
 
     // ------------------------------------------------
+    // METODO COMPROBAR PERMISO
+    // ------------------------------------------------
+    /**
+     * Comprueba el permiso de cámara y, si está concedido, lanza la cámara.
+     * Si no, solicita el permiso usando la API moderna.
+     */
+    private fun comprobarPermisoCamara() {
+
+        when {
+            // Permiso ya concedido
+            ContextCompat.checkSelfPermission(
+
+                requireContext(),
+
+                Manifest.permission.CAMERA
+
+            ) == PackageManager.PERMISSION_GRANTED -> {
+
+                abrirCamara()
+            }
+            // Debemos mostrar una explicación al usuario
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                Toast.makeText(
+                    requireContext(),
+                    "La aplicación necesita acceder a la cámara para poder hacer fotos.",
+                    Toast.LENGTH_LONG
+                ).show()
+                requestCameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+            }
+            // Pedimos el permiso directamente
+            else -> {
+
+                requestCameraPermissionLauncher.launch(
+
+                    Manifest.permission.CAMERA
+                )
+            }
+        }
+    }
+
+
+
+    // ------------------------------------------------
+    // METODO PARA ABRIR CAMARA
+    // ------------------------------------------------
+    /**
+     * Lanza la cámara usando el contrato TakePicturePreview.
+     * Devuelve un Bitmap (normalmente una miniatura de la foto).
+     */
+    private fun abrirCamara() {
+
+        takePicturePreviewLauncher.launch(
+            null
+        )
+    }
+
+    // ------------------------------------------------
     // OBSERVAR ERRORES
     // ------------------------------------------------
 
@@ -600,6 +802,107 @@ class AdminNuevoProductoFragment : Fragment() {
                 productoViewModel
                     .limpiarError()
             }
+        }
+    }
+
+    //TENEMOS QUE COPIAR LA IMAGEN EN LOCAL PORQUE LA URI ES TEMPORAL Y LO QUE GUARDAMOS EN FIRESTORE NO NOS SIRVE
+    private fun copiarImagenAlmacenInterno(
+        uriOriginal: Uri
+    ): String? {
+
+        return try {
+
+            val carpeta = File(
+
+                requireContext().filesDir,
+
+                "productos"
+            )
+
+            if (!carpeta.exists()) {
+
+                carpeta.mkdirs()
+            }
+
+            val archivoDestino = File(
+
+                carpeta,
+
+                "producto_${System.currentTimeMillis()}.jpg"
+            )
+
+            requireContext()
+                .contentResolver
+                .openInputStream(uriOriginal)
+                ?.use { input ->
+
+                    FileOutputStream(
+                        archivoDestino
+                    ).use { output ->
+
+                        input.copyTo(output)
+                    }
+                }
+
+            archivoDestino.absolutePath
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            null
+        }
+    }
+
+    //TENEMOS QUE COPIAR LA IMAGEN EN LOCAL PORQUE LA URI ES TEMPORAL Y LO QUE GUARDAMOS EN FIRESTORE NO NOS SIRVE
+    private fun guardarBitmapInterno(
+        bitmap: Bitmap
+    ): Uri? {
+
+        return try {
+
+            val carpeta = File(
+
+                requireContext().filesDir,
+
+                "productos"
+            )
+
+            if (!carpeta.exists()) {
+
+                carpeta.mkdirs()
+            }
+
+            val archivo = File(
+
+                carpeta,
+
+                "producto_${System.currentTimeMillis()}.jpg"
+            )
+
+            FileOutputStream(
+                archivo
+            ).use { output ->
+
+                bitmap.compress(
+
+                    Bitmap.CompressFormat.JPEG,
+
+                    90,
+
+                    output
+                )
+            }
+
+            Uri.fromFile(
+                archivo
+            )
+
+        } catch (e: Exception) {
+
+            e.printStackTrace()
+
+            null
         }
     }
 
