@@ -401,88 +401,231 @@ class ClienteHistoricoPedidosFragment : Fragment() {
             listaPedidosGlobal.filter {
 
                 (fechaInicio == null ||
-
                         it.fecha >= fechaInicio!!)
 
                         &&
 
                         (fechaFin == null ||
-
                                 it.fecha <= fechaFin!!)
+
+                        &&
+
+                        it.estado.equals(
+                            "finalizado",
+                            ignoreCase = true
+                        )
             }
 
         // --------------------------------------
         // PEDIDOS
         // --------------------------------------
 
+        // --------------------------------------
+// PEDIDOS DETALLADOS
+// --------------------------------------
+
+        var importeTotal = 0.0
+
         pedidosFiltrados.forEach { pedido ->
 
             val fechaTexto =
-
                 formatoFecha.format(
                     pedido.fecha.toDate()
                 )
 
             canvas.drawText(
-
-                pedido.numeroPedido.toString(),
-
+                "PEDIDO Nº ${pedido.numeroPedido}",
                 40f,
-
                 y,
-
                 paint
             )
 
+            y += 20f
+
             canvas.drawText(
-
-                fechaTexto,
-
-                180f,
-
+                "Fecha: $fechaTexto",
+                60f,
                 y,
-
                 paint
             )
 
+            y += 20f
+
             canvas.drawText(
-
-                pedido.estado,
-
-                350f,
-
+                "Estado: ${pedido.estado}",
+                60f,
                 y,
+                paint
+            )
 
+            y += 25f
+
+            canvas.drawText(
+                "Productos:",
+                60f,
+                y,
+                paint
+            )
+
+            y += 20f
+
+            pedido.lineasPedido.forEach { linea ->
+
+                val subtotal =
+
+                    linea.cantidadFinal *
+                            linea.precioUnitario
+
+                canvas.drawText(
+
+                    linea.nombreProducto,
+
+                    80f,
+
+                    y,
+
+                    paint
+                )
+
+                y += 18f
+
+                canvas.drawText(
+
+                    "Pedidas: ${linea.cantidadPedida}",
+
+                    100f,
+
+                    y,
+
+                    paint
+                )
+
+                y += 18f
+
+                canvas.drawText(
+
+                    "Devueltas: ${linea.cantidadDevuelta}",
+
+                    100f,
+
+                    y,
+
+                    paint
+                )
+
+                y += 18f
+
+                canvas.drawText(
+
+                    "Facturadas: ${linea.cantidadFinal}",
+
+                    100f,
+
+                    y,
+
+                    paint
+                )
+
+                y += 18f
+
+                canvas.drawText(
+
+                    "${String.format("%.2f", linea.precioUnitario)} €/ud",
+
+                    100f,
+
+                    y,
+
+                    paint
+                )
+
+                y += 18f
+
+                canvas.drawText(
+
+                    "Subtotal: ${
+                        String.format(
+                            "%.2f",
+                            subtotal
+                        )
+                    } €",
+
+                    100f,
+
+                    y,
+
+                    paint
+                )
+
+                y += 25f
+            }
+
+            canvas.drawText(
+                "Importe total: ${
+                    String.format(
+                        "%.2f",
+                        pedido.precioTotal
+                    )
+                } €",
+                60f,
+                y,
+                paint
+            )
+
+            importeTotal += pedido.precioTotal
+
+            y += 30f
+
+            canvas.drawLine(
+                40f,
+                y,
+                550f,
+                y,
                 paint
             )
 
             y += 25f
         }
-
         // --------------------------------------
         // RESUMEN
         // --------------------------------------
 
-        y += 20f
-
-        canvas.drawLine(
+        canvas.drawText(
+            "RESUMEN",
             40f,
-            y,
-            550f,
             y,
             paint
         )
 
-        y += 30f
+        y += 25f
 
         canvas.drawText(
-
-            "Total pedidos: ${pedidosFiltrados.size}",
-
+            "Pedidos finalizados: ${pedidosFiltrados.size}",
             40f,
-
             y,
+            paint
+        )
 
+        y += 20f
+
+        canvas.drawText(
+            "Importe total facturado: ${
+                String.format(
+                    "%.2f",
+                    importeTotal
+                )
+            } €",
+            40f,
+            y,
+            paint
+        )
+
+        y += 20f
+
+        canvas.drawText(
+            "Periodo seleccionado",
+            40f,
+            y,
             paint
         )
 

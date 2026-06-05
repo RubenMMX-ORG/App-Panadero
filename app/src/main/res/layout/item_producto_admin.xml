@@ -33,12 +33,12 @@
             <!-- ICONO -->
             <ImageView
                 android:id="@+id/imgProducto"
-                android:layout_width="0dp"
+                android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_weight="0.20"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"
-                android:padding="8dp"
+                android:minWidth="60dp"
+                android:minHeight="60dp"
+                android:maxWidth="120dp"
+                android:maxHeight="120dp"
                 android:src="@drawable/pan" />
 
             <!-- ========================================================= -->
