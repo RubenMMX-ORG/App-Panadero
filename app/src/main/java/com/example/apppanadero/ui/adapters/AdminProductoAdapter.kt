@@ -1,5 +1,6 @@
 package com.example.apppanadero.ui.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -136,6 +137,26 @@ class AdminProductoAdapter(
             "%.2f €".format(
                 precioActual
             )
+
+        // ------------------------------------------------
+        // IMAGEN PRODUCTO
+        // ------------------------------------------------
+
+        if (producto.imagenUri.isNotEmpty()) {
+
+            holder.binding.imgProducto.setImageURI(
+
+                Uri.parse(
+                    producto.imagenUri
+                )
+            )
+
+        } else {
+
+            holder.binding.imgProducto.setImageResource(
+                R.drawable.pan
+            )
+        }
 
 
 
