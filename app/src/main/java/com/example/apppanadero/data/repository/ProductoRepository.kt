@@ -1,5 +1,6 @@
 package com.example.apppanadero.data.repository
 
+import android.util.Log
 import com.example.apppanadero.data.model.Producto
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -34,9 +35,14 @@ class ProductoRepository {
 
             id = documento.id
         )
+        Log.d(
+            "FIRESTORE_PRODUCTO",
+            productoConId.toString()
+        )
 
         documento
             .set(productoConId)
+
 
             .addOnSuccessListener {
 

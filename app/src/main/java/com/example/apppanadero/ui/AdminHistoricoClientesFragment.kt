@@ -511,9 +511,16 @@ class AdminHistoricoClientesFragment : Fragment() {
 
                             if (correcto) {
 
+                                clienteGlobal =
+                                    usuarioActualizado
+
                                 binding.tvDescuento.text =
 
                                     "${descuentoSeleccionado.toInt()}% dto."
+
+                                pedidoViewModel.obtenerPedidosCliente(
+                                    clienteId
+                                )
                             }
                         }
                     }

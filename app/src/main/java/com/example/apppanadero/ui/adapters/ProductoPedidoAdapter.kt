@@ -1,8 +1,10 @@
 package com.example.apppanadero.ui.adapters
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.apppanadero.R
 import com.example.apppanadero.data.model.Producto
 import com.example.apppanadero.databinding.ItemProductoBinding
 
@@ -163,6 +165,22 @@ class ProductoPedidoAdapter(
         // ------------------------------------------------
         // DATOS PRODUCTO
         // ------------------------------------------------
+
+        if (producto.imagenUri.isNotEmpty()) {
+            //Imagen del producto
+            holder.binding.imgProducto.setImageURI(
+
+                Uri.parse(
+                    producto.imagenUri
+                )
+            )
+
+        } else {
+
+            holder.binding.imgProducto.setImageResource(
+                R.drawable.logo_panadero
+            )
+        }
 
         // Nombre producto
         holder.binding.tvNombreProducto.text =
