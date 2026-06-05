@@ -45,10 +45,9 @@
                         android:id="@+id/imgComercio"
                         android:layout_width="64dp"
                         android:layout_height="64dp"
-                        android:background="@drawable/bg_image_rounded"
                         android:padding="4dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/logo_panadero" />
+                        android:src="@drawable/mercado" />
 
                     <!-- INFORMACIÓN -->
                     <LinearLayout
