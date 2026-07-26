@@ -181,7 +181,7 @@ class PrecioRepository {
 
             if (precioActual != null) {
 
-                // 2️⃣ Desactivar precio antiguo
+                // 2 Desactivar precio antiguo
                 db.collection("precios")
                     .document(precioActual.id)
                     .update(
@@ -196,7 +196,7 @@ class PrecioRepository {
                     )
                     .addOnSuccessListener {
 
-                        // 3️⃣ Crear nuevo precio
+                        // 3 Crear nuevo precio
                         val nuevo = Precio(
 
                             productoId = productoId,

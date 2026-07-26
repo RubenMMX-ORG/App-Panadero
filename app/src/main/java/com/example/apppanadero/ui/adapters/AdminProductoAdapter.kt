@@ -144,18 +144,33 @@ class AdminProductoAdapter(
 
         if (producto.imagenUri.isNotEmpty()) {
 
-            holder.binding.imgProducto.setImageURI(
+            val uri =
+                Uri.parse(producto.imagenUri)
 
-                Uri.parse(
-                    producto.imagenUri
+            val fichero =
+                java.io.File(
+                    uri.path ?: ""
                 )
-            )
+
+            if (fichero.exists()) {
+
+                holder.binding.imgProducto
+                    .setImageURI(uri)
+
+            } else {
+
+                holder.binding.imgProducto
+                    .setImageResource(
+                        R.drawable.pan
+                    )
+            }
 
         } else {
 
-            holder.binding.imgProducto.setImageResource(
-                R.drawable.pan
-            )
+            holder.binding.imgProducto
+                .setImageResource(
+                    R.drawable.pan
+                )
         }
 
 

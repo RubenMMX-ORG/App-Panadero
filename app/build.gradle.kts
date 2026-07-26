@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.apppanadero"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.analytics)
+    implementation(libs.firebase.storage)
 
     // 🗺️ MAPS
     implementation(libs.google.maps)

@@ -21,13 +21,11 @@ import com.google.firebase.Timestamp
 import java.util.Calendar
 import android.graphics.Paint
 import android.graphics.pdf.PdfDocument
-import android.os.Environment
-import androidx.core.content.FileProvider
 import com.example.apppanadero.data.model.Pedido
-import java.io.File
-import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.Date
+import android.content.ContentValues
+import android.provider.MediaStore
 import java.util.Locale
 
 
@@ -635,70 +633,92 @@ class ClienteHistoricoPedidosFragment : Fragment() {
         // GUARDAR
         // --------------------------------------
 
-        val carpeta =
+        val values = ContentValues().apply {
 
-            Environment
-                .getExternalStoragePublicDirectory(
-
-                    Environment.DIRECTORY_DOWNLOADS
-                )
-
-        val archivo = File(
-
-            carpeta,
-
-            "historico_pedidos.pdf"
-        )
-
-        pdfDocument.writeTo(
-
-            FileOutputStream(
-                archivo
-            )
-        )
-
-        pdfDocument.close()
-        val uri = FileProvider.getUriForFile(
-            requireContext(),
-            "${requireContext().packageName}.provider",
-            archivo
-        )
-
-        val intent = Intent(
-            Intent.ACTION_SEND
-        ).apply {
-
-            type = "application/pdf"
-
-            putExtra(
-                Intent.EXTRA_STREAM,
-                uri
+            put(
+                MediaStore.Downloads.DISPLAY_NAME,
+                "historico_pedidos.pdf"
             )
 
-            addFlags(
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
+            put(
+                MediaStore.Downloads.MIME_TYPE,
+                "application/pdf"
+            )
+
+            put(
+                MediaStore.Downloads.IS_PENDING,
+                1
             )
         }
 
-        startActivity(
+        val resolver =
+            requireContext().contentResolver
 
-            Intent.createChooser(
-
-                intent,
-
-                "Enviar Historico"
-            )
+        val uri = resolver.insert(
+            MediaStore.Downloads.EXTERNAL_CONTENT_URI,
+            values
         )
 
-        Toast.makeText(
+        if (uri != null) {
 
-            requireContext(),
+            resolver.openOutputStream(uri)?.use { output ->
 
-            "Histórico descargado y listo para compartir",
+                pdfDocument.writeTo(output)
+            }
 
-            Toast.LENGTH_LONG
+            values.clear()
 
-        ).show()
+            values.put(
+                MediaStore.Downloads.IS_PENDING,
+                0
+            )
+
+            resolver.update(
+                uri,
+                values,
+                null,
+                null
+            )
+
+            val intent = Intent(Intent.ACTION_SEND).apply {
+
+                type = "application/pdf"
+
+                putExtra(
+                    Intent.EXTRA_STREAM,
+                    uri
+                )
+
+                addFlags(
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            }
+
+            startActivity(
+                Intent.createChooser(
+                    intent,
+                    "Enviar Histórico"
+                )
+            )
+
+            Toast.makeText(
+                requireContext(),
+                "PDF generado correctamente",
+                Toast.LENGTH_LONG
+            ).show()
+
+        } else {
+
+            Toast.makeText(
+                requireContext(),
+                "Error al generar PDF",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        pdfDocument.close()
+
+
     }
 
     // ------------------------------------------------

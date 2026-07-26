@@ -139,6 +139,7 @@ class PrecioViewModel(
         ) { correcto ->
 
             if (correcto) {
+                obtenerPreciosVigentes()
 
                 _precioGuardado.postValue(
                     true
@@ -168,6 +169,7 @@ class PrecioViewModel(
         ) { correcto ->
 
             if (correcto) {
+
 
                 _precioGuardado.postValue(
                     true

@@ -31,24 +31,6 @@
                 android:padding="16dp">
 
                 <!-- BUSCADOR -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    style="@style/Widget.App.TextInputLayout"
-                    app:startIconDrawable="@android:drawable/ic_search_category_default"
-                    app:startIconTint="@color/text_secondary">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etBuscarProducto"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Buscar producto"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_hint"
-                        tools:text="Pan integral" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- BOTÓN AÑADIR -->
                 <com.google.android.material.button.MaterialButton

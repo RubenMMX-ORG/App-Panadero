@@ -22,6 +22,7 @@ import com.example.apppanadero.databinding.FragmentLoginBinding
 import com.example.apppanadero.viewmodel.UsuarioViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class LoginFragment : Fragment() {
@@ -58,72 +59,56 @@ class LoginFragment : Fragment() {
         Injector.provideUsuarioViewModelFactory()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
-        _binding = FragmentLoginBinding.inflate(
-            inflater,
-            container,
-            false
-        )
+        _binding = FragmentLoginBinding.inflate(inflater,container, false)
 
         return binding.root
     }
 
-    override fun onViewCreated(
-        view: View,
-        savedInstanceState: Bundle?
-    ) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
-        
+
         val preferencias =
 
-        requireActivity()
-            .getSharedPreferences(
-    
-                "sesion",
-    
-                AppCompatActivity.MODE_PRIVATE
-            )
-    
-    val mantenerSesion =
-    
-        preferencias.getBoolean(
-    
-            "mantener_sesion",
-    
-            false
-        )
-    
-    val usuarioActual = viewModel.getCurrentUser()
+            requireActivity()
+                .getSharedPreferences(
 
-            if (
-        
-            mantenerSesion == true &&
-            usuarioActual != null
-        
-        ) {
-        
+                    "sesion",
+
+                    AppCompatActivity.MODE_PRIVATE
+                )
+
+        val mantenerSesion =
+
+            preferencias.getBoolean(
+
+                "mantener_sesion",
+
+                false
+            )
+
+        val usuarioActual = viewModel.getCurrentUser()
+
+        if (mantenerSesion == true && usuarioActual != null) {
+
             viewModel.obtenerUsuario(
                 usuarioActual.uid
             )
         }
-        
-            // Inicializamos CredentialManager
-            credentialManager = CredentialManager.create(requireContext())
-    
-            configurarRegistro()
-            configurarLogin()
-            configurarLoginGoogle()
-    
-            // SOLO observamos Firestore
-            // porque sí es estado persistente UI
-            observarUsuarioFirestore()
-        }
+
+        // Inicializamos CredentialManager
+        credentialManager = CredentialManager.create(requireContext())
+
+        configurarRegistro()
+        configurarLogin()
+        configurarLoginGoogle()
+
+        // SOLO observamos Firestore
+        // porque sí es estado persistente UI
+        observarUsuarioFirestore()
+    }
 
 
     // ---------------------------------------------------
@@ -144,10 +129,7 @@ class LoginFragment : Fragment() {
             // ---------------------------------------------------
 
             // Validar email
-            if (!android.util.Patterns.EMAIL_ADDRESS
-                    .matcher(email)
-                    .matches()
-            ) {
+            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
 
                 Toast.makeText(
                     requireContext(),
@@ -244,24 +226,24 @@ class LoginFragment : Fragment() {
                 if (usuarioFirebase != null) {
                     val preferencias =
 
-                    requireActivity()
-                        .getSharedPreferences(
-                
-                            "sesion",
-                
-                            AppCompatActivity.MODE_PRIVATE
-                        )
-                
-                val editor = preferencias.edit()
-                
-                editor.putBoolean(
-                
-                    "mantener_sesion",
-                
-                    binding.checkMantenerSesion.isChecked
-                )
-                
-                editor.commit()
+                        requireActivity()
+                            .getSharedPreferences(
+
+                                "sesion",
+
+                                AppCompatActivity.MODE_PRIVATE
+                            )
+
+                    val editor = preferencias.edit()
+
+                    editor.putBoolean(
+
+                        "mantener_sesion",
+
+                        binding.checkMantenerSesion.isChecked
+                    )
+
+                    editor.commit()
 
                     // Obtener datos Firestore
                     viewModel.obtenerUsuario(
@@ -289,6 +271,19 @@ class LoginFragment : Fragment() {
     private fun configurarLoginGoogle() {
 
         binding.btnGoogle.setOnClickListener {
+            Log.d(
+                "GOOGLE_LOGIN",
+                "Usuario actual = ${
+                    FirebaseAuth
+                        .getInstance()
+                        .currentUser
+                }"
+            )
+
+            Log.d(
+                "GOOGLE_LOGIN",
+                "Boton Google pulsado"
+            )
 
             // Configuración Google Sign In
             val googleIdOption = GetGoogleIdOption.Builder()
@@ -307,9 +302,14 @@ class LoginFragment : Fragment() {
             // Petición CredentialManager
             val request = GetCredentialRequest.Builder()
 
+
                 .addCredentialOption(googleIdOption)
 
                 .build()
+            Log.d(
+                "GOOGLE_LOGIN",
+                "Antes getCredential"
+            )
 
 
             // Operación asíncrona
@@ -323,6 +323,14 @@ class LoginFragment : Fragment() {
 
                         context = requireContext()
                     )
+                    Log.d(
+                        "GOOGLE_LOGIN",
+                        "Despues getCredential"
+                    )
+
+                    procesarCredencialGoogle(
+                        resultado.credential
+                    )
 
                     procesarCredencialGoogle(
                         resultado.credential
@@ -331,14 +339,14 @@ class LoginFragment : Fragment() {
                 } catch (e: Exception) {
 
                     Log.e(
-                        "GoogleSignIn",
-                        "Error login Google",
+                        "GOOGLE_LOGIN",
+                        "ERROR",
                         e
                     )
 
                     Toast.makeText(
                         requireContext(),
-                        "Error login Google",
+                        e.toString(),
                         Toast.LENGTH_LONG
                     ).show()
                 }
@@ -351,18 +359,10 @@ class LoginFragment : Fragment() {
     // PROCESAR TOKEN GOOGLE
     // ---------------------------------------------------
 
-    private fun procesarCredencialGoogle(
-        credential: Credential
-    ) {
+    private fun procesarCredencialGoogle(credential: Credential) {
 
         // Verificar tipo credencial
-        if (
-            credential is CustomCredential
-            &&
-                
-            credential.type ==
-            GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL
-        ) {
+        if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
 
             // Obtener token Google
             val googleIdTokenCredential =
@@ -379,32 +379,30 @@ class LoginFragment : Fragment() {
             // LOGIN FIREBASE GOOGLE
             // ---------------------------------------------------
 
-            viewModel.loginConGoogle(
-                idToken
-            ) { usuarioFirebase, error ->
+            viewModel.loginConGoogle(idToken) { usuarioFirebase, error ->
 
                 // Login correcto
                 if (usuarioFirebase != null) {
                     val preferencias =
-                
-                    requireActivity()
-                        .getSharedPreferences(
-                
-                            "sesion",
-                
-                            AppCompatActivity.MODE_PRIVATE
-                        )
-                
-                val editor = preferencias.edit()
-                
-                editor.putBoolean(
-                
-                    "mantener_sesion",
-                
-                    binding.checkMantenerSesion.isChecked
-                )
-                
-                editor.commit()
+
+                        requireActivity()
+                            .getSharedPreferences(
+
+                                "sesion",
+
+                                AppCompatActivity.MODE_PRIVATE
+                            )
+
+                    val editor = preferencias.edit()
+
+                    editor.putBoolean(
+
+                        "mantener_sesion",
+
+                        binding.checkMantenerSesion.isChecked
+                    )
+
+                    editor.commit()
                     // Buscar usuario Firestore
                     viewModel.obtenerUsuario(
                         usuarioFirebase.uid
@@ -435,9 +433,7 @@ class LoginFragment : Fragment() {
     // sí son estado persistente UI
     private fun observarUsuarioFirestore() {
 
-        viewModel.usuario.observe(
-            viewLifecycleOwner
-        ) { usuario ->
+        viewModel.usuario.observe(viewLifecycleOwner) { usuario ->
 
             // ---------------------------------------------------
             // USUARIO EXISTE FIRESTORE

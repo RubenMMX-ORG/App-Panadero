@@ -483,7 +483,7 @@ class MapaFragment : Fragment(), OnMapReadyCallback {
 
                                 .snippet(
                                     cliente.direccion +
-                                            "\n\n🚚 Pulsa aquí para iniciar navegación"
+                                            "\n\n🚚 iniciar navegación"
                                 )
 
                                 .icon(

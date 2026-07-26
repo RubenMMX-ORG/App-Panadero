@@ -31,27 +31,6 @@
                 android:padding="16dp">
 
                 <!-- BUSCADOR -->
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    style="@style/Widget.App.TextInputLayout"
-                    app:startIconDrawable="@android:drawable/ic_search_category_default"
-                    app:startIconTint="@color/text_secondary">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/etBuscar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Buscar pedido"
-                        android:paddingStart="8dp"
-                        android:paddingTop="14dp"
-                        android:paddingBottom="14dp"
-                        android:textColor="@color/text_primary"
-                        android:textColorHint="@color/text_hint"
-                        tools:text="Juan Pérez" />
-
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- RECYCLERVIEW -->
                 <androidx.recyclerview.widget.RecyclerView

@@ -1,6 +1,7 @@
 package com.example.apppanadero.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -162,7 +163,9 @@ class AdminProductosFragment : Fragment() {
 
             viewLifecycleOwner
 
+
         ) { listaPrecios ->
+
 
             mapaPrecios.clear()
 

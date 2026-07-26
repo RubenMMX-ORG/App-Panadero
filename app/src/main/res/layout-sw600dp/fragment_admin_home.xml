@@ -25,7 +25,7 @@
                 android:gravity="center"
                 android:padding="24dp">
 
-                !-- LOGO -->
+                <!-- LOGO -->
                 <ImageView
                     android:layout_width="180dp"
                     android:layout_height="180dp"
@@ -38,12 +38,16 @@
 
                 <!-- TÍTULO -->
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Panel de Administrador"
                     style="@style/TextTitle"
                     android:layout_marginTop="12dp"/>
 
                 <TextView
                     android:text="Gestiona el obrador"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     style="@style/TextSubtitle"
                     android:layout_marginBottom="24dp"/>
 
@@ -211,13 +215,13 @@
                             <ImageView
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
-                                android:src="@drawable/ic_box"
+                                android:src="@drawable/ic_user"
                                 app:tint="@android:color/white"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Gestión de Stock"
+                                android:text="Empleados"
                                 android:textColor="@android:color/white"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
@@ -226,7 +230,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Control de inventario"
+                                android:text="Informacion de empleados"
                                 android:textColor="@android:color/white"
                                 android:textSize="13sp"/>
 

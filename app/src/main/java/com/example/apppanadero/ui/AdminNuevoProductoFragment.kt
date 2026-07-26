@@ -30,6 +30,8 @@ import android.provider.MediaStore
 import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class AdminNuevoProductoFragment : Fragment() {
 
@@ -68,8 +70,11 @@ class AdminNuevoProductoFragment : Fragment() {
     // id   -> edición
     private var productoId: String? = null
 
-    //VARIABLE PARA IMAGEN
+    //VARIABLE PARA IMAGEN guarda la direccion de una imagen concreta
     private var imagenUri: Uri? = null
+
+    // Firebase Storage devuelve un objeto que representa el bucket y lo que guarda la variable es la conexion con storage
+    private val storage = FirebaseStorage.getInstance()
 
     //LAUNCHE PARA PERMISOS
     // Launcher moderno para pedir el permiso de cámara
@@ -112,29 +117,17 @@ class AdminNuevoProductoFragment : Fragment() {
             ActivityResultContracts.GetContent()
 
         ) { uri ->
+            if (uri != null) {
 
-            uri?.let {
+                val ruta = copiarImagenAlmacenInterno(uri)
 
-                val ruta =
+                if (ruta != null) {
+                    imagenUri = Uri.fromFile(File(ruta))
 
-                    copiarImagenAlmacenInterno(
-                        it
-                    )
-
-                ruta?.let { rutaGuardada ->
-
-                    imagenUri = Uri.fromFile(
-
-                        File(
-                            rutaGuardada
-                        )
-                    )
-
-                    binding.imgProducto.setImageURI(
-                        imagenUri
-                    )
+                    binding.imgProducto.setImageURI(imagenUri)
                 }
             }
+
         }
 
     // ------------------------------------------------
@@ -251,6 +244,55 @@ class AdminNuevoProductoFragment : Fragment() {
                 "Actualizar producto"
         }
 
+        //Creamos el nombre del archivo se llamara como la fecha actual para no crear duplicados
+        val nombre = "producto_${System.currentTimeMillis()}.jpg"
+
+        //Creamos una referencia (storageReference) es un objeto firebase
+        val raiz = storage.reference
+
+        val carpeta = raiz.child("productos")
+
+        val referencia = carpeta.child(nombre)
+
+        //bloque resumido
+       /* val referencia = storage.reference
+            .child("productos")
+            .child(nombre)*/
+
+        // Significa literalmente sube este archivo a storage.
+        // el metodo recibe una uri y devuelve un task(tarea) "he empezado a subir la imagen"(no significa que haya terminado.)
+        val subirTarea = referencia.putFile(imagenUri!!)
+
+        // subir la imagen tarda unos segundos o mas por tanto como no sabemos cuando sera creamos callback.
+        // Un callback es un cuando termines... avisame!!
+        //
+            subirTarea.addOnSuccessListener {
+
+
+                //val obtenerUrlTask = "Firebase está trabajando para conseguirme la URL"
+                val obtenerUrlTask = referencia.downloadUrl
+
+                //Cuando termina obtenerUrlTask, no solo dice:
+                //
+                //«¡He terminado!»
+                //
+                //También nos dice:
+                //
+                //«¡He terminado! Y aquí tienes el resultado que me pediste». y eso es el it que lo vamos a llamar url o podriamso llamrlo resultado tanbien
+                // pero cuando la lambda recibe un solo resultado kotlin nos permite llamrlo it
+                obtenerUrlTask.addOnSuccessListener { url->
+                    //lo que va dentro de las llaves se ejecuta cuando termine la tarea de obtener la url
+                    // Ya tengo la URL
+                    // Aquí puedo guardar el producto
+                    val urlImagen = url.toString()
+
+                }
+
+
+
+
+            }
+
 
 
         // ------------------------------------------------
@@ -266,6 +308,8 @@ class AdminNuevoProductoFragment : Fragment() {
         observarProductoGuardado()
 
         observarPrecioActual()
+
+        observarPrecioGuardado()
 
         observarErrores()
 
@@ -315,11 +359,7 @@ class AdminNuevoProductoFragment : Fragment() {
 
         val listaIva = listOf(
 
-            "4",
-
-            "10",
-
-            "21"
+            "4", "10", "21"
         )
 
         val adapterIva = ArrayAdapter(
@@ -597,7 +637,6 @@ class AdminNuevoProductoFragment : Fragment() {
         )
 
 
-
         // ------------------------------------------------
         // NUEVO PRODUCTO
         // ------------------------------------------------
@@ -625,18 +664,36 @@ class AdminNuevoProductoFragment : Fragment() {
                 precioDouble
             )
 
-            Toast.makeText(
 
-                requireContext(),
+        }
+    }
+    // ------------------------------------------------
+    // OBSERVAR PRECIO GUARDADO
+    // ------------------------------------------------
 
-                "Producto actualizado",
+    private fun observarPrecioGuardado() {
 
-                Toast.LENGTH_SHORT
+        precioViewModel.precioGuardado.observe(
 
-            ).show()
+            viewLifecycleOwner
 
-            findNavController()
-                .popBackStack()
+        ) { guardado ->
+
+            if (guardado) {
+
+                Toast.makeText(
+
+                    requireContext(),
+
+                    "Producto actualizado",
+
+                    Toast.LENGTH_SHORT
+
+                ).show()
+
+                findNavController()
+                    .popBackStack()
+            }
         }
     }
 
@@ -758,7 +815,6 @@ class AdminNuevoProductoFragment : Fragment() {
             }
         }
     }
-
 
 
     // ------------------------------------------------
