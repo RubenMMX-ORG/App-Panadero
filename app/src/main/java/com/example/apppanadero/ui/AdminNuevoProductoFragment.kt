@@ -244,55 +244,6 @@ class AdminNuevoProductoFragment : Fragment() {
                 "Actualizar producto"
         }
 
-        //Creamos el nombre del archivo se llamara como la fecha actual para no crear duplicados
-        val nombre = "producto_${System.currentTimeMillis()}.jpg"
-
-        //Creamos una referencia (storageReference) es un objeto firebase
-        val raiz = storage.reference
-
-        val carpeta = raiz.child("productos")
-
-        val referencia = carpeta.child(nombre)
-
-        //bloque resumido
-       /* val referencia = storage.reference
-            .child("productos")
-            .child(nombre)*/
-
-        // Significa literalmente sube este archivo a storage.
-        // el metodo recibe una uri y devuelve un task(tarea) "he empezado a subir la imagen"(no significa que haya terminado.)
-        val subirTarea = referencia.putFile(imagenUri!!)
-
-        // subir la imagen tarda unos segundos o mas por tanto como no sabemos cuando sera creamos callback.
-        // Un callback es un cuando termines... avisame!!
-        //
-            subirTarea.addOnSuccessListener {
-
-
-                //val obtenerUrlTask = "Firebase está trabajando para conseguirme la URL"
-                val obtenerUrlTask = referencia.downloadUrl
-
-                //Cuando termina obtenerUrlTask, no solo dice:
-                //
-                //«¡He terminado!»
-                //
-                //También nos dice:
-                //
-                //«¡He terminado! Y aquí tienes el resultado que me pediste». y eso es el it que lo vamos a llamar url o podriamso llamrlo resultado tanbien
-                // pero cuando la lambda recibe un solo resultado kotlin nos permite llamrlo it
-                obtenerUrlTask.addOnSuccessListener { url->
-                    //lo que va dentro de las llaves se ejecuta cuando termine la tarea de obtener la url
-                    // Ya tengo la URL
-                    // Aquí puedo guardar el producto
-                    val urlImagen = url.toString()
-
-                }
-
-
-
-
-            }
-
 
 
         // ------------------------------------------------
@@ -554,6 +505,8 @@ class AdminNuevoProductoFragment : Fragment() {
         // VALIDACIONES
         // ------------------------------------------------
 
+
+
         if (nombre.isEmpty()) {
 
             Toast.makeText(
@@ -628,43 +581,70 @@ class AdminNuevoProductoFragment : Fragment() {
         // CREAR PRODUCTO
         // ------------------------------------------------
 
-        val producto = Producto(
-            id = productoId ?: "",
-            nombre = nombre,
-            categoria = categoria,
-            iva = iva,
-            imagenUri = imagenUri?.toString() ?: ""
-        )
+        //Creamos el nombre del archivo se llamara como la fecha actual para no crear duplicados
+        val nombreimg = "producto_${System.currentTimeMillis()}.jpg"
+
+        //Creamos una referencia (storageReference) es un objeto firebase
+        val raiz = storage.reference
+
+        val carpeta = raiz.child("productos")
+
+        val referencia = carpeta.child(nombreimg)
+
+        //bloque resumido
+        /* val referencia = storage.reference
+             .child("productos")
+             .child(nombre)*/
+        // Significa literalmente sube este archivo a storage.
+        // el metodo recibe una uri y devuelve un task(tarea) "he empezado a subir la imagen"(no significa que haya terminado.)
+        val subirTarea = referencia.putFile(imagenUri!!)
+
+        // subir la imagen tarda unos segundos o mas por tanto como no sabemos cuando sera creamos callback.
+        // Un callback es un cuando termines... avisame!!
+        //
+        subirTarea.addOnSuccessListener {
 
 
-        // ------------------------------------------------
-        // NUEVO PRODUCTO
-        // ------------------------------------------------
+            //val obtenerUrlTask = "Firebase está trabajando para conseguirme la URL"
+            val obtenerUrlTask = referencia.downloadUrl
 
-        if (productoId.isNullOrEmpty()) {
+            //Cuando termina obtenerUrlTask, no solo dice:
+            //
+            //«¡He terminado!»
+            //
+            //También nos dice:
+            //
+            //«¡He terminado! Y aquí tienes el resultado que me pediste». y eso es el it que lo vamos a llamar url o podriamso llamrlo resultado tanbien
+            // pero cuando la lambda recibe un solo resultado kotlin nos permite llamrlo it
+            obtenerUrlTask.addOnSuccessListener { url->
+                //lo que va dentro de las llaves se ejecuta cuando termine la tarea de obtener la url
+                // Ya tengo la URL
+                // Aquí puedo guardar el producto
+                val urlImagen = url.toString()
+                val producto = Producto(
+                    id = productoId ?: "",
+                    nombre = nombre,
+                    categoria = categoria,
+                    iva = iva,
+                    imagenUri = urlImagen
+                )
+                if (productoId.isNullOrEmpty()) {
 
-            productoViewModel.guardarProducto(
-                producto
-            )
+                    productoViewModel.guardarProducto(producto)
 
-        } else {
+                    // ------------------------------------------------
+                    // NUEVO PRODUCTO
+                    // ------------------------------------------------
+                } else {
 
-            // ------------------------------------------------
-            // ACTUALIZAR PRODUCTO
-            // ------------------------------------------------
+                    productoViewModel.actualizarProducto(producto)
 
-            productoViewModel.actualizarProducto(
-                producto
-            )
-
-            precioViewModel.actualizarPrecio(
-
-                producto.id,
-
-                precioDouble
-            )
-
-
+                    precioViewModel.actualizarPrecio(
+                        producto.id,
+                        precioDouble
+                    )
+                }
+            }
         }
     }
     // ------------------------------------------------

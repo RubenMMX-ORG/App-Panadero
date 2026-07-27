@@ -1,13 +1,16 @@
 package com.example.apppanadero.ui.adapters
 
+import android.app.AlertDialog
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.apppanadero.R
 import com.example.apppanadero.data.model.Producto
 import com.example.apppanadero.databinding.ItemProductoAdminBinding
+
 
 // ------------------------------------------------
 // ADAPTER PRODUCTOS ADMIN
@@ -144,36 +147,17 @@ class AdminProductoAdapter(
 
         if (producto.imagenUri.isNotEmpty()) {
 
-            val uri =
-                Uri.parse(producto.imagenUri)
-
-            val fichero =
-                java.io.File(
-                    uri.path ?: ""
-                )
-
-            if (fichero.exists()) {
-
-                holder.binding.imgProducto
-                    .setImageURI(uri)
-
-            } else {
-
-                holder.binding.imgProducto
-                    .setImageResource(
-                        R.drawable.pan
-                    )
-            }
+            Glide.with(holder.itemView)
+                .load(producto.imagenUri)
+                .placeholder(R.drawable.pan)
+                .error(R.drawable.pan)
+                .into(holder.binding.imgProducto)
 
         } else {
 
             holder.binding.imgProducto
-                .setImageResource(
-                    R.drawable.pan
-                )
+                .setImageResource(R.drawable.pan)
         }
-
-
 
 
         // ------------------------------------------------
@@ -189,11 +173,9 @@ class AdminProductoAdapter(
         // ------------------------------------------------
         // BOTÓN ELIMINAR
         // ------------------------------------------------
-        holder.binding.imgEliminar
-            .setOnClickListener {
-
-                onEliminarClick(producto)
-            }
+        holder.binding.imgEliminar.setOnClickListener {
+            onEliminarClick(producto)
+        }
 
     }
 

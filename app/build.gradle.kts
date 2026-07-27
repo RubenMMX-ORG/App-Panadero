@@ -79,6 +79,9 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.storage)
 
+    // Glide
+    implementation(libs.glide)
+
     // 🗺️ MAPS
     implementation(libs.google.maps)
     implementation(libs.google.location)

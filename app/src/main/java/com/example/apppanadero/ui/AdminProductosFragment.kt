@@ -1,5 +1,6 @@
 package com.example.apppanadero.ui
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -17,6 +18,7 @@ import com.example.apppanadero.databinding.FragmentAdminProductosBinding
 import com.example.apppanadero.ui.adapters.AdminProductoAdapter
 import com.example.apppanadero.viewmodel.PrecioViewModel
 import com.example.apppanadero.viewmodel.ProductoViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class AdminProductosFragment : Fragment() {
 
@@ -238,23 +240,14 @@ class AdminProductosFragment : Fragment() {
 
                     onEliminarClick = { producto ->
 
-                        productoViewModel
-                            .eliminarProducto(
-                                producto.id
-                            )
-
-                        productoViewModel
-                            .obtenerTodosProductos()// llamamos para refresca el reycler
-
-                        Toast.makeText(
-
-                            requireContext(),
-
-                            "Producto eliminado",
-
-                            Toast.LENGTH_SHORT
-
-                        ).show()
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setTitle("🗑️ Eliminar producto")
+                            .setMessage("¿Estás seguro de que deseas eliminar este producto?")
+                            .setPositiveButton("Eliminar") { _, _ ->
+                                productoViewModel.eliminarProducto(producto.id)
+                            }
+                            .setNegativeButton("Cancelar", null)
+                            .show()
                     }
                 )
 
